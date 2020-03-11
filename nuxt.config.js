@@ -74,7 +74,8 @@ export default {
           onSuccessAction: 'auth/init'
         }
       },
-      firestore: true
+      firestore: true,
+      analytics: true
     }
   }
 }
