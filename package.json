@@ -25,6 +25,8 @@
     "@nuxtjs/dotenv": "^1.4.0",
     "@nuxtjs/firebase": "^4.2.2",
     "@nuxtjs/pwa": "^3.0.0-0",
+    "core-js": "2",
+    "date-fns": "^2.10.0",
     "firebase": "^7.10.0",
     "nuxt": "^2.0.0"
   },
