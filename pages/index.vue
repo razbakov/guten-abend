@@ -13,20 +13,15 @@
 </template>
 
 <script>
-import useAuth from '~/use/auth.js'
+import useThreads from '~/use/threads.js'
 
 export default {
   setup() {
-    const { create, loading } = useAuth()
+    const { create, loading } = useThreads()
 
     return {
       create,
       loading
-    }
-  },
-  computed: {
-    uid() {
-      return this.$store.state.auth.uid
     }
   }
 }

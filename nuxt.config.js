@@ -69,11 +69,7 @@ export default {
       measurementId: 'G-9NK95KY740'
     },
     services: {
-      auth: {
-        initialize: {
-          onSuccessAction: 'auth/init'
-        }
-      },
+      auth: true,
       firestore: true,
       analytics: true
     }

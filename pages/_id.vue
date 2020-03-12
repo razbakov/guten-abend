@@ -14,7 +14,7 @@
         type="text"
         class="border w-full rounded p-4"
         placeholder="Set a thread topic"
-        @keyup.enter="changeTopic()"
+        @keyup.enter="changeTopic(newTopic)"
       />
     </div>
     <div class="h-screen overflow-y-auto">
@@ -34,7 +34,10 @@
           type="text"
           class="border w-full rounded p-4"
           placeholder="Write a message"
-          @keyup.enter="send()"
+          @keyup.enter="
+            sendMessage(input)
+            input = ''
+          "
         />
       </div>
       <div v-else>
@@ -43,7 +46,7 @@
           type="text"
           class="border w-full rounded p-4"
           placeholder="Your name"
-          @keyup.enter="register()"
+          @keyup.enter="saveProfileName(name)"
         />
       </div>
     </div>
@@ -51,105 +54,51 @@
 </template>
 
 <script>
-import format from 'date-fns/format'
+import useAuth from '~/use/auth.js'
+import useUtils from '~/use/utils.js'
+import useThreads from '~/use/threads.js'
 
 export default {
   data: () => ({
-    loading: true,
-    thread: null,
-    threadId: null,
-    messages: [],
     input: '',
     newTopic: '',
     editing: true,
     name: ''
   }),
   async validate({ app, params }) {
-    const threadId = params.id
+    const { load } = useThreads()
+    const exists = await load(params.id)
 
-    const threadDoc = await app.$fireStore
-      .collection('threads')
-      .doc(threadId)
-      .get()
-
-    return threadDoc.exists
+    return exists
   },
-  computed: {
-    uid() {
-      return this.$store.state.auth.uid
-    },
+  setup() {
+    const { uid, loading, profile, saveProfileName } = useAuth(true)
+    const { formatDate } = useUtils()
+    const { thread, messages, load, sendMessage, changeTopic } = useThreads()
 
-    profile() {
-      return this.$store.state.auth.profile
+    return {
+      uid,
+      profile,
+      saveProfileName,
+      formatDate,
+      thread,
+      sendMessage,
+      changeTopic,
+      load,
+      loading,
+      messages
     }
   },
-  async mounted() {
-    if (!this.uid) {
-      await this.$fireAuth.signInAnonymously()
-    }
-
-    this.threadId = this.$route.params.id
-
-    this.$fireStore
-      .collection('threads')
-      .doc(this.threadId)
-      .onSnapshot((doc) => {
-        this.thread = doc.data()
-        this.newTopic = this.thread.topic
+  watch: {
+    'thread.topic': {
+      handler(val) {
+        this.newTopic = val
         this.editing = !this.newTopic
-      })
-
-    this.$fireStore
-      .collection(`threads/${this.threadId}/messages`)
-      .orderBy('createdAt', 'asc')
-      .onSnapshot((snapshot) => {
-        snapshot.docChanges().forEach((change) => {
-          if (change.type === 'added') {
-            this.messages.push({
-              ...change.doc.data(),
-              id: change.doc.id
-            })
-          }
-          if (change.type === 'modified') {
-          }
-          if (change.type === 'removed') {
-          }
-        })
-      })
-
-    this.loading = false
-  },
-  methods: {
-    formatDate(val) {
-      return format(new Date(val), 'H:mm')
-    },
-    async register() {
-      const profile = {
-        createdBy: this.uid,
-        createdAt: +new Date(),
-        name: this.name
       }
-      await this.$store.dispatch('auth/saveProfile', profile)
-    },
-    send() {
-      this.$fireStore.collection(`threads/${this.threadId}/messages`).add({
-        authorId: this.uid,
-        authorName: this.profile.name,
-        createdAt: +new Date(),
-        type: 'message',
-        message: this.input
-      })
-
-      this.input = ''
-    },
-    changeTopic() {
-      this.$fireStore
-        .collection('threads')
-        .doc(this.threadId)
-        .update({
-          topic: this.newTopic
-        })
     }
+  },
+  mounted() {
+    this.load(this.$route.params.id)
   }
 }
 </script>

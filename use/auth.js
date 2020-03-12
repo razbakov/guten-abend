@@ -1,25 +1,75 @@
-import { ref } from '@vue/composition-api'
+import { reactive, toRefs } from '@vue/composition-api'
+import firebase from 'firebase/app'
+import 'firebase/auth'
+import 'firebase/firestore'
 
-export default () => {
-  const loading = ref(false)
+export default (autoSignin) => {
+  const firestore = firebase.firestore()
 
-  async function create() {
-    loading.value = true
+  const state = reactive({
+    loading: true,
+    uid: null,
+    profile: null
+  })
 
-    await this.$fireAuth.signInAnonymously()
-    const thread = await this.$fireStore.collection('threads').add({
+  const auth = firebase.auth()
+
+  auth.onAuthStateChanged((user) => {
+    state.loading = false
+    state.uid = user?.uid
+    loadProfile()
+  })
+
+  if (autoSignin) {
+    auth.signInAnonymously()
+  }
+
+  async function loadProfile() {
+    if (!state.uid) {
+      return
+    }
+
+    state.loading = true
+
+    const doc = await firestore
+      .collection('profiles')
+      .doc(state.uid)
+      .get()
+
+    state.loading = false
+
+    if (!doc.exists) {
+      return
+    }
+
+    state.profile = doc.data()
+  }
+
+  async function saveProfileName(name) {
+    if (!state.uid) {
+      return
+    }
+
+    state.loading = true
+
+    const profile = {
+      createdBy: state.uid,
       createdAt: +new Date(),
-      updatedAt: +new Date(),
-      createdBy: this.uid
-    })
+      name
+    }
 
-    loading.value = false
+    await firestore
+      .collection('profiles')
+      .doc(state.uid)
+      .set(profile)
 
-    this.$router.push(`/${thread.id}`)
+    loadProfile()
   }
 
   return {
-    create,
-    loading
+    ...toRefs(state),
+    auth,
+    saveProfileName,
+    loadProfile
   }
 }
