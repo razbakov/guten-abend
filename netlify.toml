@@ -1,0 +1,11 @@
+[build]
+  publish = "dist"
+  command = "yarn build"
+
+[context.production.environment]
+  APP_ENV = "production"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
