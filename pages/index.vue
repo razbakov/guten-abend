@@ -13,27 +13,20 @@
 </template>
 
 <script>
+import useAuth from '~/use/auth.js'
+
 export default {
-  data: () => ({
-    loading: false
-  }),
+  setup() {
+    const { create, loading } = useAuth()
+
+    return {
+      create,
+      loading
+    }
+  },
   computed: {
     uid() {
       return this.$store.state.auth.uid
-    }
-  },
-  methods: {
-    async create() {
-      this.loading = true
-
-      await this.$fireAuth.signInAnonymously()
-      const thread = await this.$fireStore.collection('threads').add({
-        createdAt: +new Date(),
-        updatedAt: +new Date(),
-        createdBy: this.uid
-      })
-
-      this.$router.push(`/${thread.id}`)
     }
   }
 }
