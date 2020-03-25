@@ -1,0 +1,6 @@
+[build]
+  publish = "pages/.vuepress/dist"
+  command = "yarn build"
+
+[context.production.environment]
+  APP_ENV = "production"

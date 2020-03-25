@@ -1,0 +1,84 @@
+@tailwind base;
+
+html
+  font-size 19px
+
+.markdown
+  @apply leading-normal break-words text-blue-900
+  // color #62535c
+  // font-size 19px
+
+  li + li
+    @apply mt-1
+  li > p + p
+    @apply mt-6
+  strong
+    @apply font-semibold
+  a
+    @apply text-blue-600 underline
+  a:hover
+    @apply text-blue-800 no-underline
+  strong a
+    @apply font-bold
+  p
+    @apply my-4
+  h1
+    @apply leading-tight border-b text-4xl font-sans font-extrabold mb-4 mt-6 pb-2
+  h2
+    @apply leading-tight border-b text-2xl font-sans font-semibold mb-4 mt-6 pb-2
+  h3
+    @apply leading-snug text-lg font-sans font-semibold mb-4 mt-6
+  h4
+    @apply leading-none text-base font-sans font-semibold mb-4 mt-6
+  h5
+    @apply leading-tight text-sm font-sans font-semibold mb-4 mt-6
+  h6
+    @apply leading-tight text-sm font-sans font-semibold text-gray-600 mb-4 mt-6
+  blockquote
+    @apply text-base border-l-4 border-gray-300 pl-4 pr-4 text-gray-600
+  ul
+     @apply text-base pl-8 list-disc
+  ol
+    @apply text-base pl-8 list-decimal
+  // kbd
+  //   @apply text-xs inline-block rounded border px-1 py-05 align-middle font-normal font-mono shadow
+  table
+    @apply text-base border-gray-600
+  th
+    @apply border py-1 px-3
+  td
+    @apply border py-1 px-3
+  img, iframe
+    @apply mx-auto block
+  figcaption
+    @apply font-semibold text-center text-gray-800 mt-2
+
+  .aspect-ratio
+    overflow: hidden;
+    // Calculated from the aspect ratio of the content (in case of 16:9 it is 9/16= 0.5625)
+    padding-top: 56.25%;
+    position: relative;
+  
+  .aspect-ratio iframe
+    border: 0;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+
+.bg-gradient-blue
+  background linear-gradient(90deg, #667eea 0%, #764ba2 100%)
+
+.header-anchor
+  display none
+.icon.outbound
+  display none !important
+
+nav ul .router-link-active
+  @apply bg-gray-300
+
+@tailwind components;
+@tailwind utilities;
+
+@import './code.styl'

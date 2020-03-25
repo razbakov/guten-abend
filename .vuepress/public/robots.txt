@@ -1,0 +1,4 @@
+User-agent: *
+Disallow:
+Sitemap: https://gutenabend.netlify.com/sitemap.xml
+Host: https://gutenabend.netlify.com
