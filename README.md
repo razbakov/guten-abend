@@ -29,7 +29,7 @@ We are here to provide you space to socialize and have fun, not leaving your hou
 
 Sign up and you will get emails about next events.
 
-<cta href="https://forms.gle/SdRgQ4JWghQRKH9z7">
+<cta href="https://bit.ly/2JgRhXm">
 Sign Up
 </cta>
 
