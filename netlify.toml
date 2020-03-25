@@ -1,5 +1,5 @@
 [build]
-  publish = "pages/.vuepress/dist"
+  publish = ".vuepress/dist"
   command = "yarn build"
 
 [context.production.environment]
