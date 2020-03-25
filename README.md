@@ -3,7 +3,7 @@ permalink: /
 layout: page
 ---
 
-## Welcome to quarantine online club
+## Welcome to the quarantine online club
 
 We are here to provide you space to socialize and have fun, not leaving your house!
 
