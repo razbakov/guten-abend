@@ -4,37 +4,37 @@ layout: page
 language: de
 ---
 
-## Wilkommen be der quarantine online klub
+## Willkommen im Quarantäne Online Klub
 
-We are here to provide you space to socialize and have fun, not leaving your house!
+Wir stellen hier einen Raum zur Verfügung um zusammen zu kommen und Spaß zu haben, ohne das Haus zu verlassen.
 
-### Morning activities
+### Veranstaltungen morgens
 
 - Yoga
-- Accountability groups (support groups to achieve goals)
+- Verantwortlichkeitsgruppen (Unterstützungsgruppen zur Zielerreichung)
 
-### Lunch activities
+### Veranstaltungen mittags
 
-- Salsa Workshop / Animation
+- Salsa Workshop / Salsa Animationen
 
-### Evening activities
+### Veranstaltungen abends
 
-- Concerts
-- Board games
-- Conversation games ([we are already playing Mafia Game](https://razbakov.com/mafia/))
-- Storytelling
-- Presentations
-- Stand-up comedy
+- Konzerte
+- Brettspiele
+- Konversationsspiele ([Es wird bereits "Mafia" gespielt](https://razbakov.com/mafia/))
+- Geschichten erzählen
+- Präsentationen
+- Stand-up Comedy
 
-### Ready to join?
+### Bereit mitzumachen?
 
-Sign up and you will get emails about next events.
+Tragen Sie sich ein und Sie erhalten Emails zu den nächsten Veranstaltungen.
 
 <cta href="https://bit.ly/2JgRhXm">
 Sign Up
 </cta>
 
-We are also looking for creators and animators, who would like to contribute to our club and share some fun with us!
+Wir sind auf der Suche nach Menschen, die in der Organisation hier einen Beitrag zur Zwischenmenschlichkeit leisten möchten!
 
-Stay healthy!
+Bleiben Sie gesund und bleiben Sie daheim!
 [Aleksey Razbakov](https://razbakov.com)
