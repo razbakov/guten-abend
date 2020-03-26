@@ -3,9 +3,12 @@
 html
   font-size 19px
 
+body
+  background-color #FDEDDF
+
 .markdown
-  @apply leading-normal break-words text-blue-900
-  // color #62535c
+  @apply leading-normal break-words
+  color #361A02
   // font-size 19px
 
   li + li
@@ -72,14 +75,24 @@ html
 
 .header-anchor
   display none
+
 .icon.outbound
   display none !important
 
 nav ul .router-link-active
-  @apply bg-gray-300
+  @apply font-bold
 
 .content__default
   width 100%
+
+.bg-primary
+  background-color #E63500
+
+.bg-primary-darker
+  background-color #AE2A02
+
+.text-dark
+  color: #361A02
 
 @tailwind components;
 @tailwind utilities;
