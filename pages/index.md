@@ -3,9 +3,11 @@ permalink: /
 layout: page
 ---
 
-## Welcome to the quarantine online club
+# Everyhing closed?
 
-We are here to provide you space to socialize and have fun, not leaving your house!
+**We are open 24/7**
+
+Guten Abend is a social hub, where you can socialize and have fun.
 
 ### Morning activities
 
