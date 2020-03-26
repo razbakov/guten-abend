@@ -14,13 +14,14 @@ We are here to provide you space to socialize and have fun, not leaving your hou
 
 ### Lunch activities
 
-- Salsa Workshop / Animation
+- [Salsa Warm Up](/salsa)
 
 ### Evening activities
 
+- [Mafia Game](/mafia)
+- Conversation games
 - Concerts
 - Board games
-- Conversation games ([we are already playing Mafia Game](https://razbakov.com/mafia/))
 - Storytelling
 - Presentations
 - Stand-up comedy

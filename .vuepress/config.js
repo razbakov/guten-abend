@@ -18,8 +18,9 @@ module.exports = {
   description: "Online Kantine",
   themeConfig: {
     nav: [
-      // { text: "About", link: "/about/" }
-      // { text: 'Contact', link: '/contact/' },
+      { text: "Home", link: "/" },
+      { text: "Salsa Warm Up", link: "/salsa/" },
+      { text: "Mafia Game", link: "/mafia/" }
     ],
     hostname: hostname
   },
@@ -81,6 +82,14 @@ module.exports = {
       canonical_base: hostname
     },
     "@vuepress/pwa": {},
+    container: {
+      type: "details",
+      before: info =>
+        `<details class="custom-block details">${
+          info ? `<summary>${info}</summary>` : ""
+        }\n`,
+      after: () => "</details>\n"
+    },
     seo: {}
   },
   postcss: {
