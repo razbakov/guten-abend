@@ -3,22 +3,32 @@ permalink: /
 layout: page
 ---
 
-# Everyhing closed?
+**Everyhing closed?**
 
-**We are open 24/7**
+# We are open 24/7
 
-Guten Abend is a social hub, where you can socialize and have fun.
+Guten Abend is a social hub, where you can socialize and have fun. Join and you will get emails about our next events.
 
-### Morning activities
+<cta href="https://bit.ly/2JgRhXm">
+Join Now
+</cta>
+
+## Any time of the day
+
+::: details Morning
 
 - Yoga
 - Accountability groups (support groups to achieve goals)
 
-### Lunch activities
+:::
+
+::: details Lunch
 
 - [Salsa Warm Up](/salsa)
 
-### Evening activities
+:::
+
+::: details Evening
 
 - [Mafia Game](/mafia)
 - Conversation games
@@ -28,13 +38,11 @@ Guten Abend is a social hub, where you can socialize and have fun.
 - Presentations
 - Stand-up comedy
 
-### Ready to join?
+:::
 
-Sign up and you will get emails about next events.
+## Want more?
 
-<cta href="https://bit.ly/2JgRhXm">
-Sign Up
-</cta>
+[Suggest an idea](https://github.com/razbakov/guten-abend/issues/new)
 
 We are also looking for creators and animators, who would like to contribute to our club and share some fun with us!
 
