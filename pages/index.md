@@ -7,7 +7,7 @@ layout: page
 
 # We are open 24/7
 
-Guten Abend is a social hub, where you can socialize and have fun. Join and you will get emails about our next events.
+Guten Abend is a social hub to socialize and have fun. We meet via Zoom online. Join to get emails about our next events.
 
 <cta href="https://bit.ly/2JgRhXm">
 Join Now

@@ -5,20 +5,18 @@ layout: page
 
 # Salsa Warm Up
 
-<figure class="aspect-ratio">
+- **When?** Everyday
+- **At what time?** At 13:00 - 13:30 (CET)
+- **Where?** Online Zoom meeting (you will receive link per email)
+
+<figure class="aspect-ratio mt-5">
   <iframe src="https://www.youtube.com/embed/q5E_Il2APrM" frameborder="0" allowfullscreen></iframe>
 </figure>
 
-Join our fitness with music!
+Join our fitness with music! Learn some salsa rhythm and get your body into motion.
 
-Salsa Animation and Footwork
-
-Learn some salsa rhythm and get your body into motion
-
-### Details
-
-- Day: Monday - Friday
-- Time: 13:00 - 13:30 (CET)
+The basic idea of our online meetup is that we all join via Zoom with our video and microphone on,
+so that we feel connected and see what others do, like in a normal dance workshop.
 
 ### Ready to join?
 
