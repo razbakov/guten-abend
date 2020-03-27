@@ -1,5 +1,5 @@
 ---
-permalink: /
+permalink: /de/
 layout: page
 language: de
 ---
