@@ -29,6 +29,7 @@ export default {
   css: [
     '@/assets/css/typography.css',
     '@/assets/css/aspect-ratio.css',
+    '@/assets/css/signup.css',
     '@/assets/css/nav.css'
   ],
   /*
@@ -66,14 +67,14 @@ export default {
   },
   firebase: {
     config: {
-      apiKey: 'AIzaSyBYRafQ1LpToLZspBY9uoe89Ao-4h-3X7Y',
-      authDomain: 'tell-me-what-336d8.firebaseapp.com',
-      databaseURL: 'https://tell-me-what-336d8.firebaseio.com',
-      projectId: 'tell-me-what-336d8',
-      storageBucket: 'tell-me-what-336d8.appspot.com',
-      messagingSenderId: '99203117430',
-      appId: '1:99203117430:web:16704fc542cb7157a84a57',
-      measurementId: 'G-9NK95KY740'
+      apiKey: 'AIzaSyBEo2JLHYrGCAL0zIM5enhr50D7gxZHxgQ',
+      authDomain: 'gutenabend-ea9a0.firebaseapp.com',
+      databaseURL: 'https://gutenabend-ea9a0.firebaseio.com',
+      projectId: 'gutenabend-ea9a0',
+      storageBucket: 'gutenabend-ea9a0.appspot.com',
+      messagingSenderId: '529618991089',
+      appId: '1:529618991089:web:a3cad08d7e4d7f0c4a3650',
+      measurementId: 'G-EQ7DKFZPJC'
     },
     services: {
       auth: true,

@@ -9,18 +9,13 @@
           Zoom online. Join to get emails about our next events.
         </p>
       </div>
-      <div
-        href="https://bit.ly/2JgRhXm"
-        class="container text-center p-4 w-full md:max-w-xl mx-auto"
-      >
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://bit.ly/2JgRhXm"
+      <div class="container text-center p-4 w-full md:max-w-xl mx-auto">
+        <nuxt-link
+          to="/signup"
           class="bg-primary hover:shadow no-underline text-white font-semibold py-2 px-4 rounded text-white"
         >
           Join Now
-        </a>
+        </nuxt-link>
       </div>
       <div class="typo">
         <h2>Any time of the day</h2>
