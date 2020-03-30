@@ -1,3 +1,5 @@
+/* purgecss start ignore */
 .nuxt-link-exact-active {
   @apply font-bold;
 }
+/* purgecss end ignore */

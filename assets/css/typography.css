@@ -1,3 +1,4 @@
+/* purgecss start ignore */
 html {
   font-size: 19px;
 }
@@ -71,3 +72,4 @@ html {
 .details {
   @apply p-2;
 }
+/* purgecss end ignore */
