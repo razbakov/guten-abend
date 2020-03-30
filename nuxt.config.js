@@ -4,7 +4,10 @@ export default {
    ** Headers of the page
    */
   head: {
-    title: 'Instant Poll',
+    title: 'Guten Abend',
+    bodyAttrs: {
+      class: 'bg-light'
+    },
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -23,7 +26,11 @@ export default {
   /*
    ** Global CSS
    */
-  css: [],
+  css: [
+    '@/assets/css/typography.css',
+    '@/assets/css/aspect-ratio.css',
+    '@/assets/css/nav.css'
+  ],
   /*
    ** Plugins to load before mounting the App
    */

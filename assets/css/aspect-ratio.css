@@ -1,0 +1,15 @@
+.aspect-ratio {
+  overflow: hidden;
+  /* Calculated from the aspect ratio of the content (in case of 16:9 it is 9/16= 0.5625) */
+  padding-top: 56.25%;
+  position: relative;
+}
+
+.aspect-ratio iframe {
+  border: 0;
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
