@@ -11,7 +11,7 @@ export default (_config) => {
 
   const firestore = firebase.firestore()
 
-  const uid = window.localStorage.getItem('uid') ?? null
+  const uid = window.localStorage.getItem('uid')
 
   const state = reactive({
     loading: true,
@@ -55,8 +55,12 @@ export default (_config) => {
   firebase.auth().onAuthStateChanged((user) => {
     state.loading = false
     state.uid = user?.uid
-    window.localStorage.setItem('uid', state.uid)
-    loadAccount()
+
+    if (state.uid) {
+      window.localStorage.setItem('uid', state.uid)
+    }
+
+    loadAccount(user)
     loadProfile()
   })
 
@@ -65,8 +69,6 @@ export default (_config) => {
   }
 
   async function signOut() {
-    state.loading = true
-
     window.localStorage.removeItem('uid')
     await firebase.auth().signOut()
 
@@ -108,7 +110,7 @@ export default (_config) => {
     }
   }
 
-  async function loadAccount() {
+  async function loadAccount(user) {
     if (!state.uid) {
       return
     }
@@ -125,7 +127,11 @@ export default (_config) => {
     if (!doc.exists) {
       const account = {
         createdBy: state.uid,
-        createdAt: +new Date()
+        createdAt: +new Date(),
+        name: user.displayName ?? '',
+        email: user.email ?? '',
+        photo: user.photoURL ?? '',
+        timezone: new Date().toString().match(/([A-Z]+[+-][0-9]+)/)[1]
       }
 
       await firestore

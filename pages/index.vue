@@ -14,7 +14,7 @@
           to="/signup"
           class="bg-primary hover:shadow no-underline text-white font-semibold py-2 px-4 rounded text-white"
         >
-          Join Now
+          {{ uid ? 'Go to my Profile' : 'Join Now' }}
         </nuxt-link>
       </div>
       <div class="typo">
@@ -72,15 +72,14 @@
 </template>
 
 <script>
-import useThreads from '~/use/threads.js'
+import useAuth from '~/use/auth.js'
 
 export default {
   setup() {
-    const { create, loading } = useThreads()
+    const { uid } = useAuth()
 
     return {
-      create,
-      loading
+      uid
     }
   }
 }
