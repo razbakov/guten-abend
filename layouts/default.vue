@@ -82,6 +82,7 @@ export default {
     },
     nav: [
       { text: 'Home', link: '/' },
+      { text: 'Schedule', link: '/schedule/' },
       { text: 'Salsa Warm Up', link: '/salsa/' },
       { text: 'Mafia Game', link: '/mafia/' }
     ]

@@ -17,15 +17,15 @@
               {{ event.time }}
             </p>
           </div>
-          <div class="flex p-4 justify-between">
-            <p>Are you coming?</p>
+          <div class="flex px-6 pb-4 justify-end">
+            <p class="mr-4">Are you coming?</p>
             <div class="inline-flex">
               <button
                 class="hover:bg-green-400 text-green-800 font-bold py-2 px-4 rounded-l"
                 :class="{
                   'bg-green-300': getRsvpResponse(event.id) === 'yes'
                 }"
-                @click="updateRsvp(event, 'yes')"
+                @click="rsvp(event, 'yes')"
               >
                 Yes
               </button>
@@ -34,7 +34,7 @@
                 :class="{
                   'bg-red-300': getRsvpResponse(event.id) === 'no'
                 }"
-                @click="updateRsvp(event, 'no')"
+                @click="rsvp(event, 'no')"
               >
                 No
               </button>
@@ -99,6 +99,16 @@ export default {
       uid,
       getRsvpResponse,
       updateRsvp
+    }
+  },
+  methods: {
+    rsvp(event, answer) {
+      if (this.uid) {
+        this.updateRsvp(event, answer)
+      } else {
+        alert('This action requires login')
+        this.$router.push('/signup')
+      }
     }
   }
 }

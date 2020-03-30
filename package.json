@@ -22,6 +22,7 @@
     }
   },
   "dependencies": {
+    "@nuxt/markdown": "^0.0.21",
     "@nuxtjs/dotenv": "^1.4.0",
     "@nuxtjs/firebase": "^4.2.2",
     "@nuxtjs/pwa": "^3.0.0-0",
