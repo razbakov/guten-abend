@@ -6,11 +6,13 @@
       <p class="text-lg">
         Guten Abend is an online social hub to socialize and have fun via Zoom.
       </p>
-      <div class="container text-center mt-6 p-4 w-full mx-auto">
-        <nuxt-link to="/signup" class="btn">
+      <div
+        class="container text-center mt-3 p-4 w-full mx-auto md:flex justify-center"
+      >
+        <nuxt-link to="/signup" class="block btn m-2">
           {{ uid ? 'Go to my Profile' : 'Join Now' }}
         </nuxt-link>
-        <nuxt-link to="/schedule" class="btn-secondary ml-5"
+        <nuxt-link to="/schedule" class="block btn-secondary m-2"
           >See schedule</nuxt-link
         >
       </div>
