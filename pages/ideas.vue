@@ -3,7 +3,7 @@
     <div class="typo w-full">
       <div class="flex items-baseline justify-between">
         <h1 id="ideas">Ideas</h1>
-        <button class="btn" @click="addingIdea = true">
+        <button class="btn" @click="addIdea">
           Add your idea
         </button>
       </div>
@@ -58,6 +58,14 @@ export default {
     rsvp(event, answer) {
       if (this.uid) {
         this.updateRsvp(event, answer)
+      } else {
+        alert('This action requires login')
+        this.$router.push('/signup')
+      }
+    },
+    addIdea() {
+      if (this.uid) {
+        this.addingIdea = true
       } else {
         alert('This action requires login')
         this.$router.push('/signup')
