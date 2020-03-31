@@ -5,7 +5,7 @@ import 'firebase/firestore'
 import useAuth from '~/use/auth'
 
 export default () => {
-  const { uid } = useAuth()
+  const { uid, account } = useAuth()
 
   const firestore = firebase.firestore()
 
@@ -48,17 +48,24 @@ export default () => {
       (item) => item.event?.id === eventId && item.rsvp === 'yes'
     ).length
 
+  const getList = (eventId) =>
+    state.participants
+      .filter((item) => item.event?.id === eventId && item.rsvp === 'yes')
+      .map((item) => item.participant)
+
   async function updateRsvp(event, rsvp) {
     const rsvpObject = getRsvp(event.id)
 
     if (rsvpObject) {
       await collection.doc(rsvpObject.id).update({
         updateAt: +new Date(),
+        participant: account.value,
         rsvp
       })
     } else {
       await collection.add({
         uid: uid.value,
+        participant: account.value,
         event,
         createdAt: +new Date(),
         updateAt: +new Date()
@@ -70,6 +77,7 @@ export default () => {
     getRsvp,
     getRsvpResponse,
     updateRsvp,
-    getCount
+    getCount,
+    getList
   }
 }
