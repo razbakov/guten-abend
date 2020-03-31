@@ -4,7 +4,7 @@
       <p class="font-bold">Everything closed?</p>
       <h1 class="font-bold text-4xl">We are open 24/7</h1>
       <p class="text-lg">
-        Guten Abend is an online social hub to socialize and have fun via Zoom.
+        Guten Abend is an online social hub to have fun via Zoom.
       </p>
       <div
         class="container text-center mt-3 p-4 w-full mx-auto md:flex justify-center"
