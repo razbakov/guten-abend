@@ -1,5 +1,7 @@
 <template>
-  <div class="font-sans leading-normal tracking-normal antialiased">
+  <div
+    class="font-sans leading-normal tracking-normal antialiased min-h-screen"
+  >
     <header>
       <nav class="flex items-center text-dark justify-between flex-wrap p-6">
         <div class="flex mb-4">
@@ -39,7 +41,7 @@
           </div>
         </div>
         <ul
-          class="md:flex text-lg absolute left-0 right-0 bottom-0 top-0 md:relative bg-light md:bg-transparent"
+          class="md:flex text-lg fixed left-0 right-0 bottom-0 top-0 md:relative bg-light md:bg-transparent"
           :class="{ hidden: !isMenuOpen }"
         >
           <li v-for="item in nav" :key="item.link">
@@ -50,8 +52,27 @@
               >{{ item.text }}</router-link
             >
           </li>
+          <li v-if="uid && account">
+            <router-link
+              class="mr-2 md:px-4 md:py-2 p-4 w-full block"
+              to="/profile"
+              exact
+              >{{ account.name || 'Your profile' }}</router-link
+            >
+          </li>
+          <li v-if="!uid">
+            <router-link
+              class="mr-2 md:px-4 md:py-2 p-4 w-full block text-primary"
+              to="/signup"
+              exact
+              >Sign in</router-link
+            >
+          </li>
         </ul>
-        <div class="absolute right-0 top-0 mr-5 mt-5 md:hidden">
+        <div
+          class="right-0 top-0 mr-5 mt-5 md:hidden z-50"
+          :class="isMenuOpen ? 'fixed' : 'absolute'"
+        >
           <button
             class="hamburger hamburger--elastic"
             :class="{ 'is-active': isMenuOpen }"
@@ -72,6 +93,8 @@
 </template>
 
 <script>
+import useAuth from '~/use/auth.js'
+
 export default {
   data: () => ({
     isMenuOpen: false,
@@ -83,6 +106,7 @@ export default {
     nav: [
       { text: 'Home', link: '/' },
       { text: 'Schedule', link: '/schedule/' },
+      { text: 'Ideas', link: '/ideas/' },
       { text: 'Salsa Warm Up', link: '/salsa/' },
       { text: 'Mafia Game', link: '/mafia/' }
     ]
@@ -90,6 +114,14 @@ export default {
   watch: {
     $route() {
       this.isMenuOpen = false
+    }
+  },
+  setup() {
+    const { uid, account } = useAuth()
+
+    return {
+      uid,
+      account
     }
   }
 }

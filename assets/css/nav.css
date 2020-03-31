@@ -15,6 +15,16 @@
   @apply shadow text-white bg-red-700;
 }
 
+.typo .btn-secondary,
+.btn-secondary {
+  @apply bg-transparent text-primary font-semibold py-2 px-4 border border-primary rounded no-underline;
+}
+
+.typo .btn-secondary:hover,
+.btn-secondary:hover {
+  @apply bg-primary text-white border-transparent;
+}
+
 .hero {
   @apply p-2 text-center;
 }

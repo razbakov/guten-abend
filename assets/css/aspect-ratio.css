@@ -4,6 +4,7 @@
   /* Calculated from the aspect ratio of the content (in case of 16:9 it is 9/16= 0.5625) */
   padding-top: 56.25%;
   position: relative;
+  z-index: -1;
 }
 
 .aspect-ratio iframe {
@@ -13,5 +14,6 @@
   position: absolute;
   top: 0;
   width: 100%;
+  z-index: -1;
 }
 /* purgecss end ignore */

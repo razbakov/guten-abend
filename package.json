@@ -34,6 +34,7 @@
     "markdown-it-attrs": "^3.0.2",
     "markdown-it-container": "^2.0.0",
     "nuxt": "^2.0.0",
+    "slugify": "^1.4.0",
     "v-runtime-template": "^1.10.0"
   },
   "devDependencies": {

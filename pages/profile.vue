@@ -65,56 +65,6 @@
           </div>
         </div>
         <div class="typo">
-          <h2>Your Interests</h2>
-        </div>
-        <div
-          v-for="(activities, time) in interests"
-          :key="time"
-          class="md:flex mb-6 items-start border-b pb-6"
-        >
-          <div class="md:w-1/3">
-            {{ time }}
-          </div>
-          <div class="md:w-2/3 block">
-            <label
-              v-for="(activityLabel, activityId) in activities"
-              :key="activityId"
-              class="text-gray-500 font-bold w-full block"
-            >
-              <input
-                v-model="account[activityId]"
-                class="mr-2 leading-tight"
-                type="checkbox"
-              />
-              <span class="text-sm">
-                {{ activityLabel }}
-              </span>
-            </label>
-          </div>
-        </div>
-        <div class="typo">
-          <h3>Which days works best for you?</h3>
-        </div>
-        <div class="md:flex md:items-center mb-6">
-          <div class="md:w-1/3"></div>
-          <div class="md:w-2/3 block">
-            <label
-              v-for="(dayLabel, dayId) in days"
-              :key="dayId"
-              class="w-full block text-gray-500 font-bold"
-            >
-              <input
-                v-model="account[dayId]"
-                class="mr-2 leading-tight"
-                type="checkbox"
-              />
-              <span class="text-sm">
-                {{ dayLabel }}
-              </span>
-            </label>
-          </div>
-        </div>
-        <div class="typo">
           <h2>Guten Abend Club</h2>
         </div>
         <p class="text-sm">
@@ -181,7 +131,7 @@
         <button
           class="shadow bg-blue-500 hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
           type="button"
-          @click="updateAccount(account)"
+          @click="save"
         >
           Save
         </button>
@@ -204,46 +154,6 @@ import useAuth from '~/use/auth.js'
 
 export default {
   middleware: ['auth'],
-  data: () => ({
-    interests: {
-      Morning: {
-        yoga: 'Yoga',
-        accountability: 'Accountability group'
-      },
-      Lunch: {
-        salsa: 'Salsa Warm Up'
-      },
-      Evening: {
-        mafia: 'Mafia Game',
-        concerts: 'Concerts',
-        boardgames: 'Board Games',
-        conversationgames: 'Conversation Games',
-        storytelling: 'Storytelling',
-        presentations: 'Presentations',
-        bookclub: 'Book Club',
-        german: 'German Conversation Club',
-        standup: 'Stand-up Comedy'
-      }
-    },
-    days: {
-      Monday: 'Monday',
-      Tuesday: 'Tuesday',
-      Wednesday: 'Wednesday',
-      Thursday: 'Thursday',
-      Friday: 'Friday',
-      Saturday: 'Saturday',
-      Sunday: 'Sunday'
-    }
-  }),
-  watch: {
-    uid: {
-      handler(val) {
-        if (!val) {
-          this.$router.replace('/')
-        }
-      }
-    }
-  },
   setup() {
     const { uid, account, loading, signOut, updateAccount } = useAuth()
 
@@ -253,6 +163,21 @@ export default {
       account,
       signOut,
       updateAccount
+    }
+  },
+  watch: {
+    uid: {
+      handler(val) {
+        if (!val) {
+          this.$router.replace('/')
+        }
+      }
+    }
+  },
+  methods: {
+    async save() {
+      await this.updateAccount(this.account)
+      this.$router.push('/schedule')
     }
   }
 }

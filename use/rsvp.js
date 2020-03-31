@@ -38,20 +38,17 @@ export default () => {
 
   const getRsvp = (eventId) =>
     state.participants.find(
-      (item) => item.event?.id === eventId && item.uid === uid.value
+      (item) => item.eventId === eventId && item.uid === uid.value
     )
 
   const getRsvpResponse = (eventId) => getRsvp(eventId)?.rsvp ?? null
 
-  const getCount = (eventId) =>
-    state.participants.filter(
-      (item) => item.event?.id === eventId && item.rsvp === 'yes'
-    ).length
-
   const getList = (eventId) =>
     state.participants
-      .filter((item) => item.event?.id === eventId && item.rsvp === 'yes')
+      .filter((item) => item.eventId === eventId && item.rsvp === 'yes')
       .map((item) => item.participant)
+
+  const getCount = (eventId) => getList(eventId).length
 
   async function updateRsvp(event, rsvp) {
     const rsvpObject = getRsvp(event.id)
@@ -66,6 +63,7 @@ export default () => {
       await collection.add({
         uid: uid.value,
         participant: account.value,
+        eventId: event.id,
         event,
         createdAt: +new Date(),
         updateAt: +new Date()

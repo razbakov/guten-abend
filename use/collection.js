@@ -42,9 +42,10 @@ export default (name) => {
     return true
   }
 
-  function update(data) {
-    if (!state.id) {
-      return create(data)
+  async function update(data) {
+    if (!data.id) {
+      const result = await create(data)
+      return result
     }
 
     const changes = {
@@ -53,12 +54,10 @@ export default (name) => {
       ...data
     }
 
-    return collection.doc(state.id).update(changes)
+    return collection.doc(data.id).update(changes)
   }
 
   async function create(data) {
-    console.log('creating', data)
-
     const doc = await collection.add({
       createdAt: +new Date(),
       updatedAt: +new Date(),
