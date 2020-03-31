@@ -4,8 +4,8 @@
     <div v-else>
       <div class="mb-4">
         <button
-          @click="update(event)"
           class="shadow bg-blue-500 hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
+          @click="update(event)"
         >
           Save
         </button>
@@ -13,8 +13,8 @@
       <div class="flex">
         <div class="bg-white w-1/2 border rounded mr-2">
           <input
-            type="text"
             v-model="event.title"
+            type="text"
             class="bg-white border-b p-2 w-full"
           />
           <textarea

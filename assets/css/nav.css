@@ -1,4 +1,6 @@
 /* purgecss start ignore */
+@import 'hamburgers/dist/hamburgers.css';
+
 .nuxt-link-exact-active {
   @apply font-bold;
 }

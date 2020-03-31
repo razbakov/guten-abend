@@ -86,6 +86,11 @@ export default {
       { text: 'Salsa Warm Up', link: '/salsa/' },
       { text: 'Mafia Game', link: '/mafia/' }
     ]
-  })
+  }),
+  watch: {
+    $route() {
+      this.isMenuOpen = false
+    }
+  }
 }
 </script>
