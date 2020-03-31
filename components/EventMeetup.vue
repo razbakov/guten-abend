@@ -71,11 +71,14 @@
     <div v-else>
       <div class="px-6 py-4">
         <div class="font-bold text-xl mb-2">{{ event.title }}</div>
+        <Preview class="mb-2" :content="event.description" />
         <p class="text-gray-700 text-base">
           <strong class="font-bold">{{ getDay(event.date) }}</strong>
           {{ getDate(event.date) }} at {{ getTime(event.date) }} UTC
         </p>
-        <div class="text-center">{{ getCount(event.id) }} participants</div>
+        <div class="text-center font-bold">
+          {{ getCount(event.id) }} participants
+        </div>
       </div>
       <div class="flex px-6 pb-4 justify-end">
         <p class="mr-4">Do you want to join?</p>
@@ -123,8 +126,12 @@ import useAuth from '~/use/auth.js'
 import useRSVP from '~/use/rsvp.js'
 import useCollection from '~/use/collection.js'
 import useUtils from '~/use/utils.js'
+import Preview from '~/components/Preview.vue'
 
 export default {
+  components: {
+    Preview
+  },
   props: {
     event: {
       type: Object,
@@ -147,7 +154,7 @@ export default {
       {
         name: 'description',
         label: 'Description',
-        type: 'text',
+        type: 'textarea',
         placeholder: 'Describe event'
       },
       {

@@ -71,7 +71,10 @@
     <div v-else>
       <div class="px-6 py-4">
         <div class="font-bold text-xl mb-2">{{ event.title }}</div>
-        <div class="text-center">{{ getCount(event.id) }} interested</div>
+        <div class="mb-2">{{ event.description }}</div>
+        <div class="text-center font-bold">
+          {{ getCount(event.id) }} interested
+        </div>
       </div>
       <div class="flex px-6 pb-4 justify-end">
         <p class="mr-4">Are you interested?</p>
@@ -153,7 +156,6 @@ export default {
   mounted() {
     this.isEditing = this.editing
     this.data = { ...this.event }
-    this.data.tag = this.event?.id
   },
   setup() {
     const { uid } = useAuth()
