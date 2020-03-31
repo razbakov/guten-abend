@@ -10,10 +10,7 @@
         </p>
       </div>
       <div class="container text-center p-4 w-full md:max-w-xl mx-auto">
-        <nuxt-link
-          to="/signup"
-          class="bg-primary hover:shadow no-underline text-white font-semibold py-2 px-4 rounded text-white"
-        >
+        <nuxt-link to="/signup" class="btn">
           {{ uid ? 'Go to my Profile' : 'Join Now' }}
         </nuxt-link>
       </div>

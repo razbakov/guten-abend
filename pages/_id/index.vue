@@ -1,44 +1,73 @@
 <template>
   <main class="typo container w-full mx-auto md:max-w-xl px-4 pb-8 flex">
-    <div v-if="loading">Loading</div>
-    <div v-else>
+    <div v-if="event">
       <h1>{{ event.title }}</h1>
-      <div v-html="preview"></div>
+      <Preview :content="event.content" />
+    </div>
+
+    <div
+      v-if="editing"
+      class="absolute mt-24 top-0 left-0 bottom-0 bg-gray-200 border rounded mr-2 p-1"
+    >
+      <button
+        class="shadow bg-blue-500 mb-2 hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
+        @click="update(event)"
+      >
+        Save
+      </button>
+      <div class="bg-white">
+        <input
+          v-model="event.title"
+          type="text"
+          class="bg-white border-b p-2 w-full"
+        />
+        <textarea
+          v-model="event.content"
+          class="font-mono p-2 w-full h-full"
+          rows="20"
+        />
+      </div>
     </div>
   </main>
 </template>
 
 <script>
-import Markdown from '@nuxt/markdown'
 import useCollection from '~/use/collection.js'
+import Preview from '~/components/Preview.vue'
 
 export default {
-  data: () => ({
-    preview: ''
-  }),
-  setup() {
-    const { loading, load, doc: event } = useCollection('events')
+  components: {
+    Preview
+  },
+  async asyncData({ params }) {
+    if (!process.server) {
+      return {}
+    }
+
+    const { load, doc: event } = useCollection('events')
+
+    await load(params.id)
 
     return {
-      loading,
+      loading: false,
+      event
+    }
+  },
+  computed: {
+    editing() {
+      return !!this.$route.query.edit
+    }
+  },
+  async mounted() {
+    await this.load(this.$route.params.id)
+  },
+  setup() {
+    const { load, update, doc: event } = useCollection('events')
+
+    return {
       event,
+      update,
       load
-    }
-  },
-  watch: {
-    'event.content': {
-      handler() {
-        this.updatePreview()
-      }
-    }
-  },
-  mounted() {
-    this.load(this.$route.params.id)
-  },
-  methods: {
-    async updatePreview() {
-      const md = new Markdown({ toc: false, sanitize: false })
-      this.preview = (await md.toMarkup(this.event.content)).html
     }
   }
 }

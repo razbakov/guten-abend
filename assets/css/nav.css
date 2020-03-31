@@ -4,4 +4,18 @@
 .nuxt-link-exact-active {
   @apply font-bold;
 }
+
+.typo .btn,
+.btn {
+  @apply bg-primary no-underline text-white font-semibold py-2 px-4 rounded;
+}
+
+.typo .btn:hover,
+.btn:hover {
+  @apply shadow text-white bg-red-700;
+}
+
+.hero {
+  @apply p-2 text-center;
+}
 /* purgecss end ignore */
