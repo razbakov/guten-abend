@@ -56,6 +56,12 @@ export default {
     '@nuxtjs/dotenv',
     '@nuxtjs/firebase'
   ],
+  pwa: {
+    meta: {
+      name: 'Guten Abend',
+      description: 'Online Kantine'
+    }
+  },
   /*
    ** Build configuration
    */
