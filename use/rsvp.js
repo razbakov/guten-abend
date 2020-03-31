@@ -15,7 +15,7 @@ export default () => {
 
   const collection = firestore.collection('participants')
 
-  collection.where('uid', '==', uid.value).onSnapshot((snapshot) => {
+  collection.onSnapshot((snapshot) => {
     snapshot.docChanges().forEach((change) => {
       const data = {
         ...change.doc.data(),
@@ -37,9 +37,16 @@ export default () => {
   })
 
   const getRsvp = (eventId) =>
-    state.participants.find((item) => item.event?.id === eventId)
+    state.participants.find(
+      (item) => item.event?.id === eventId && item.uid === uid.value
+    )
 
   const getRsvpResponse = (eventId) => getRsvp(eventId)?.rsvp ?? null
+
+  const getCount = (eventId) =>
+    state.participants.filter(
+      (item) => item.event?.id === eventId && item.rsvp === 'yes'
+    ).length
 
   async function updateRsvp(event, rsvp) {
     const rsvpObject = getRsvp(event.id)
@@ -62,6 +69,7 @@ export default () => {
   return {
     getRsvp,
     getRsvpResponse,
-    updateRsvp
+    updateRsvp,
+    getCount
   }
 }

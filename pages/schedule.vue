@@ -16,9 +16,10 @@
               <strong class="font-bold">{{ event.day }}</strong> at
               {{ event.time }}
             </p>
+            <div class="text-center">{{ getCount(event.id) }} participants</div>
           </div>
           <div class="flex px-6 pb-4 justify-end">
-            <p class="mr-4">Are you coming?</p>
+            <p class="mr-4">Do you want to join?</p>
             <div class="inline-flex">
               <button
                 class="hover:bg-green-400 text-green-800 font-bold py-2 px-4 rounded-l"
@@ -40,6 +41,20 @@
               </button>
             </div>
           </div>
+          <div
+            v-if="getRsvpResponse(event.id) === 'yes'"
+            class="flex px-6 bg-gray-200"
+          >
+            <p v-if="event.link" class="text-gray-700">
+              Zoom link:
+              <a target="_blank" rel="noopener" :href="event.link">{{
+                event.link
+              }}</a>
+            </p>
+            <p v-else>
+              Zoom link will appear here before the event. Check later.
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -57,7 +72,8 @@ export default {
         title: 'Salsa Warm Up',
         time: '13:00 CET',
         day: 'Every Day',
-        id: 'salsa'
+        id: 'salsa',
+        link: 'https://us04web.zoom.us/j/750631096'
       },
       {
         title: 'Resistance board game',
@@ -93,12 +109,13 @@ export default {
   }),
   setup() {
     const { uid } = useAuth()
-    const { getRsvpResponse, updateRsvp } = useRSVP()
+    const { getRsvpResponse, updateRsvp, getCount } = useRSVP()
 
     return {
       uid,
       getRsvpResponse,
-      updateRsvp
+      updateRsvp,
+      getCount
     }
   },
   methods: {
