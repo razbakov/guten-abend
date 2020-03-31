@@ -156,20 +156,8 @@ export default {
         type: 'datetime-local'
       },
       {
-        name: 'time',
-        label: 'Time'
-      },
-      {
-        name: 'day',
-        label: 'Day'
-      },
-      {
         name: 'link',
         label: 'Zoom Link'
-      },
-      {
-        name: 'slug',
-        label: 'Slug'
       }
     ]
   }),
@@ -185,7 +173,6 @@ export default {
   mounted() {
     this.isEditing = this.editing
     this.data = { ...this.event }
-    this.data.tag = this.event?.id || ''
   },
   setup() {
     const { uid } = useAuth()
