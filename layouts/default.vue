@@ -4,7 +4,7 @@
   >
     <header>
       <nav class="flex items-center text-dark justify-between flex-wrap p-6">
-        <div class="flex mb-4">
+        <div class="sm:flex mb-4">
           <img
             class="w-16 h-16 mr-4"
             src="/img/logo.svg"
