@@ -112,9 +112,9 @@
 </template>
 
 <script>
-import useAuth from '~/use/auth.js'
-import useRSVP from '~/use/rsvp.js'
-import useCollection from '~/use/collection.js'
+import useAuth from '~/use/auth'
+import useRSVP from '~/use/rsvp'
+import useDoc from '~/use/doc'
 
 export default {
   props: {
@@ -160,7 +160,7 @@ export default {
   setup() {
     const { uid } = useAuth()
     const { getRsvpResponse, updateRsvp, getCount } = useRSVP()
-    const { update } = useCollection('ideas')
+    const { update } = useDoc('ideas')
 
     return {
       uid,

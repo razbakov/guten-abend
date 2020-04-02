@@ -32,8 +32,8 @@
 </template>
 
 <script>
-import useCollection from '~/use/collection.js'
-import Preview from '~/components/Preview.vue'
+import useDoc from '~/use/doc'
+import Preview from '~/components/Preview'
 
 export default {
   components: {
@@ -44,7 +44,7 @@ export default {
       return {}
     }
 
-    const { load, doc: event } = useCollection('events')
+    const { load, doc: event } = useDoc('events')
 
     await load(params.id)
 
@@ -62,7 +62,7 @@ export default {
     await this.load(this.$route.params.id)
   },
   setup() {
-    const { load, update, doc: event } = useCollection('events')
+    const { load, update, doc: event } = useDoc('events')
 
     return {
       event,

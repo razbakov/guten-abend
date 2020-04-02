@@ -1,4 +1,4 @@
-import useAuth from '~/use/auth.js'
+import useAuth from '~/use/auth'
 
 export default function({ route, redirect }) {
   const { uid } = useAuth()

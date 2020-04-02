@@ -17,10 +17,10 @@
 </template>
 
 <script>
-import useAuth from '~/use/auth.js'
-import useDoc from '~/use/collection.js'
-import TForm from '~/components/TForm.vue'
-import TLoader from '~/components/TLoader.vue'
+import useAuth from '~/use/auth'
+import useDoc from '~/use/doc'
+import TForm from '~/components/TForm'
+import TLoader from '~/components/TLoader'
 
 export default {
   middleware: ['auth'],

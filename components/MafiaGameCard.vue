@@ -70,11 +70,11 @@
 </template>
 
 <script>
-import useAuth from '~/use/auth.js'
-import useRSVP from '~/use/rsvp.js'
-import useDoc from '~/use/collection.js'
-import useUtils from '~/use/utils.js'
-import TForm from '~/components/TForm.vue'
+import useAuth from '~/use/auth'
+import useRSVP from '~/use/rsvp'
+import useDoc from '~/use/doc'
+import useUtils from '~/use/utils'
+import TForm from '~/components/TForm'
 
 export default {
   components: {

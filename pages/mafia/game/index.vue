@@ -28,11 +28,11 @@
 </template>
 
 <script>
-import useAuth from '~/use/auth.js'
-import useDoc from '~/use/collection.js'
-import useCollection from '~/use/collections.js'
-import TLoader from '~/components/TLoader.vue'
-import MafiaGameCard from '~/components/MafiaGameCard.vue'
+import useAuth from '~/use/auth'
+import useDoc from '~/use/doc'
+import useCollection from '~/use/collections'
+import TLoader from '~/components/TLoader'
+import MafiaGameCard from '~/components/MafiaGameCard'
 
 export default {
   components: {

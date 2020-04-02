@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import useAuth from '~/use/auth.js'
+import useAuth from '~/use/auth'
 
 export default {
   data: () => ({

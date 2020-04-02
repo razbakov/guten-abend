@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import useRSVP from '~/use/rsvp.js'
+import useRSVP from '~/use/rsvp'
 
 export default {
   setup() {

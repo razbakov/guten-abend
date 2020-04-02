@@ -27,10 +27,10 @@
 </template>
 
 <script>
-import useAuth from '~/use/auth.js'
-import useRSVP from '~/use/rsvp.js'
-import useCollection from '~/use/collections.js'
-import EventIdea from '~/components/EventIdea.vue'
+import useAuth from '~/use/auth'
+import useRSVP from '~/use/rsvp'
+import useCollection from '~/use/collections'
+import EventIdea from '~/components/EventIdea'
 
 export default {
   components: {

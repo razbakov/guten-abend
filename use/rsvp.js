@@ -1,5 +1,5 @@
 import useAuth from '~/use/auth'
-import useDoc from '~/use/collection'
+import useDoc from '~/use/doc'
 import useCollection from '~/use/collections'
 
 export default () => {

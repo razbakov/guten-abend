@@ -122,11 +122,11 @@
 </template>
 
 <script>
-import useAuth from '~/use/auth.js'
-import useRSVP from '~/use/rsvp.js'
-import useCollection from '~/use/collection.js'
-import useUtils from '~/use/utils.js'
-import Preview from '~/components/Preview.vue'
+import useAuth from '~/use/auth'
+import useRSVP from '~/use/rsvp'
+import useDoc from '~/use/doc'
+import useUtils from '~/use/utils'
+import Preview from '~/components/Preview'
 
 export default {
   components: {
@@ -184,7 +184,7 @@ export default {
   setup() {
     const { uid } = useAuth()
     const { getRsvpResponse, updateRsvp, getCount } = useRSVP()
-    const { update } = useCollection('meetups')
+    const { update } = useDoc('meetups')
     const { getDay, getTime, getDate } = useUtils()
 
     return {
