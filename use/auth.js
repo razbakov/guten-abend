@@ -1,4 +1,4 @@
-import { reactive, toRefs } from '@vue/composition-api'
+import { reactive, toRefs, computed } from '@vue/composition-api'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
@@ -12,6 +12,7 @@ export default (_config) => {
   const firestore = firebase.firestore()
 
   const uid = window.localStorage.getItem('uid')
+  const isAdmin = !!window.localStorage.getItem('is_admin')
 
   const state = reactive({
     loading: true,
@@ -20,6 +21,14 @@ export default (_config) => {
     profile: null,
     account: null
   })
+
+  const can = (action, object) => {
+    if (action === 'edit') {
+      return isAdmin || !object || object.createdBy === state.uid
+    } else {
+      return true
+    }
+  }
 
   // Confirm the link is a sign-in with email link.
   if (firebase.auth().isSignInWithEmailLink(window.location.href)) {
@@ -78,6 +87,8 @@ export default (_config) => {
 
     state.loading = false
   }
+
+  const ready = computed(() => !state.loading && state.uid && state.account)
 
   async function loadProfile() {
     if (!state.uid) {
@@ -215,6 +226,9 @@ export default (_config) => {
     loadAccount,
     signInWithGoogle,
     sendSignInLinkToEmail,
-    signOut
+    signOut,
+    ready,
+    isAdmin,
+    can
   }
 }

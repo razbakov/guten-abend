@@ -18,6 +18,27 @@ export default (name) => {
 
   const collection = firestore.collection(name)
 
+  async function loadById(id) {
+    const doc = await collection.doc(id).get()
+    state.id = id
+
+    if (!doc.exists) {
+      state.exists = false
+      state.loading = false
+      state.doc = {}
+
+      return false
+    }
+
+    state.doc = doc.data()
+    state.slug = state.doc.slug
+
+    state.exists = true
+    state.loading = false
+
+    return true
+  }
+
   async function load(slug) {
     const filteredCollection = await collection.where('slug', '==', slug).get()
 
@@ -43,18 +64,35 @@ export default (name) => {
   }
 
   async function update(data) {
-    if (!data.id) {
+    if (data.id) {
+      state.id = data.id
+      state.exists = true
+    }
+
+    if (!state.id) {
       const result = await create(data)
       return result
     }
 
-    const changes = {
+    let changes = {
       updatedAt: +new Date(),
       updatedBy: uid.value,
       ...data
     }
 
-    return collection.doc(data.id).update(changes)
+    if (state.exists) {
+      const result = await collection.doc(state.id).update(changes)
+      return result
+    } else {
+      changes = {
+        createdAt: +new Date(),
+        createdBy: uid.value,
+        ...changes
+      }
+
+      const result = await collection.doc(state.id).set(changes)
+      return result
+    }
   }
 
   async function create(data) {
@@ -76,6 +114,7 @@ export default (name) => {
     ...toRefs(state),
     create,
     load,
-    update
+    update,
+    loadById
   }
 }
