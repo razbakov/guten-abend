@@ -1,8 +1,8 @@
 <template>
   <div class="rounded bg-white mb-4 overflow-hidden shadow-lg w-full">
-    <div v-if="!isEditing && canEdit" class="float-right mr-2 mt-2">
+    <div v-if="!isEditing && can('edit', event)" class="float-right mr-2 mt-2">
       <nuxt-link
-        v-if="$route.query.admin"
+        v-if="isAdmin"
         class="underline mr-2"
         :to="`/schedule/${event.id}`"
       >
@@ -32,41 +32,7 @@
     </div>
 
     <div v-if="isEditing" class="px-6 py-4">
-      <form @submit.prevent="save">
-        <div
-          v-for="field in fields"
-          :key="field.name"
-          class="md:flex md:items-top mb-6"
-        >
-          <div class="md:w-1/3">
-            <label
-              :for="field.name"
-              class="block text-gray-700 font-bold md:text-right mb-1 md:mb-0 pr-4"
-            >
-              {{ field.label }}
-            </label>
-          </div>
-          <div class="md:w-2/3">
-            <input
-              v-if="!field.type"
-              :id="field.name"
-              v-model="data[field.name]"
-              :placeholder="field.placeholder"
-              class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-              type="text"
-            />
-            <textarea
-              v-if="field.type === 'text'"
-              :id="field.name"
-              v-model="data[field.name]"
-              :placeholder="field.placeholder"
-              class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-              type="text"
-            />
-          </div>
-        </div>
-        <button class="btn" type="submit">Save</button>
-      </form>
+      <TForm v-model="event" :fields="fields" @save="save" />
     </div>
     <div v-else>
       <div class="px-6 py-4">
@@ -115,8 +81,12 @@
 import useAuth from '~/use/auth'
 import useRSVP from '~/use/rsvp'
 import useDoc from '~/use/doc'
+import TForm from '~/components/TForm'
 
 export default {
+  components: {
+    TForm
+  },
   props: {
     event: {
       type: Object,
@@ -144,21 +114,12 @@ export default {
       }
     ]
   }),
-  computed: {
-    canEdit() {
-      return (
-        !this.event ||
-        this.event.createdBy === this.uid ||
-        this.$route.query.admin
-      )
-    }
-  },
   mounted() {
     this.isEditing = this.editing
     this.data = { ...this.event }
   },
   setup() {
-    const { uid } = useAuth()
+    const { uid, can, isAdmin } = useAuth()
     const { getRsvpResponse, updateRsvp, getCount } = useRSVP()
     const { update } = useDoc('ideas')
 
@@ -167,7 +128,9 @@ export default {
       getRsvpResponse,
       updateRsvp,
       getCount,
-      update
+      update,
+      isAdmin,
+      can
     }
   },
   methods: {
@@ -179,8 +142,8 @@ export default {
         this.$router.push('/signup')
       }
     },
-    async save() {
-      await this.update(this.data)
+    async save(data) {
+      await this.update(data)
       this.isEditing = false
       this.$emit('save')
     }

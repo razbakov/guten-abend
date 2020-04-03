@@ -39,13 +39,8 @@ export default {
   data: () => ({
     addingEvent: false
   }),
-  computed: {
-    isAdmin() {
-      return this.$route.query.admin
-    }
-  },
   setup() {
-    const { uid } = useAuth()
+    const { uid, isAdmin } = useAuth()
     const { getRsvpResponse, updateRsvp, getCount } = useRSVP()
     const { docs: ideas } = useCollection('ideas')
     const { docs: events } = useCollection('meetups', 'date')
@@ -56,7 +51,8 @@ export default {
       updateRsvp,
       getCount,
       ideas,
-      events
+      events,
+      isAdmin
     }
   },
   methods: {
