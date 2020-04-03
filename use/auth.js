@@ -3,6 +3,7 @@ import { toRefs, computed } from '@vue/composition-api'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
+import { useRouter } from '~/plugins/router'
 
 let uid = null
 let isAdmin = false
@@ -34,7 +35,11 @@ export default () => {
     state.initialized = true
   }
 
+  const router = useRouter()
+
   const ready = computed(() => !state.loading && !!state.uid && !!state.account)
+
+  const firestore = firebase.firestore()
 
   function can(action, object) {
     if (action === 'edit') {
@@ -48,6 +53,7 @@ export default () => {
     if (user) {
       state.uid = user.uid
     } else {
+      state.loading = false
       state.uid = null
     }
 
@@ -60,8 +66,6 @@ export default () => {
     }
 
     window.localStorage.setItem('uid', state.uid)
-
-    const firestore = firebase.firestore()
 
     const account = await loadAccount()
 
@@ -89,8 +93,6 @@ export default () => {
   async function loadAccount() {
     state.loading = true
 
-    const firestore = firebase.firestore()
-
     const doc = await firestore
       .collection('accounts')
       .doc(state.uid)
@@ -114,8 +116,6 @@ export default () => {
     }
 
     state.loading = true
-
-    const firestore = firebase.firestore()
 
     const doc = await firestore
       .collection('profiles')
@@ -153,8 +153,6 @@ export default () => {
       ...data
     }
 
-    const firestore = firebase.firestore()
-
     await firestore
       .collection('profiles')
       .doc(state.uid)
@@ -175,8 +173,6 @@ export default () => {
       ...data
     }
 
-    const firestore = firebase.firestore()
-
     await firestore
       .collection('accounts')
       .doc(state.uid)
@@ -192,6 +188,8 @@ export default () => {
     setUser(null)
 
     state.loading = false
+
+    router.replace('/')
   }
 
   async function signInAnonymously() {

@@ -3,8 +3,8 @@
     class="font-sans leading-normal tracking-normal antialiased min-h-screen"
   >
     <THeader />
-    <div class="container w-full mx-auto md:max-w-xl px-4 pb-8">
-      <div class="bg-white w-full shadow-md rounded px-8 pb-8 mb-4 pt-2">
+    <div class="container w-full mx-auto md:max-w-xl">
+      <div class="bg-white w-full shadow-md rounded px-8 pb-8 pt-2">
         <TLoader v-if="!ready" />
         <nuxt v-else />
       </div>

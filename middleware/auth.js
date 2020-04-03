@@ -7,7 +7,7 @@ export default function({ route, redirect }) {
     redirect('/account')
   }
 
-  if (!uid.value) {
+  if (route.name === 'account' && !uid.value) {
     redirect('/')
   }
 }
