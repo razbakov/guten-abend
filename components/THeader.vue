@@ -52,9 +52,9 @@
         <li v-if="uid && account">
           <router-link
             class="mr-2 md:px-4 md:py-2 p-4 w-full block"
-            to="/profile"
+            to="/account"
             exact
-            >{{ account.name || 'Your profile' }}</router-link
+            >{{ account.name || 'My account' }}</router-link
           >
         </li>
         <li v-if="!uid">

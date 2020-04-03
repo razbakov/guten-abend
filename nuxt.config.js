@@ -35,7 +35,7 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: ['~/plugins/composition-api'],
+  plugins: ['~/plugins/composition-api', '~/plugins/firebase'],
   /*
    ** Nuxt.js dev-modules
    */
@@ -53,8 +53,7 @@ export default {
   modules: [
     '@nuxtjs/pwa',
     // Doc: https://github.com/nuxt-community/dotenv-module
-    '@nuxtjs/dotenv',
-    '@nuxtjs/firebase'
+    '@nuxtjs/dotenv'
   ],
   pwa: {
     meta: {
@@ -76,21 +75,23 @@ export default {
   generate: {
     routes: ['/', '/signup/', '/mafia/', '/salsa/', '/schedule/']
   },
-  firebase: {
-    config: {
-      apiKey: 'AIzaSyBEo2JLHYrGCAL0zIM5enhr50D7gxZHxgQ',
-      authDomain: 'gutenabend-ea9a0.firebaseapp.com',
-      databaseURL: 'https://gutenabend-ea9a0.firebaseio.com',
-      projectId: 'gutenabend-ea9a0',
-      storageBucket: 'gutenabend-ea9a0.appspot.com',
-      messagingSenderId: '529618991089',
-      appId: '1:529618991089:web:a3cad08d7e4d7f0c4a3650',
-      measurementId: 'G-EQ7DKFZPJC'
-    },
-    services: {
-      auth: true,
-      firestore: true,
-      analytics: true
+  env: {
+    firebase: {
+      config: {
+        apiKey: 'AIzaSyBEo2JLHYrGCAL0zIM5enhr50D7gxZHxgQ',
+        authDomain: 'gutenabend-ea9a0.firebaseapp.com',
+        databaseURL: 'https://gutenabend-ea9a0.firebaseio.com',
+        projectId: 'gutenabend-ea9a0',
+        storageBucket: 'gutenabend-ea9a0.appspot.com',
+        messagingSenderId: '529618991089',
+        appId: '1:529618991089:web:a3cad08d7e4d7f0c4a3650',
+        measurementId: 'G-EQ7DKFZPJC'
+      },
+      services: {
+        auth: true,
+        firestore: true,
+        analytics: true
+      }
     }
   }
 }
