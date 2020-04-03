@@ -10,7 +10,7 @@
         class="container text-center mt-3 p-4 w-full mx-auto md:flex justify-center"
       >
         <nuxt-link to="/signup" class="block btn m-2">
-          {{ uid ? 'Go to my Profile' : 'Join Now' }}
+          {{ uid ? 'Go to my Account' : 'Join Now' }}
         </nuxt-link>
         <nuxt-link to="/schedule" class="block btn-secondary m-2"
           >See schedule</nuxt-link

@@ -4,6 +4,7 @@ import 'firebase/auth'
 import 'firebase/firestore'
 
 export default (_config) => {
+  console.log('use auth.js')
   const defaultConfig = {
     autoSignin: false
   }
@@ -62,6 +63,7 @@ export default (_config) => {
   }
 
   firebase.auth().onAuthStateChanged((user) => {
+    console.log('onAuthStateChanged')
     state.loading = false
     state.uid = user?.uid
 
@@ -122,6 +124,7 @@ export default (_config) => {
   }
 
   async function loadAccount(user) {
+    console.log('loadAccount')
     if (!state.uid) {
       return
     }

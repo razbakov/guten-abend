@@ -3,7 +3,7 @@
     <div class="typo bg-white w-full shadow-md rounded px-8 pb-8 mb-4 pt-2">
       <TLoader v-if="!ready" />
       <div v-else>
-        <h2 v-if="exists">Your Mafia Profile</h2>
+        <h2 v-if="exists">My Mafia Profile</h2>
         <h2 v-else>Create Mafia Profile</h2>
         <TForm
           v-model="profile"
