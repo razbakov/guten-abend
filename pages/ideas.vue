@@ -1,7 +1,7 @@
 <template>
-  <main>
+  <main class="p-4">
     <div class="typo w-full">
-      <div class="flex items-baseline justify-between">
+      <div class="md:flex items-baseline justify-between mb-4">
         <h1 id="ideas">Ideas</h1>
         <button class="btn" @click="addIdea">
           Add your idea

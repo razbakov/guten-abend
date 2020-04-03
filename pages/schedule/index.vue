@@ -1,7 +1,7 @@
 <template>
-  <main>
+  <main class="p-4">
     <div class="typo w-full">
-      <div class="flex items-baseline justify-between">
+      <div class="md:flex items-baseline justify-between mb-4">
         <h1 id="ideas">Schedule</h1>
         <button v-if="isAdmin" class="btn" @click="addingEvent = true">
           Add Event
