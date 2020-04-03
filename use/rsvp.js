@@ -1,6 +1,6 @@
 import useAuth from '~/use/auth'
 import useDoc from '~/use/doc'
-import useCollection from '~/use/collections'
+import useCollection from '~/use/collection'
 
 export default () => {
   const { uid, account } = useAuth()
