@@ -29,7 +29,7 @@
 <script>
 import useAuth from '~/use/auth'
 import useRSVP from '~/use/rsvp'
-import useCollection from '~/use/collections'
+import useCollection from '~/use/collection'
 import EventMeetup from '~/components/EventMeetup'
 
 export default {

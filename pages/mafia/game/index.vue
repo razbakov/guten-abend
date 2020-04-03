@@ -30,7 +30,7 @@
 <script>
 import useAuth from '~/use/auth'
 import useDoc from '~/use/doc'
-import useCollection from '~/use/collections'
+import useCollection from '~/use/collection'
 import TLoader from '~/components/TLoader'
 import MafiaGameCard from '~/components/MafiaGameCard'
 
