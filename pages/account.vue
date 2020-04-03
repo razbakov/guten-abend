@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="card">
     <div class="typo">
       <h2 v-if="account">My Account</h2>
       <h2 v-else>Create Account</h2>
@@ -25,7 +25,6 @@ import TForm from '~/components/TForm'
 
 export default {
   middleware: ['auth'],
-  layout: 'card',
   components: {
     TForm
   },

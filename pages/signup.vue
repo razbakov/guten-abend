@@ -1,6 +1,6 @@
 <template>
-  <div class="container w-full mx-auto md:max-w-xl">
-    <div class="bg-white w-full shadow-md rounded p-6 pt-2">
+  <div>
+    <div class="card">
       <TLoader v-if="loading || signingIn" />
       <div v-else-if="emailSent" class="typo">
         <h2>Almost there</h2>

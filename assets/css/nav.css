@@ -28,4 +28,12 @@
 .hero {
   @apply p-2 text-center;
 }
+
+.card {
+  @apply bg-white w-full shadow-md rounded px-8 pb-8 pt-2;
+}
+
+.card-item {
+  @apply rounded bg-white mb-4 overflow-hidden shadow-lg w-full;
+}
 /* purgecss end ignore */

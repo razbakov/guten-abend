@@ -1,5 +1,5 @@
 <template>
-  <div class="rounded bg-white mb-4 overflow-hidden shadow-lg w-full">
+  <div class="card-item">
     <div v-if="!isEditing && can('edit', game)" class="float-right mr-2 mt-2">
       <button
         class="rounded border p-2 hover:bg-gray-200"

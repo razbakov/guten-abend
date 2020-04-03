@@ -1,5 +1,5 @@
 <template>
-  <main class="container w-full mx-auto md:max-w-xl px-4 pb-8 flex">
+  <main>
     <div class="typo w-full">
       <div class="flex items-baseline justify-between">
         <h1 id="ideas">Ideas</h1>
