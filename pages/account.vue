@@ -1,9 +1,11 @@
 <template>
-  <div class="card">
-    <div class="typo">
-      <h2 v-if="account">My Account</h2>
-      <h2 v-else>Create Account</h2>
+  <main class="card">
+    <div class="mb-4 bg-gray-200 -mt-2 -mx-8 p-4">
+      <h1 class="text-3xl font-bold">
+        {{ account ? 'My Account' : 'Create Account' }}
+      </h1>
     </div>
+
     <TForm
       v-model="account"
       :fields="fields"
@@ -16,7 +18,7 @@
         Logout
       </button>
     </div>
-  </div>
+  </main>
 </template>
 
 <script>

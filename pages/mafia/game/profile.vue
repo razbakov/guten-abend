@@ -1,19 +1,21 @@
 <template>
-  <div class="container w-full mx-auto md:max-w-xl px-4 pb-8">
-    <div class="typo bg-white w-full shadow-md rounded px-8 pb-8 mb-4 pt-2">
-      <TLoader v-if="!ready" />
-      <div v-else>
-        <h2 v-if="exists">My Mafia Profile</h2>
-        <h2 v-else>Create Mafia Profile</h2>
-        <TForm
-          v-model="profile"
-          :fields="fields"
-          :submit-label="`${exists ? 'Save' : 'Finish'}`"
-          @save="save"
-        />
-      </div>
+  <main class="card">
+    <div class="mb-4 bg-gray-200 -mt-2 -mx-8 p-4">
+      <h1 class="text-3xl font-bold">
+        {{ exists ? 'My Mafia Profile' : 'Create Mafia Profile' }}
+      </h1>
     </div>
-  </div>
+
+    <TLoader v-if="!ready" />
+    <div v-else>
+      <TForm
+        v-model="profile"
+        :fields="fields"
+        :submit-label="`${exists ? 'Save' : 'Finish'}`"
+        @save="save"
+      />
+    </div>
+  </main>
 </template>
 
 <script>

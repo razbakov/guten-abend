@@ -1,5 +1,5 @@
 <template>
-  <div class="container w-full mx-auto md:max-w-xl p-4 rounded shadow bg-white">
+  <main class="card">
     <div class="font-bold text-lg mb-4">Event {{ slug }}</div>
     <div class="font-mono">
       <div
@@ -11,7 +11,7 @@
         <p><span class="font-bold">Email:</span> {{ participant.email }}</p>
       </div>
     </div>
-  </div>
+  </main>
 </template>
 
 <script>

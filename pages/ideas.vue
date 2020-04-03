@@ -1,27 +1,23 @@
 <template>
   <main class="p-4">
-    <div class="typo w-full">
-      <div class="md:flex items-baseline justify-between mb-4">
-        <h1 id="ideas">Ideas</h1>
-        <button class="btn" @click="addIdea">
-          Add your idea
-        </button>
-      </div>
+    <div class="md:flex items-baseline justify-between mb-4">
+      <h1 class="text-3xl font-bold">Ideas</h1>
+      <button class="btn" @click="addIdea">
+        Add your idea
+      </button>
+    </div>
 
-      <EventIdea v-if="addingIdea" :editing="true" @save="addingIdea = false" />
+    <EventIdea v-if="addingIdea" :editing="true" @save="addingIdea = false" />
 
-      <p>Mark those that you like and we will plan it for the next week.</p>
+    <div class="mb-4">
+      Mark those that you like and we will plan it for the next week.
+    </div>
 
-      <div>
-        <EventIdea v-for="event in ideas" :key="event.id" :event="event" />
-      </div>
+    <EventIdea v-for="event in ideas" :key="event.id" :event="event" />
 
-      <div class="typo">
-        <p>
-          We are also looking for creators and animators, who would like to
-          contribute to our club and share some fun with us!
-        </p>
-      </div>
+    <div class="m-4">
+      We are also looking for creators and animators, who would like to
+      contribute to our club and share some fun with us!
     </div>
   </main>
 </template>

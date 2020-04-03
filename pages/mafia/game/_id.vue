@@ -1,5 +1,5 @@
 <template>
-  <div>Mafia Game #1</div>
+  <main>Mafia Game #1</main>
 </template>
 
 <script>

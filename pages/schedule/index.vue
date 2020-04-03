@@ -1,27 +1,23 @@
 <template>
   <main class="p-4">
-    <div class="typo w-full">
-      <div class="md:flex items-baseline justify-between mb-4">
-        <h1 id="ideas">Schedule</h1>
-        <button v-if="isAdmin" class="btn" @click="addingEvent = true">
-          Add Event
-        </button>
-      </div>
+    <div class="md:flex items-baseline justify-between mb-4">
+      <h1 class="text-3xl font-bold">Schedule</h1>
+      <button v-if="isAdmin" class="btn" @click="addingEvent = true">
+        Add Event
+      </button>
+    </div>
 
-      <EventMeetup
-        v-if="addingEvent"
-        :editing="true"
-        @save="addingEvent = false"
-      />
+    <EventMeetup
+      v-if="addingEvent"
+      :editing="true"
+      @save="addingEvent = false"
+    />
 
-      <div>
-        <EventMeetup v-for="event in events" :key="event.id" :event="event" />
-      </div>
+    <EventMeetup v-for="event in events" :key="event.id" :event="event" />
 
-      <div class="hero typo">
-        <h2>Want more?</h2>
-        <nuxt-link to="/ideas" class="btn-secondary">See ideas</nuxt-link>
-      </div>
+    <div class="hero">
+      <h2 class="text-2xl font-bold mb-4">Want more?</h2>
+      <nuxt-link to="/ideas" class="btn-secondary">See ideas</nuxt-link>
     </div>
   </main>
 </template>
