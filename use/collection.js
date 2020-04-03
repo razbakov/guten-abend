@@ -29,6 +29,10 @@ export default (name, order) => {
   }
 
   const docs = computed(() => {
+    if (!state[name]) {
+      return []
+    }
+
     let result = Object.keys(state[name]).map((key) => ({
       ...state[name][key],
       id: key
