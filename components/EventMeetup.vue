@@ -32,7 +32,15 @@
     </div>
 
     <div v-if="isEditing" class="px-6 py-4">
-      <TForm v-model="event" :fields="fields" @save="save" />
+      <TForm
+        v-model="event"
+        :fields="fields"
+        show-cancel
+        show-remove
+        @save="saveItem"
+        @cancel="cancel"
+        @remove="removeItem"
+      />
     </div>
     <div v-else>
       <div class="px-6 py-4">
@@ -42,7 +50,7 @@
           <strong class="font-bold">{{ getDay(event.date) }}</strong>
           {{ getDate(event.date) }} at {{ getTime(event.date) }} UTC
         </p>
-        <div class="text-center font-bold">
+        <div class="text-center font-bold py-2">
           {{ getCount(event.id) }} participants
         </div>
       </div>
@@ -71,17 +79,17 @@
       </div>
       <div
         v-if="getRsvpResponse(event.id) === 'yes'"
-        class="flex px-6 bg-gray-200"
+        class="flex px-6 py-4 bg-gray-200 text-gray-700"
       >
-        <p v-if="event.link" class="text-gray-700">
+        <div v-if="event.link">
           Zoom link:
           <a target="_blank" rel="noopener" :href="event.link">{{
             event.link
           }}</a>
-        </p>
-        <p v-else>
+        </div>
+        <div v-else>
           Zoom link will appear here before the event. Check later.
-        </p>
+        </div>
       </div>
     </div>
   </div>
@@ -143,7 +151,7 @@ export default {
   setup() {
     const { uid, isAdmin, can } = useAuth()
     const { getRsvpResponse, updateRsvp, getCount } = useRSVP()
-    const { update } = useDoc('meetups')
+    const { update, remove } = useDoc('meetups')
     const { getDay, getTime, getDate } = useUtils()
 
     return {
@@ -156,7 +164,8 @@ export default {
       getTime,
       getDate,
       isAdmin,
-      can
+      can,
+      remove
     }
   },
   methods: {
@@ -172,6 +181,18 @@ export default {
       await this.update(data)
       this.isEditing = false
       this.$emit('save')
+    },
+    cancel() {
+      this.isEditing = false
+      this.$emit('cancel')
+    },
+    async saveItem(data) {
+      this.cancel()
+      await this.update(data)
+    },
+    async removeItem(id) {
+      this.cancel()
+      await this.remove(id)
     }
   }
 }

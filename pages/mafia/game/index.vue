@@ -7,11 +7,7 @@
       </button>
     </div>
 
-    <MafiaGameCard
-      v-if="addingGame"
-      :editing="true"
-      @save="addingGame = false"
-    />
+    <MafiaGameCard v-if="addingGame" editing @cancel="addingGame = false" />
 
     <div v-if="games.length">
       <MafiaGameCard v-for="game in games" :key="game.id" :game="game" />

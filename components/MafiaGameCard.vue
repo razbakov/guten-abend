@@ -24,7 +24,15 @@
     </div>
 
     <div v-if="isEditing" class="px-6 py-4">
-      <TForm v-model="game" :fields="fields" @save="save" />
+      <TForm
+        v-model="game"
+        :fields="fields"
+        show-cancel
+        show-remove
+        @save="saveItem"
+        @cancel="cancel"
+        @remove="removeItem"
+      />
     </div>
     <div v-else>
       <div class="px-6 py-4">
@@ -33,7 +41,7 @@
           Created {{ getDate(game.createdAt) }} at
           {{ getTime(game.createdAt) }} UTC
         </p>
-        <div class="text-center font-bold">
+        <div class="text-center font-bold py-2">
           {{ getCount(game.id) }} participants
         </div>
       </div>
@@ -107,7 +115,7 @@ export default {
   setup() {
     const { uid, isAdmin, can } = useAuth()
     const { getRsvpResponse, updateRsvp, getCount } = useRSVP()
-    const { update } = useDoc('mafia_games')
+    const { update, remove } = useDoc('mafia_games')
     const { getDay, getTime, getDate } = useUtils()
 
     return {
@@ -120,7 +128,8 @@ export default {
       getTime,
       getDate,
       isAdmin,
-      can
+      can,
+      remove
     }
   },
   methods: {
@@ -131,10 +140,17 @@ export default {
     rsvp(event, answer) {
       this.updateRsvp(event, answer)
     },
-    async save(data) {
-      await this.update(data)
+    cancel() {
       this.isEditing = false
-      this.$emit('save')
+      this.$emit('cancel')
+    },
+    async saveItem(data) {
+      this.cancel()
+      await this.update(data)
+    },
+    async removeItem(id) {
+      this.cancel()
+      await this.remove(id)
     }
   }
 }

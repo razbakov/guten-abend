@@ -95,6 +95,10 @@ export default (name) => {
     }
   }
 
+  async function remove(id) {
+    await collection.doc(id).delete()
+  }
+
   async function create(data) {
     const doc = await collection.add({
       createdAt: +new Date(),
@@ -115,6 +119,7 @@ export default (name) => {
     create,
     load,
     update,
-    loadById
+    loadById,
+    remove
   }
 }

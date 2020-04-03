@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="save">
+  <div>
     <div v-for="field in fields" :key="field.name">
       <div class="md:flex md:items-top mb-6">
         <div class="md:w-1/3">
@@ -64,9 +64,19 @@
       </div>
     </div>
     <div class="flex justify-end">
-      <button class="btn" type="submit">{{ submitLabel }}</button>
+      <button
+        v-if="showRemove"
+        class="p-2 px-4 underline text-red-500"
+        @click="remove"
+      >
+        Delete
+      </button>
+      <button v-if="showCancel" class="p-2 px-4 underline" @click="cancel">
+        Cancel
+      </button>
+      <button class="btn" @click="save">{{ submitLabel }}</button>
     </div>
-  </form>
+  </div>
 </template>
 
 <script>
@@ -89,6 +99,14 @@ export default {
     submitLabel: {
       type: String,
       default: 'Save'
+    },
+    showCancel: {
+      type: Boolean,
+      default: false
+    },
+    showRemove: {
+      type: Boolean,
+      default: false
     }
   },
   data: () => ({
@@ -106,9 +124,6 @@ export default {
     load() {
       this.data = { ...this.value }
     },
-    save() {
-      this.$emit('save', this.data)
-    },
     getLabel(field) {
       if (typeof field === 'string') {
         return camelcase(field)
@@ -119,6 +134,15 @@ export default {
       }
 
       return camelcase(field.name)
+    },
+    remove() {
+      this.$emit('remove', this.data.id)
+    },
+    cancel() {
+      this.$emit('cancel')
+    },
+    save() {
+      this.$emit('save', this.data)
     }
   }
 }
