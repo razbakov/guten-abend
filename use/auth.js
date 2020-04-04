@@ -41,11 +41,15 @@ export default () => {
 
   const firestore = firebase.firestore()
 
-  function can(action, object) {
-    if (action === 'edit') {
-      return isAdmin || !object || object.createdBy === state.uid
-    } else {
+  function can(action, collection, object) {
+    if (isAdmin) {
       return true
+    }
+    if (action === 'edit') {
+      return !object || object.createdBy === state.uid
+    }
+    if (action === 'remove') {
+      return object && object.createdBy === state.uid
     }
   }
 
