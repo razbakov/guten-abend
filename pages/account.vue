@@ -2,14 +2,14 @@
   <main class="card">
     <div class="mb-4 bg-gray-200 -mt-2 -mx-8 p-4">
       <h1 class="text-3xl font-bold">
-        {{ account ? 'My Account' : 'Create Account' }}
+        {{ account && account.newsletter ? 'My Account' : 'Create Account' }}
       </h1>
     </div>
 
     <TForm
       v-model="account"
       :fields="fields"
-      :submit-label="`${account ? 'Save' : 'Finish'}`"
+      :submit-label="`${account && account.newsletter ? 'Save' : 'Finish'}`"
       @save="save"
     />
 
@@ -72,7 +72,15 @@ export default {
   methods: {
     async save(data) {
       await this.updateAccount(data)
-      this.$router.push('/schedule')
+
+      let target = window.localStorage.getItem('target')
+      window.localStorage.removeItem('target')
+
+      if (!target) {
+        target = '/schedule'
+      }
+
+      this.$router.push(target)
     }
   }
 }

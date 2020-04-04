@@ -2,30 +2,30 @@
   <div>
     <div class="md:flex px-6 pb-4 justify-end items-center text-center">
       <div class="mr-4">
-        <slot name="header" :count="getCount(item.id)" />
+        <slot name="header" :count="getCount(id)" />
       </div>
       <div class="flex mt-4 md:mt-0 content-center justify-center">
         <button
           class="hover:bg-green-400 text-green-800 font-bold py-2 px-4 rounded-l"
           :class="{
-            'bg-green-300': getRsvpResponse(item.id) === 'yes'
+            'bg-green-300': getRsvpResponse(id) === 'yes'
           }"
-          @click="rsvp(item, 'yes')"
+          @click="rsvp(id, 'yes')"
         >
           Yes
         </button>
         <button
           class="hover:bg-red-400 text-red-800 font-bold py-2 px-4 rounded-r"
           :class="{
-            'bg-red-300': getRsvpResponse(item.id) === 'no'
+            'bg-red-300': getRsvpResponse(id) === 'no'
           }"
-          @click="rsvp(item, 'no')"
+          @click="rsvp(id, 'no')"
         >
           No
         </button>
       </div>
     </div>
-    <div v-if="getRsvpResponse(item.id) === 'yes'">
+    <div v-if="getRsvpResponse(id) === 'yes'">
       <slot />
     </div>
   </div>
@@ -37,29 +37,34 @@ import useRSVP from '~/use/rsvp'
 
 export default {
   props: {
-    item: {
-      type: Object,
-      default: () => ({})
+    id: {
+      type: String,
+      default: ''
+    },
+    collection: {
+      type: String,
+      default: ''
     }
   },
   setup() {
     const { uid } = useAuth()
-    const { getRsvpResponse, updateRsvp, getCount } = useRSVP()
+    const { getRsvpResponse, getCount, updateRsvp } = useRSVP()
 
     return {
-      uid,
       getRsvpResponse,
+      getCount,
       updateRsvp,
-      getCount
+      uid
     }
   },
   methods: {
-    rsvp(event, answer) {
+    rsvp(id, answer) {
       if (this.uid) {
-        this.updateRsvp(event, answer)
+        this.updateRsvp(id, this.collection, answer)
       } else {
-        alert('This action requires login')
-        this.$router.push('/signup')
+        this.$router.push(
+          `/rsvp/${this.id}/?rsvp=no&back=${this.$route.fullPath}&collection=${this.collection}`
+        )
       }
     }
   }

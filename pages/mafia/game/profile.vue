@@ -55,7 +55,15 @@ export default {
   methods: {
     async save(data) {
       await this.update(data)
-      this.$router.push('/mafia/game/')
+
+      let target = window.localStorage.getItem('target')
+      window.localStorage.removeItem('target')
+
+      if (!target) {
+        target = '/mafia/game/'
+      }
+
+      this.$router.push(target)
     }
   }
 }

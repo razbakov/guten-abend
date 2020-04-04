@@ -10,6 +10,7 @@ import GameModerator from '~/components/Mafia/Moderator'
 import GamePlayer from '~/components/Mafia/Player'
 
 export default {
+  middleware: ['auth'],
   components: {
     GameModerator,
     GamePlayer

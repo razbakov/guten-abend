@@ -24,7 +24,7 @@
           <TGuests v-if="openedListId === item.id" :id="item.id" class="p-4" />
           <TPreview class="mb-2" :content="item.description" />
         </div>
-        <TRsvp :item="item" :collection="collection">
+        <TRsvp :id="item.id" :collection="collection">
           <template v-slot:header="{ count }">
             {{ count }} interested. Are you interested?
           </template>

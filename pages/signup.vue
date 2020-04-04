@@ -96,7 +96,14 @@ export default {
     uid: {
       handler(val) {
         if (val) {
-          this.$router.replace('/account')
+          let target = window.localStorage.getItem('target')
+          window.localStorage.removeItem('target')
+
+          if (!target) {
+            target = '/account'
+          }
+
+          this.$router.push(target)
         }
       }
     }

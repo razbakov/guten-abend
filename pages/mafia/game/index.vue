@@ -26,7 +26,7 @@
           </p>
           <TGuests v-if="openedListId === item.id" :id="item.id" class="p-4" />
         </div>
-        <TRsvp :item="item" :collection="collection">
+        <TRsvp :id="item.id" :collection="collection">
           <template v-slot:header="{ count }">
             {{ count }} participants. Do you want to join?
           </template>

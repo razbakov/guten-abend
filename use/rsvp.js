@@ -13,7 +13,8 @@ export default () => {
       (item) => item.eventId === eventId && item.uid === uid.value
     )
 
-  const getRsvpResponse = (eventId) => getRsvp(eventId)?.rsvp ?? null
+  const getRsvpResponse = (eventId) =>
+    (uid.value && getRsvp(eventId)?.rsvp) ?? null
 
   function getList(eventId, rsvp = 'yes') {
     return docs.value
@@ -23,8 +24,8 @@ export default () => {
 
   const getCount = (eventId) => getList(eventId).length
 
-  async function updateRsvp(event, rsvp) {
-    let rsvpObject = getRsvp(event.id)
+  async function updateRsvp(eventId, collection, rsvp) {
+    let rsvpObject = getRsvp(eventId)
 
     if (!rsvpObject) {
       rsvpObject = {
@@ -36,8 +37,8 @@ export default () => {
       ...rsvpObject,
       participant: account.value,
       rsvp,
-      eventId: event.id,
-      event
+      eventId,
+      collection
     }
 
     await update(rsvpObject)
