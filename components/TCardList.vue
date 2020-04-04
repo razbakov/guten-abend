@@ -13,8 +13,8 @@
 
     <div v-if="currentId === 'add'" class="card-item">
       <TForm
-        class="px-6 py-4"
         v-model="item"
+        class="px-6 py-4"
         :fields="fields"
         show-cancel
         @save="saveItem"
@@ -30,7 +30,7 @@
           class="px-6 py-4"
           :fields="fields"
           show-cancel
-          :show-remove="can('remove', collectionm, item)"
+          :show-remove="can('remove', collection, item)"
           @save="saveItem"
           @cancel="cancelItem"
           @remove="removeItem"
