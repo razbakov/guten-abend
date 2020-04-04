@@ -27,6 +27,7 @@ export default {
   setup() {
     const { uid } = useAuth()
     const { params } = useRouter()
+
     const id = params.id
 
     const { doc: game, update } = useLiveDoc('mafia_games', id)
@@ -55,7 +56,7 @@ export default {
       }
     }
 
-    await this.update(this.id, changes)
+    await this.update(changes)
   }
 }
 </script>

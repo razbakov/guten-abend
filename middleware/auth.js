@@ -12,7 +12,7 @@ export default async function({ route, redirect }) {
     redirect('/')
   }
 
-  if (route.name === 'mafia-game-id') {
+  if (route.name === 'mafia-game-id' || route.name === 'mafia-game') {
     if (!uid.value) {
       window.localStorage.setItem('target', route.fullPath)
       redirect('/signup')

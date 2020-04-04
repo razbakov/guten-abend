@@ -47,6 +47,7 @@ export default {
   },
   setup() {
     const { params } = useRouter()
+
     const id = params.id
 
     const { doc: game, update, loading } = useLiveDoc('mafia_games', id)
