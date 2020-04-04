@@ -68,6 +68,7 @@
 
 <script>
 import { computed, ref } from '@vue/composition-api'
+import { sortBy } from '~/utils'
 import useAuth from '~/use/auth'
 import useDoc from '~/use/doc'
 import useCollection from '~/use/collection'
@@ -105,7 +106,7 @@ export default {
     currentId: false
   }),
   setup(props) {
-    const { docs, sortBy } = useCollection(props.collection)
+    const { docs } = useCollection(props.collection)
     const { update, remove } = useDoc(props.collection)
     const { can } = useAuth()
 

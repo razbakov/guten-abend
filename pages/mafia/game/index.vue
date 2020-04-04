@@ -42,7 +42,7 @@
 
 <script>
 import useAuth from '~/use/auth'
-import useUtils from '~/use/utils'
+import { getDay, getTime, getDate } from '~/utils'
 import TCardList from '~/components/TCardList'
 import TRsvp from '~/components/TRsvp'
 
@@ -65,7 +65,6 @@ export default {
   }),
   setup() {
     const { can } = useAuth()
-    const { getDay, getTime, getDate } = useUtils()
 
     return {
       can,

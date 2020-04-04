@@ -55,10 +55,10 @@
 <script>
 import useAuth from '~/use/auth'
 import useRSVP from '~/use/rsvp'
-import useUtils from '~/use/utils'
 import TCardList from '~/components/TCardList'
 import TPreview from '~/components/TPreview'
 import TRsvp from '~/components/TRsvp'
+import { getDay, getTime, getDate } from '~/utils'
 
 export default {
   components: {
@@ -72,7 +72,6 @@ export default {
     const add = 'Add event'
 
     const { can } = useAuth()
-    const { getDay, getTime, getDate } = useUtils()
     const { getRsvpResponse } = useRSVP()
     const now = +new Date()
 
