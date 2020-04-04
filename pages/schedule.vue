@@ -8,13 +8,15 @@
       :filters="filters"
     >
       <template v-slot:toolbar="{ item }">
-        <nuxt-link
+        <button
           v-if="can('manage', collection, item)"
           class="underline mr-2"
-          :to="`/schedule/${item.id}`"
+          @click="
+            !openedListId ? (openedListId = item.id) : (openedListId = false)
+          "
         >
           Guests
-        </nuxt-link>
+        </button>
       </template>
       <template v-slot="{ item }">
         <div class="px-6 py-4">
@@ -23,7 +25,8 @@
             <strong class="font-bold">{{ getDay(item.date) }}</strong>
             {{ getDate(item.date) }} at {{ getTime(item.date) }} UTC
           </div>
-          <TPreview class="mb-2" :content="item.description" />
+          <TGuests v-if="openedListId === item.id" :id="item.id" class="p-4" />
+          <TPreview v-else class="mb-2" :content="item.description" />
         </div>
         <TRsvp :item="item" :collection="collection">
           <template v-slot:header="{ count }">
@@ -53,18 +56,21 @@
 </template>
 
 <script>
+import { ref } from '@vue/composition-api'
 import useAuth from '~/use/auth'
 import useRSVP from '~/use/rsvp'
 import TCardList from '~/components/TCardList'
 import TPreview from '~/components/TPreview'
 import TRsvp from '~/components/TRsvp'
+import TGuests from '~/components/TGuests'
 import { getDay, getTime, getDate } from '~/utils'
 
 export default {
   components: {
     TCardList,
     TRsvp,
-    TPreview
+    TPreview,
+    TGuests
   },
   setup() {
     const title = 'Schedule'
@@ -74,6 +80,7 @@ export default {
     const { can } = useAuth()
     const { getRsvpResponse } = useRSVP()
     const now = +new Date()
+    const openedListId = ref(false)
 
     const filters = [
       {
@@ -132,7 +139,8 @@ export default {
       fields,
       title,
       collection,
-      add
+      add,
+      openedListId
     }
   }
 }

@@ -8,17 +8,20 @@
       :filters="filters"
     >
       <template v-slot:toolbar="{ item }">
-        <nuxt-link
+        <button
           v-if="can('manage', collection, item)"
           class="underline mr-2"
-          :to="`/schedule/${item.id}`"
+          @click="
+            !openedListId ? (openedListId = item.id) : (openedListId = false)
+          "
         >
           Followers
-        </nuxt-link>
+        </button>
       </template>
       <template v-slot="{ item }">
         <div class="px-6 py-4">
           <div class="font-bold text-xl mb-2">{{ item.title }}</div>
+          <TGuests v-if="openedListId === item.id" :id="item.id" class="p-4" />
           <TPreview class="mb-2" :content="item.description" />
         </div>
         <TRsvp :item="item" :collection="collection">
@@ -32,17 +35,20 @@
 </template>
 
 <script>
+import { ref } from '@vue/composition-api'
 import useAuth from '~/use/auth'
 import useRSVP from '~/use/rsvp'
 import TCardList from '~/components/TCardList'
 import TPreview from '~/components/TPreview'
 import TRsvp from '~/components/TRsvp'
+import TGuests from '~/components/TGuests'
 
 export default {
   components: {
     TCardList,
     TRsvp,
-    TPreview
+    TPreview,
+    TGuests
   },
   setup() {
     const title = 'Ideas'
@@ -50,6 +56,7 @@ export default {
     const add = 'Add your idea'
 
     const { getCount, getRsvpResponse } = useRSVP()
+    const openedListId = ref(false)
 
     const fields = [
       {
@@ -99,7 +106,8 @@ export default {
       title,
       collection,
       add,
-      filters
+      filters,
+      openedListId
     }
   }
 }

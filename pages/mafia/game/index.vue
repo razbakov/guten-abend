@@ -7,13 +7,15 @@
       :fields="fields"
     >
       <template v-slot:toolbar="{ item }">
-        <nuxt-link
+        <button
           v-if="can('manage', collection, item)"
           class="underline mr-2"
-          :to="`/schedule/${item.id}`"
+          @click="
+            !openedListId ? (openedListId = item.id) : (openedListId = false)
+          "
         >
           Players
-        </nuxt-link>
+        </button>
       </template>
       <template v-slot="{ item }">
         <div class="px-6 py-4">
@@ -22,6 +24,7 @@
             Created {{ getDate(item.createdAt) }} at
             {{ getTime(item.createdAt) }} UTC
           </p>
+          <TGuests v-if="openedListId === item.id" :id="item.id" class="p-4" />
         </div>
         <TRsvp :item="item" :collection="collection">
           <template v-slot:header="{ count }">
@@ -41,36 +44,46 @@
 </template>
 
 <script>
+import { ref } from '@vue/composition-api'
 import useAuth from '~/use/auth'
 import { getDay, getTime, getDate } from '~/utils'
 import TCardList from '~/components/TCardList'
 import TRsvp from '~/components/TRsvp'
+import TGuests from '~/components/TGuests'
 
 export default {
   components: {
     TCardList,
-    TRsvp
+    TRsvp,
+    TGuests
   },
-  data: () => ({
-    title: 'Mafia Dashboard',
-    collection: 'mafia_games',
-    add: 'Create game',
-    fields: [
+  setup() {
+    const { can } = useAuth()
+
+    const title = 'Mafia Dashboard'
+    const collection = 'mafia_games'
+    const add = 'Create game'
+
+    const openedListId = ref(false)
+
+    const fields = [
       {
         name: 'title',
         label: 'Title',
         placeholder: 'Give it a funny name'
       }
     ]
-  }),
-  setup() {
-    const { can } = useAuth()
 
     return {
       can,
       getDay,
       getTime,
-      getDate
+      getDate,
+      fields,
+      title,
+      collection,
+      add,
+      openedListId
     }
   }
 }

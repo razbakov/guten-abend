@@ -74,7 +74,6 @@ import useDoc from '~/use/doc'
 import useCollection from '~/use/collection'
 import TIconEdit from '~/components/TIconEdit'
 import TForm from '~/components/TForm'
-
 export default {
   components: {
     TIconEdit,
