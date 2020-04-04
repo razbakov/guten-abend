@@ -1,7 +1,29 @@
 <template>
-  <main>Mafia Game #1</main>
+  <GameModerator v-if="isCreator" />
+  <GamePlayer v-else />
 </template>
 
 <script>
-export default {}
+import useDoc from '~/use/doc'
+import useRouter from '~/use/router'
+import GameModerator from '~/components/Mafia/Moderator'
+import GamePlayer from '~/components/Mafia/Player'
+
+export default {
+  components: {
+    GameModerator,
+    GamePlayer
+  },
+  setup() {
+    const { params } = useRouter()
+    const { loadById, doc, isCreator } = useDoc('mafia_games')
+
+    loadById(params.id)
+
+    return {
+      doc,
+      isCreator
+    }
+  }
+}
 </script>

@@ -1,4 +1,4 @@
-import { reactive, toRefs } from '@vue/composition-api'
+import { reactive, toRefs, computed } from '@vue/composition-api'
 import firebase from 'firebase/app'
 import 'firebase/firestore'
 import useAuth from '~/use/auth'
@@ -114,12 +114,17 @@ export default (name) => {
     return doc
   }
 
+  const isCreator = computed(
+    () => state.doc && uid.value === state.doc.createdBy
+  )
+
   return {
     ...toRefs(state),
     create,
     load,
     update,
     loadById,
-    remove
+    remove,
+    isCreator
   }
 }
