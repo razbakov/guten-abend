@@ -1,10 +1,10 @@
 <template>
   <div>
-    <div class="flex px-6 pb-4 justify-end">
-      <p class="mr-4">
+    <div class="md:flex px-6 pb-4 justify-end items-center text-center">
+      <div class="mr-4">
         <slot name="header" :count="getCount(item.id)" />
-      </p>
-      <div class="inline-flex">
+      </div>
+      <div class="flex mt-4 md:mt-0 content-center justify-center">
         <button
           class="hover:bg-green-400 text-green-800 font-bold py-2 px-4 rounded-l"
           :class="{
