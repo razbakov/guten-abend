@@ -143,7 +143,7 @@ export default {
 
       const set = combinations[count]
       Object.keys(set).forEach((role) => {
-        for (let i = 1; i < set[role]; i++) {
+        for (let i = 0; i < set[role]; i++) {
           dictionary.push(role)
         }
       })
