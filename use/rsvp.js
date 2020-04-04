@@ -15,10 +15,11 @@ export default () => {
 
   const getRsvpResponse = (eventId) => getRsvp(eventId)?.rsvp ?? null
 
-  const getList = (eventId) =>
-    docs.value
-      .filter((item) => item.eventId === eventId && item.rsvp === 'yes')
+  function getList(eventId, rsvp = 'yes') {
+    return docs.value
+      .filter((item) => item.eventId === eventId && item.rsvp === rsvp)
       .map((item) => item.participant)
+  }
 
   const getCount = (eventId) => getList(eventId).length
 

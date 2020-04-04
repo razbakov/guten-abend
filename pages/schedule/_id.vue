@@ -1,9 +1,9 @@
 <template>
   <main class="card">
-    <div class="font-bold text-lg mb-4">Event {{ slug }}</div>
+    <div class="font-bold text-lg mb-4">Event</div>
     <div class="font-mono">
       <div
-        v-for="participant in getList(slug)"
+        v-for="participant in participants"
         :key="participant.email"
         class="border-b mb-2 p-2"
       >
@@ -16,21 +16,17 @@
 
 <script>
 import useRSVP from '~/use/rsvp'
+import useRouter from '~/use/router'
 
 export default {
   setup() {
-    const { getRsvpResponse, updateRsvp, getCount, getList } = useRSVP()
+    const { params } = useRouter()
+    const { getList } = useRSVP()
+
+    const participants = getList(params.id)
 
     return {
-      getRsvpResponse,
-      updateRsvp,
-      getCount,
-      getList
-    }
-  },
-  computed: {
-    id() {
-      return this.$route.params.id
+      participants
     }
   }
 }
