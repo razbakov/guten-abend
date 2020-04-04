@@ -20,7 +20,9 @@
       </template>
       <template v-slot="{ item }">
         <div class="px-6 py-4">
-          <div class="font-bold text-xl mb-2">{{ item.title }}</div>
+          <div class="font-bold text-xl mb-2">
+            {{ item.title }}
+          </div>
           <div class="text-gray-700 text-base">
             <strong class="font-bold">{{ getDay(item.date) }}</strong>
             {{ getDate(item.date) }} at {{ getTime(item.date) }} UTC
@@ -37,11 +39,15 @@
         </div>
         <TRsvp :item="item" :collection="collection">
           <template v-slot:header="{ count }">
-            {{ count }} participants. Do you want to join?
+            <div v-if="item.past">{{ count }} participated</div>
+            <div v-else>{{ count }} participants. Do you want to join?</div>
           </template>
           <template v-slot:default>
-            <div class="flex px-6 py-4 bg-gray-200 text-gray-700">
-              <div v-if="item.link">
+            <div
+              v-if="!item.past"
+              class="flex px-6 py-4 bg-gray-200 text-gray-700"
+            >
+              <div v-if="item.link && (item.soon || item.now)">
                 <a class="btn" target="_blank" rel="noopener" :href="item.link"
                   >Open in Zoom</a
                 >
@@ -123,6 +129,7 @@ export default {
         default: true,
         map: (item) => ({
           ...item,
+          past: false,
           now:
             +new Date(item.date) + 60000 * item.duration > now &&
             +new Date(item.date) < now,
@@ -138,9 +145,12 @@ export default {
       {
         name: 'past',
         label: 'Past',
+        map: (item) => ({
+          ...item,
+          past: true
+        }),
         filter: (item) =>
-          +new Date(item.date) + 60000 * item.duration < now &&
-          getRsvpResponse(item.id) !== 'no',
+          +new Date(item.date) < now && getRsvpResponse(item.id) !== 'no',
         sort: '-date'
       },
       {
