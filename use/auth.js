@@ -37,7 +37,9 @@ export default () => {
 
   const router = useRouter()
 
-  const ready = computed(() => !state.loading && !!state.uid && !!state.account)
+  const accountLoaded = computed(
+    () => !state.loading && !!state.uid && !!state.account
+  )
 
   const firestore = firebase.firestore()
 
@@ -260,7 +262,7 @@ export default () => {
     signInWithGoogle,
     sendSignInLinkToEmail,
     signOut,
-    ready,
+    accountLoaded,
     isAdmin,
     can,
     signInAnonymously,

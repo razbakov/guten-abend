@@ -6,7 +6,7 @@
       </h1>
     </div>
 
-    <TLoader v-if="!ready" />
+    <TLoader v-if="!accountLoaded" />
     <div v-else>
       <TForm
         v-model="profile"
@@ -40,13 +40,13 @@ export default {
     ]
   }),
   setup() {
-    const { uid, ready } = useAuth()
+    const { uid, accountLoaded } = useAuth()
     const { loadById, doc: profile, update, exists } = useDoc('mafia_profiles')
 
     loadById(uid.value)
 
     return {
-      ready,
+      accountLoaded,
       profile,
       update,
       exists
