@@ -6,7 +6,7 @@
         class="underline mr-2"
         :to="`/schedule/${event.id}`"
       >
-        Followers
+        Guests
       </nuxt-link>
 
       <button
@@ -34,51 +34,16 @@
     <div v-if="isEditing" class="px-6 py-4">
       <TForm
         v-model="event"
+        :fields="fields"
         show-cancel
         show-remove
-        :fields="fields"
         @save="saveItem"
         @cancel="cancel"
         @remove="removeItem"
       />
     </div>
     <div v-else>
-      <div class="px-6 py-4">
-        <div class="font-bold text-xl mb-2">{{ event.title }}</div>
-        <div class="mb-2">{{ event.description }}</div>
-        <div class="text-center font-bold py-2">
-          {{ getCount(event.id) }} interested
-        </div>
-      </div>
-      <div class="flex px-6 pb-4 justify-end">
-        <p class="mr-4">Are you interested?</p>
-        <div class="inline-flex">
-          <button
-            class="hover:bg-green-400 text-green-800 font-bold py-2 px-4 rounded-l"
-            :class="{
-              'bg-green-300': getRsvpResponse(event.id) === 'yes'
-            }"
-            @click="rsvp(event, 'yes')"
-          >
-            Yes
-          </button>
-          <button
-            class="hover:bg-red-400 text-red-800 font-bold py-2 px-4 rounded-r"
-            :class="{
-              'bg-red-300': getRsvpResponse(event.id) === 'no'
-            }"
-            @click="rsvp(event, 'no')"
-          >
-            No
-          </button>
-        </div>
-      </div>
-      <div
-        v-if="getRsvpResponse(event.id) === 'yes'"
-        class="flex px-6 py-4 bg-gray-200 text-gray-700"
-      >
-        Let's get more people interested and schedule it for the next week.
-      </div>
+      <slot />
     </div>
   </div>
 </template>
@@ -87,12 +52,11 @@
 import useAuth from '~/use/auth'
 import useRSVP from '~/use/rsvp'
 import useDoc from '~/use/doc'
+import useUtils from '~/use/utils'
 import TForm from '~/components/TForm'
 
 export default {
-  components: {
-    TForm
-  },
+  components: { TForm },
   props: {
     event: {
       type: Object,
@@ -105,29 +69,17 @@ export default {
   },
   data: () => ({
     data: {},
-    isEditing: false,
-    fields: [
-      {
-        name: 'title',
-        label: 'Title',
-        placeholder: 'Summarize your idea in 2-3 words'
-      },
-      {
-        name: 'description',
-        label: 'Description',
-        type: 'text',
-        placeholder: 'Describe your idea'
-      }
-    ]
+    isEditing: false
   }),
   mounted() {
     this.isEditing = this.editing
     this.data = { ...this.event }
   },
   setup() {
-    const { uid, can, isAdmin } = useAuth()
+    const { uid, isAdmin, can } = useAuth()
     const { getRsvpResponse, updateRsvp, getCount } = useRSVP()
-    const { update, remove } = useDoc('ideas')
+    const { update, remove } = useDoc('meetups')
+    const { getDay, getTime, getDate } = useUtils()
 
     return {
       uid,
@@ -135,6 +87,9 @@ export default {
       updateRsvp,
       getCount,
       update,
+      getDay,
+      getTime,
+      getDate,
       isAdmin,
       can,
       remove
@@ -148,18 +103,6 @@ export default {
         alert('This action requires login')
         this.$router.push('/signup')
       }
-    },
-    cancel() {
-      this.isEditing = false
-      this.$emit('cancel')
-    },
-    async saveItem(data) {
-      this.cancel()
-      await this.update(data)
-    },
-    async removeItem(id) {
-      this.cancel()
-      await this.remove(id)
     }
   }
 }

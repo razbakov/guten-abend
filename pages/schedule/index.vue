@@ -1,19 +1,48 @@
 <template>
   <main class="p-4">
-    <div class="md:flex items-baseline justify-between mb-4">
-      <h1 class="text-3xl font-bold">Schedule</h1>
-      <button v-if="isAdmin" class="btn" @click="addingEvent = true">
-        Add Event
-      </button>
-    </div>
-
-    <EventMeetup
-      v-if="addingEvent"
-      :editing="true"
-      @save="addingEvent = false"
-    />
-
-    <EventMeetup v-for="event in events" :key="event.id" :event="event" />
+    <TCardList
+      :collection="collection"
+      :title="title"
+      :add="add"
+      :fields="fields"
+    >
+      <template v-slot:toolbar="{ item }">
+        <nuxt-link
+          v-if="can('manage', collection, item)"
+          class="underline mr-2"
+          :to="`/schedule/${item.id}`"
+        >
+          Guests
+        </nuxt-link>
+      </template>
+      <template v-slot="{ item }">
+        <div class="px-6 py-4">
+          <div class="font-bold text-xl mb-2">{{ item.title }}</div>
+          <div class="text-gray-700 text-base">
+            <strong class="font-bold">{{ getDay(item.date) }}</strong>
+            {{ getDate(item.date) }} at {{ getTime(item.date) }} UTC
+          </div>
+          <TPreview class="mb-2" :content="item.description" />
+        </div>
+        <TRsvp :item="item" :collection="collection">
+          <template v-slot:header="{ count }">
+            {{ count }} participants. Do you want to join?
+          </template>
+          <template v-slot:default>
+            <div class="flex px-6 py-4 bg-gray-200 text-gray-700">
+              <div v-if="item.link">
+                <a class="btn" target="_blank" rel="noopener" :href="item.link"
+                  >Open in Zoom</a
+                >
+              </div>
+              <div v-else>
+                Zoom link will appear here before the event. Check later.
+              </div>
+            </div>
+          </template>
+        </TRsvp>
+      </template>
+    </TCardList>
 
     <div class="hero">
       <h2 class="text-2xl font-bold mb-4">Want more?</h2>
@@ -24,41 +53,53 @@
 
 <script>
 import useAuth from '~/use/auth'
-import useRSVP from '~/use/rsvp'
-import useCollection from '~/use/collection'
-import EventMeetup from '~/components/EventMeetup'
+import useUtils from '~/use/utils'
+import TCardList from '~/components/TCardList'
+import TPreview from '~/components/TPreview'
+import TRsvp from '~/components/TRsvp'
 
 export default {
   components: {
-    EventMeetup
+    TCardList,
+    TRsvp,
+    TPreview
   },
   data: () => ({
-    addingEvent: false
+    title: 'Schedule',
+    collection: 'meetups',
+    add: 'Add event',
+    fields: [
+      {
+        name: 'title',
+        label: 'Title',
+        placeholder: 'Summarize event in 2-3 words'
+      },
+      {
+        name: 'description',
+        label: 'Description',
+        type: 'textarea',
+        placeholder: 'Describe event'
+      },
+      {
+        name: 'date',
+        label: 'Date',
+        type: 'datetime-local'
+      },
+      {
+        name: 'link',
+        label: 'Zoom Link'
+      }
+    ]
   }),
   setup() {
-    const { uid, isAdmin } = useAuth()
-    const { getRsvpResponse, updateRsvp, getCount } = useRSVP()
-    const { docs: ideas } = useCollection('ideas')
-    const { docs: events } = useCollection('meetups', 'date')
+    const { can } = useAuth()
+    const { getDay, getTime, getDate } = useUtils()
 
     return {
-      uid,
-      getRsvpResponse,
-      updateRsvp,
-      getCount,
-      ideas,
-      events,
-      isAdmin
-    }
-  },
-  methods: {
-    rsvp(event, answer) {
-      if (this.uid) {
-        this.updateRsvp(event, answer)
-      } else {
-        alert('This action requires login')
-        this.$router.push('/signup')
-      }
+      can,
+      getDay,
+      getTime,
+      getDate
     }
   }
 }

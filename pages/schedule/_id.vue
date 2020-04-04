@@ -29,7 +29,7 @@ export default {
     }
   },
   computed: {
-    slug() {
+    id() {
       return this.$route.params.id
     }
   }

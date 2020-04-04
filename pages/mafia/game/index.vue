@@ -1,49 +1,77 @@
 <template>
   <main class="p-4">
-    <div class="md:flex items-baseline justify-between mb-4">
-      <h1 class="text-3xl font-bold">Mafia Dashboard</h1>
-      <button v-if="isAdmin" class="btn" @click="addingGame = true">
-        Create Game
-      </button>
-    </div>
-
-    <MafiaGameCard v-if="addingGame" editing @cancel="addingGame = false" />
-
-    <div v-if="games.length">
-      <MafiaGameCard v-for="game in games" :key="game.id" :game="game" />
-    </div>
-    <div v-else-if="!addingGame" class="p-4">
-      There are no games yet.
-    </div>
+    <TCardList
+      :collection="collection"
+      :title="title"
+      :add="add"
+      :fields="fields"
+    >
+      <template v-slot:toolbar="{ item }">
+        <nuxt-link
+          v-if="can('manage', collection, item)"
+          class="underline mr-2"
+          :to="`/schedule/${item.id}`"
+        >
+          Players
+        </nuxt-link>
+      </template>
+      <template v-slot="{ item }">
+        <div class="px-6 py-4">
+          <div class="font-bold text-xl mb-2">{{ item.title }}</div>
+          <p class="text-gray-700 text-base">
+            Created {{ getDate(item.createdAt) }} at
+            {{ getTime(item.createdAt) }} UTC
+          </p>
+        </div>
+        <TRsvp :item="item" :collection="collection">
+          <template v-slot:header="{ count }">
+            {{ count }} participants. Do you want to join?
+          </template>
+          <template v-slot:default>
+            <div class="flex px-6 py-4 bg-gray-200 text-gray-700">
+              <router-link class="btn" :to="`/mafia/game/${item.id}`"
+                >Start Game</router-link
+              >
+            </div>
+          </template>
+        </TRsvp>
+      </template>
+    </TCardList>
   </main>
 </template>
 
 <script>
 import useAuth from '~/use/auth'
-import useDoc from '~/use/doc'
-import useCollection from '~/use/collection'
-import MafiaGameCard from '~/components/MafiaGameCard'
+import useUtils from '~/use/utils'
+import TCardList from '~/components/TCardList'
+import TRsvp from '~/components/TRsvp'
 
 export default {
   components: {
-    MafiaGameCard
+    TCardList,
+    TRsvp
   },
   data: () => ({
-    addingGame: false
+    title: 'Mafia Dashboard',
+    collection: 'mafia_games',
+    add: 'Create game',
+    fields: [
+      {
+        name: 'title',
+        label: 'Title',
+        placeholder: 'Give it a funny name'
+      }
+    ]
   }),
   setup() {
-    const { uid, ready, isAdmin } = useAuth()
-    const { docs: games } = useCollection('mafia_games')
-    const { loadById, doc: profile } = useDoc('mafia_profiles')
-
-    loadById(uid.value)
+    const { can } = useAuth()
+    const { getDay, getTime, getDate } = useUtils()
 
     return {
-      uid,
-      ready,
-      profile,
-      isAdmin,
-      games
+      can,
+      getDay,
+      getTime,
+      getDate
     }
   }
 }

@@ -2,7 +2,7 @@
   <main>
     <div v-if="event" class="typo">
       <h1>{{ event.title }}</h1>
-      <Preview :content="event.content" />
+      <TPreview :content="event.content" />
     </div>
 
     <div
@@ -30,11 +30,11 @@
 
 <script>
 import useDoc from '~/use/doc'
-import Preview from '~/components/Preview'
+import TPreview from '~/components/TPreview'
 
 export default {
   components: {
-    Preview
+    TPreview
   },
   computed: {
     editing() {
