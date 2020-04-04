@@ -1,22 +1,26 @@
-# tell-me-what
+# GutenAbend
 
-> Instant polls, forms, chats
+Online Kantine - https://gutenabend.netlify.com/
 
-## Build Setup
+- Sign in (Google or magic link)
+- Create an account
+- Manage meetups (add, edit, remove)
+- Manage ideas (add, edit, remove)
+- RSVP (record a response, see list)
 
-``` bash
+## Built with
+
+- [Vue Composition Api](https://composition-api.vuejs.org/)
+- [Firebase](https://firebase.google.com/)
+- [Nuxt.js](https://nuxtjs.org)
+- [Tailwind CSS](https://tailwindcss.com/)
+
+## Installation
+
+```bash
 # install dependencies
-$ yarn install
+yarn install
 
 # serve with hot reload at localhost:3000
-$ yarn dev
-
-# build for production and launch server
-$ yarn build
-$ yarn start
-
-# generate static project
-$ yarn generate
+yarn dev
 ```
-
-For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
