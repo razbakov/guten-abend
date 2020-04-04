@@ -22,7 +22,7 @@
       />
     </div>
 
-    <div v-if="filters" class="flex">
+    <div v-if="filters && filters.length > 1" class="flex">
       <button
         v-for="filter in filters"
         :key="filter.name"
@@ -122,13 +122,25 @@ export default {
         return docs.value
       }
 
-      const filterHandler = props.filters.find(
+      const filterObject = props.filters.find(
         (filter) => filter.name === activeFilter.value
-      ).filter
+      )
 
-      const result = docs.value.filter(filterHandler)
+      let result = docs.value
 
-      return result.sort(sortBy('date'))
+      if (filterObject.map) {
+        result = result.map(filterObject.map)
+      }
+
+      if (filterObject.filter) {
+        result = result.filter(filterObject.filter)
+      }
+
+      if (filterObject.sort) {
+        result = result.sort(sortBy(filterObject.sort))
+      }
+
+      return result
     })
 
     return {

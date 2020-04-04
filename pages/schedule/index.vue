@@ -82,18 +82,21 @@ export default {
         label: 'Upcoming',
         default: true,
         filter: (item) =>
-          +new Date(item.date) > now && getRsvpResponse(item.id) !== 'no'
+          +new Date(item.date) > now && getRsvpResponse(item.id) !== 'no',
+        sort: 'date'
       },
       {
         name: 'past',
         label: 'Past',
         filter: (item) =>
-          +new Date(item.date) < now && getRsvpResponse(item.id) !== 'no'
+          +new Date(item.date) < now && getRsvpResponse(item.id) !== 'no',
+        sort: '-date'
       },
       {
         name: 'archive',
         label: 'Archive',
-        filter: (item) => getRsvpResponse(item.id) === 'no'
+        filter: (item) => getRsvpResponse(item.id) === 'no',
+        sort: 'date'
       }
     ]
 

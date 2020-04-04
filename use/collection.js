@@ -5,7 +5,7 @@ import 'firebase/firestore'
 
 const state = Vue.observable({})
 
-export default (name, order) => {
+export default (name) => {
   if (!state[name]) {
     const firestore = firebase.firestore()
     const collection = firestore.collection(name)
@@ -24,8 +24,17 @@ export default (name, order) => {
     })
   }
 
-  const sortBy = (key) => {
-    return (a, b) => (a[key] > b[key] ? 1 : b[key] > a[key] ? -1 : 0)
+  const sortBy = (_key) => {
+    let key = _key
+    let multi = 1
+
+    if (_key[0] === '-') {
+      key = _key.slice(1)
+      multi = -1
+    }
+
+    return (a, b) =>
+      a[key] > b[key] ? 1 * multi : b[key] > a[key] ? -1 * multi : 0
   }
 
   const docs = computed(() => {
@@ -33,16 +42,10 @@ export default (name, order) => {
       return []
     }
 
-    let result = Object.keys(state[name]).map((key) => ({
+    return Object.keys(state[name]).map((key) => ({
       ...state[name][key],
       id: key
     }))
-
-    if (order) {
-      result = result.sort(sortBy(order))
-    }
-
-    return result
   })
 
   return {

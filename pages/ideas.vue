@@ -5,6 +5,7 @@
       :title="title"
       :add="add"
       :fields="fields"
+      :filters="filters"
     >
       <template v-slot:toolbar="{ item }">
         <nuxt-link
@@ -32,6 +33,7 @@
 
 <script>
 import useAuth from '~/use/auth'
+import useRSVP from '~/use/rsvp'
 import TCardList from '~/components/TCardList'
 import TPreview from '~/components/TPreview'
 import TRsvp from '~/components/TRsvp'
@@ -42,11 +44,14 @@ export default {
     TRsvp,
     TPreview
   },
-  data: () => ({
-    title: 'Ideas',
-    collection: 'ideas',
-    add: 'Add your idea',
-    fields: [
+  setup() {
+    const title = 'Ideas'
+    const collection = 'ideas'
+    const add = 'Add your idea'
+
+    const { getCount, getRsvpResponse } = useRSVP()
+
+    const fields = [
       {
         name: 'title',
         label: 'Title',
@@ -59,12 +64,42 @@ export default {
         placeholder: 'Describe your idea'
       }
     ]
-  }),
-  setup() {
+
+    const filters = [
+      {
+        name: 'active',
+        label: 'Active',
+        default: true,
+        map: (item) => ({
+          ...item,
+          votes: getCount(item.id)
+        }),
+        filter: (item) => getRsvpResponse(item.id) !== 'no',
+        sort: '-votes'
+      },
+
+      {
+        name: 'archive',
+        label: 'Archive',
+        default: true,
+        map: (item) => ({
+          ...item,
+          votes: getCount(item.id)
+        }),
+        filter: (item) => getRsvpResponse(item.id) === 'no',
+        sort: '-votes'
+      }
+    ]
+
     const { can } = useAuth()
 
     return {
-      can
+      can,
+      fields,
+      title,
+      collection,
+      add,
+      filters
     }
   }
 }
