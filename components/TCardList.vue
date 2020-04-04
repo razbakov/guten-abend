@@ -22,6 +22,18 @@
       />
     </div>
 
+    <div v-if="filters" class="flex">
+      <button
+        v-for="filter in filters"
+        :key="filter.name"
+        class="p-2 text-gray-700"
+        :class="filter.name === activeFilter ? 'font-bold' : ''"
+        @click="activeFilter = filter.name"
+      >
+        {{ filter.label }}
+      </button>
+    </div>
+
     <div v-for="(item, itemId) in items" :key="item.id" :item="item">
       <div class="card-item">
         <TForm
@@ -55,6 +67,7 @@
 </template>
 
 <script>
+import { computed, ref } from '@vue/composition-api'
 import useAuth from '~/use/auth'
 import useDoc from '~/use/doc'
 import useCollection from '~/use/collection'
@@ -82,21 +95,48 @@ export default {
     fields: {
       type: Array,
       default: () => []
+    },
+    filters: {
+      type: Array,
+      default: () => []
     }
   },
   data: () => ({
     currentId: false
   }),
   setup(props) {
-    const { docs: items } = useCollection(props.collection)
+    const { docs, sortBy } = useCollection(props.collection)
     const { update, remove } = useDoc(props.collection)
     const { can } = useAuth()
 
+    const activeFilter = ref(
+      props.filters.find((filter) => !!filter.default)?.name
+    )
+
+    const items = computed(() => {
+      if (!docs.value) {
+        return []
+      }
+
+      if (!activeFilter.value) {
+        return docs.value
+      }
+
+      const filterHandler = props.filters.find(
+        (filter) => filter.name === activeFilter.value
+      ).filter
+
+      const result = docs.value.filter(filterHandler)
+
+      return result.sort(sortBy('date'))
+    })
+
     return {
-      items,
       can,
       update,
-      remove
+      remove,
+      items,
+      activeFilter
     }
   },
   methods: {

@@ -5,6 +5,7 @@
       :title="title"
       :add="add"
       :fields="fields"
+      :filters="filters"
     >
       <template v-slot:toolbar="{ item }">
         <nuxt-link
@@ -53,6 +54,7 @@
 
 <script>
 import useAuth from '~/use/auth'
+import useRSVP from '~/use/rsvp'
 import useUtils from '~/use/utils'
 import TCardList from '~/components/TCardList'
 import TPreview from '~/components/TPreview'
@@ -64,11 +66,38 @@ export default {
     TRsvp,
     TPreview
   },
-  data: () => ({
-    title: 'Schedule',
-    collection: 'meetups',
-    add: 'Add event',
-    fields: [
+  setup() {
+    const title = 'Schedule'
+    const collection = 'meetups'
+    const add = 'Add event'
+
+    const { can } = useAuth()
+    const { getDay, getTime, getDate } = useUtils()
+    const { getRsvpResponse } = useRSVP()
+    const now = +new Date()
+
+    const filters = [
+      {
+        name: 'upcoming',
+        label: 'Upcoming',
+        default: true,
+        filter: (item) =>
+          +new Date(item.date) > now && getRsvpResponse(item.id) !== 'no'
+      },
+      {
+        name: 'past',
+        label: 'Past',
+        filter: (item) =>
+          +new Date(item.date) < now && getRsvpResponse(item.id) !== 'no'
+      },
+      {
+        name: 'archive',
+        label: 'Archive',
+        filter: (item) => getRsvpResponse(item.id) === 'no'
+      }
+    ]
+
+    const fields = [
       {
         name: 'title',
         label: 'Title',
@@ -90,16 +119,18 @@ export default {
         label: 'Zoom Link'
       }
     ]
-  }),
-  setup() {
-    const { can } = useAuth()
-    const { getDay, getTime, getDate } = useUtils()
 
     return {
       can,
       getDay,
       getTime,
-      getDate
+      getDate,
+      getRsvpResponse,
+      filters,
+      fields,
+      title,
+      collection,
+      add
     }
   }
 }

@@ -47,6 +47,7 @@ export default (name, order) => {
 
   return {
     ...toRefs(state[name]),
-    docs
+    docs,
+    sortBy
   }
 }
