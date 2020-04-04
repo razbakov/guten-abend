@@ -13,7 +13,6 @@
 
     <div v-if="currentId === 'add'" class="card-item">
       <TForm
-        v-model="item"
         class="px-6 py-4"
         :fields="fields"
         show-cancel
