@@ -5,6 +5,11 @@
       <div class="border-b">
         <h1 class="text-3xl font-bold">Moderator</h1>
       </div>
+      <div v-if="playing">
+        <div v-if="profile">Playing as: {{ profile.nickname }}</div>
+        <div v-if="game.places">Place: {{ game.places[uid] }}</div>
+        <div v-if="game.roles">Role: {{ game.roles[uid] }}</div>
+      </div>
       <div class="py-4 flex">
         <div v-if="playerIds.length > 2">
           <button class="btn-secondary mr-2" @click="assignPlaces">
@@ -12,6 +17,13 @@
           </button>
           <button class="btn-secondary mr-2" @click="assignRoles">
             Assign roles
+          </button>
+          <button
+            class="mr-2"
+            :class="playing ? 'btn' : 'btn-secondary'"
+            @click="autoPilot"
+          >
+            Auto pilot
           </button>
         </div>
         <div v-else class="text-red-500">
@@ -30,7 +42,7 @@
                 </div>
               </td>
               <td>{{ player.nickname }}</td>
-              <td>
+              <td v-if="!playing">
                 {{ player.role }}
               </td>
               <td class="w-12">
@@ -87,6 +99,8 @@
 
 <script>
 import { ref } from '@vue/composition-api'
+import useAuth from '~/use/auth'
+import useDoc from '~/use/doc'
 import useLiveDoc from '~/use/liveDoc'
 import useRouter from '~/use/router'
 import TLoader from '~/components/TLoader'
@@ -97,13 +111,16 @@ export default {
     TLoader
   },
   setup() {
+    const { uid } = useAuth()
     const { params } = useRouter()
 
     const id = params.id
 
     const { doc: game, update, loading } = useLiveDoc('mafia_games', id)
+    const { loadById: loadProfile, doc: profile } = useDoc('mafia_profiles')
 
     const now = ref(0)
+    const playing = ref(false)
 
     setInterval(() => {
       now.value = +new Date()
@@ -113,7 +130,11 @@ export default {
       game,
       update,
       loading,
-      now
+      now,
+      loadProfile,
+      profile,
+      playing,
+      uid
     }
   },
   computed: {
@@ -153,10 +174,29 @@ export default {
         }
       })
     },
+    async autoPilot() {
+      if (this.playing) {
+        this.playing = false
+        return
+      }
+
+      this.playing = true
+
+      await this.loadProfile(this.uid)
+      await this.update({
+        [`players.${this.uid}`]: {
+          active: true,
+          nickname: this.profile.nickname
+        }
+      })
+
+      await this.assignPlaces()
+      await this.assignRoles()
+    },
     getRandom(max) {
       return Math.floor(Math.random() * Math.floor(max))
     },
-    assignPlaces() {
+    async assignPlaces() {
       const playerIds = Object.keys(this.game.players)
       const places = {}
 
@@ -168,11 +208,11 @@ export default {
         playerIds.splice(0, 1)
       }
 
-      this.update({
+      await this.update({
         places
       })
     },
-    assignRoles() {
+    async assignRoles() {
       const playerIds = this.playerIds
       const count = playerIds.length
       const roles = {}
@@ -244,7 +284,7 @@ export default {
         playerIds.splice(0, 1)
       }
 
-      this.update({
+      await this.update({
         roles,
         set: {
           count,

@@ -118,14 +118,12 @@ export default {
   async mounted() {
     await this.loadProfile(this.uid)
 
-    const changes = {
+    await this.update({
       [`players.${this.uid}`]: {
         active: true,
         nickname: this.profile.nickname
       }
-    }
-
-    await this.update(changes)
+    })
   },
 
   methods: {
