@@ -24,6 +24,13 @@
           <div class="text-gray-700 text-base">
             <strong class="font-bold">{{ getDay(item.date) }}</strong>
             {{ getDate(item.date) }} at {{ getTime(item.date) }} UTC
+            <span v-if="item.duration">({{ item.duration }} min)</span>
+          </div>
+          <div v-if="item.now" class="text-green-500 font-bold">
+            Happening now
+          </div>
+          <div v-if="item.soon" class="text-orange-500 font-bold">
+            Starts soon
           </div>
           <TGuests v-if="openedListId === item.id" :id="item.id" class="p-4" />
           <TPreview v-else class="mb-2" :content="item.description" />
@@ -82,30 +89,6 @@ export default {
     const now = +new Date()
     const openedListId = ref(false)
 
-    const filters = [
-      {
-        name: 'upcoming',
-        label: 'Upcoming',
-        default: true,
-        filter: (item) =>
-          +new Date(item.date) > now && getRsvpResponse(item.id) !== 'no',
-        sort: 'date'
-      },
-      {
-        name: 'past',
-        label: 'Past',
-        filter: (item) =>
-          +new Date(item.date) < now && getRsvpResponse(item.id) !== 'no',
-        sort: '-date'
-      },
-      {
-        name: 'archive',
-        label: 'Archive',
-        filter: (item) => getRsvpResponse(item.id) === 'no',
-        sort: 'date'
-      }
-    ]
-
     const fields = [
       {
         name: 'title',
@@ -124,8 +107,47 @@ export default {
         type: 'datetime-local'
       },
       {
+        name: 'duration',
+        label: 'Duration (min)'
+      },
+      {
         name: 'link',
         label: 'Zoom Link'
+      }
+    ]
+
+    const filters = [
+      {
+        name: 'upcoming',
+        label: 'Upcoming',
+        default: true,
+        map: (item) => ({
+          ...item,
+          now:
+            +new Date(item.date) + 60000 * item.duration > now &&
+            +new Date(item.date) < now,
+          soon:
+            +new Date(item.date) > now &&
+            +new Date(item.date) - 60000 * 60 < now
+        }),
+        filter: (item) =>
+          +new Date(item.date) + 60000 * item.duration > now &&
+          getRsvpResponse(item.id) !== 'no',
+        sort: 'date'
+      },
+      {
+        name: 'past',
+        label: 'Past',
+        filter: (item) =>
+          +new Date(item.date) + 60000 * item.duration < now &&
+          getRsvpResponse(item.id) !== 'no',
+        sort: '-date'
+      },
+      {
+        name: 'archive',
+        label: 'Archive',
+        filter: (item) => getRsvpResponse(item.id) === 'no',
+        sort: 'date'
       }
     ]
 
