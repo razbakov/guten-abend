@@ -21,18 +21,37 @@
       </div>
       <div class="mt-4">
         <h2 class="text-xl font-bold">Players</h2>
-        <div
-          v-for="player in players"
-          :key="player.id"
-          class="flex items-center"
-        >
-          <div v-if="player.place" class="bg-gray-200 w-6 h-6 mr-2 text-center">
-            {{ player.place }}
-          </div>
-          <div>{{ player.nickname }}</div>
-          <div v-if="player.role" class="ml-2 text-center">
-            - {{ player.role }}
-          </div>
+        <div class="typo">
+          <table>
+            <tr v-for="player in players" :key="player.id">
+              <td class="text-center">
+                <div class="bg-gray-200 w-6 h-6">
+                  {{ player.place }}
+                </div>
+              </td>
+              <td>{{ player.nickname }}</td>
+              <td>
+                {{ player.role }}
+              </td>
+              <td class="w-12">
+                {{ left(player.voice) }}
+              </td>
+              <td>
+                <button
+                  class="bg-gray-200 p-1 border rounded"
+                  @click="start(player.id, 60)"
+                >
+                  60s
+                </button>
+                <button
+                  class="bg-gray-200 p-1 border rounded"
+                  @click="start(player.id, 30)"
+                >
+                  30s
+                </button>
+              </td>
+            </tr>
+          </table>
         </div>
       </div>
       <div class="mt-4">
@@ -67,6 +86,7 @@
 </template>
 
 <script>
+import { ref } from '@vue/composition-api'
 import useLiveDoc from '~/use/liveDoc'
 import useRouter from '~/use/router'
 import TLoader from '~/components/TLoader'
@@ -83,10 +103,17 @@ export default {
 
     const { doc: game, update, loading } = useLiveDoc('mafia_games', id)
 
+    const now = ref(0)
+
+    setInterval(() => {
+      now.value = +new Date()
+    }, 500)
+
     return {
       game,
       update,
-      loading
+      loading,
+      now
     }
   },
   computed: {
@@ -99,12 +126,33 @@ export default {
           id: playerId,
           nickname: this.game.players[playerId].nickname,
           place: this.game.places[playerId],
-          role: this.game.roles[playerId]
+          role: this.game.roles[playerId],
+          voice: (this.game.voice && this.game.voice[playerId]) ?? 0
         }))
         .sort(sortBy('place'))
     }
   },
   methods: {
+    left(end) {
+      if (!end) {
+        return 0
+      }
+
+      const result = Math.round((end - this.now) / 1000)
+
+      if (result < 0 || result > 60) {
+        return 0
+      }
+
+      return result
+    },
+    start(playerId, time) {
+      this.update({
+        voice: {
+          [playerId]: +new Date() + time * 1000
+        }
+      })
+    },
     getRandom(max) {
       return Math.floor(Math.random() * Math.floor(max))
     },

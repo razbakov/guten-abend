@@ -11,19 +11,24 @@
       </div>
       <div class="mt-4">
         <h2 class="text-xl font-bold">Players</h2>
-        <div
-          v-for="player in players"
-          :key="player.id"
-          class="flex items-center"
-          :class="uid === player.id ? 'font-bold' : ''"
-        >
-          <div v-if="player.place" class="bg-gray-200 w-6 h-6 mr-2 text-center">
-            {{ player.place }}
-          </div>
-          <div>{{ player.nickname }}</div>
-          <div v-if="player.role" class="ml-2 text-center">
-            - {{ player.role }}
-          </div>
+        <div class="typo">
+          <table>
+            <tr
+              v-for="player in players"
+              :key="player.id"
+              :class="uid === player.id ? 'font-bold' : ''"
+            >
+              <td class="text-center">
+                <div class="bg-gray-200 w-6 h-6">
+                  {{ player.place }}
+                </div>
+              </td>
+              <td>{{ player.nickname }}</td>
+              <td class="w-12">
+                {{ left(player.voice) }}
+              </td>
+            </tr>
+          </table>
         </div>
       </div>
       <div class="mt-4">
@@ -58,6 +63,7 @@
 </template>
 
 <script>
+import { ref } from '@vue/composition-api'
 import useAuth from '~/use/auth'
 import useDoc from '~/use/doc'
 import useLiveDoc from '~/use/liveDoc'
@@ -80,6 +86,12 @@ export default {
       'mafia_profiles'
     )
 
+    const now = ref(0)
+
+    setInterval(() => {
+      now.value = +new Date()
+    }, 500)
+
     return {
       id,
       game,
@@ -87,7 +99,8 @@ export default {
       uid,
       profile,
       loadProfile,
-      loading
+      loading,
+      now
     }
   },
   computed: {
@@ -96,7 +109,8 @@ export default {
         .map((playerId) => ({
           id: playerId,
           nickname: this.game.players[playerId].nickname,
-          place: this.game.places[playerId]
+          place: this.game.places[playerId],
+          voice: (this.game.voice && this.game.voice[playerId]) ?? 0
         }))
         .sort(sortBy('place'))
     }
@@ -112,6 +126,22 @@ export default {
     }
 
     await this.update(changes)
+  },
+
+  methods: {
+    left(end) {
+      if (!end) {
+        return 0
+      }
+
+      const result = Math.round((end - this.now) / 1000)
+
+      if (result < 0 || result > 60) {
+        return 0
+      }
+
+      return result
+    }
   }
 }
 </script>
