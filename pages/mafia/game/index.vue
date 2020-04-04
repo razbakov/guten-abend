@@ -1,6 +1,8 @@
 <template>
   <main class="p-4">
+    <TLoader v-if="!profile" />
     <TCardList
+      v-else
       :collection="collection"
       :title="title"
       :add="add"
@@ -26,7 +28,7 @@
           </p>
           <TGuests v-if="openedListId === item.id" :id="item.id" class="p-4" />
         </div>
-        <TRsvp :id="item.id" :collection="collection">
+        <TRsvp :id="item.id" :collection="collection" :extra="profile">
           <template v-slot:header="{ count }">
             {{ count }} participants. Do you want to join?
           </template>
@@ -44,23 +46,29 @@
 </template>
 
 <script>
-import { ref } from '@vue/composition-api'
+import { ref, computed } from '@vue/composition-api'
 import useAuth from '~/use/auth'
+import useDoc from '~/use/doc'
 import { getDay, getTime, getDate } from '~/utils'
 import TCardList from '~/components/TCardList'
 import TRsvp from '~/components/TRsvp'
 import TGuests from '~/components/TGuests'
+import TLoader from '~/components/TLoader'
 
 export default {
   components: {
     TCardList,
     TRsvp,
-    TGuests
+    TGuests,
+    TLoader
   },
   setup() {
-    const { can } = useAuth()
+    const { can, uid } = useAuth()
+    const { loadById, doc: profile } = useDoc('mafia_profiles')
 
-    const title = 'Mafia Dashboard'
+    loadById(uid.value)
+
+    const title = computed(() => `Welcome, ${profile.value?.nickname}!`)
     const collection = 'mafia_games'
     const add = 'Create game'
 
@@ -83,7 +91,8 @@ export default {
       title,
       collection,
       add,
-      openedListId
+      openedListId,
+      profile
     }
   }
 }
