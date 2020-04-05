@@ -16,9 +16,6 @@
         >See schedule</nuxt-link
       >
     </div>
-    <div v-if="isAdmin" class="p-6">
-      <nuxt-link class="btn-secondary" to="/mafia/game">Mafia</nuxt-link>
-    </div>
   </main>
 </template>
 
@@ -27,11 +24,10 @@ import useAuth from '~/use/auth'
 
 export default {
   setup() {
-    const { uid, isAdmin } = useAuth()
+    const { uid } = useAuth()
 
     return {
-      uid,
-      isAdmin
+      uid
     }
   }
 }

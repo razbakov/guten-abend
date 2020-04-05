@@ -61,6 +61,13 @@
             >
               <TIconEdit />
             </button>
+            <button
+              v-if="deleteItem"
+              class="rounded border p-2 hover:bg-gray-200"
+              @click="removeItem(item.id)"
+            >
+              x
+            </button>
           </div>
           <slot :item="item" />
         </div>
@@ -105,6 +112,10 @@ export default {
     },
     map: {
       type: [Function, Boolean],
+      default: false
+    },
+    deleteItem: {
+      type: Boolean,
       default: false
     }
   },
