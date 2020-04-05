@@ -34,6 +34,12 @@
                 </dt>
                 <dd>{{ item.participant.email }}</dd>
               </div>
+              <div v-if="item.nickname" class="flex">
+                <dt class="w-1/3 text-right mr-2 text-gray-500">
+                  nickname
+                </dt>
+                <dd>{{ item.nickname }}</dd>
+              </div>
               <div
                 v-if="item.participant && item.participant.name"
                 class="flex"

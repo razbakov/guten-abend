@@ -47,7 +47,7 @@ export default () => {
 
   const getCount = (eventId) => getList(eventId).length
 
-  async function updateRsvp(eventId, collection, rsvp) {
+  async function updateRsvp(eventId, collection, rsvp, extra) {
     let rsvpObject = getRsvp(eventId)
 
     if (!rsvpObject) {
@@ -61,7 +61,8 @@ export default () => {
       participant: account.value,
       rsvp,
       eventId,
-      collection
+      collection,
+      ...extra
     }
 
     await update(rsvpObject)

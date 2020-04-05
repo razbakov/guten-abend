@@ -11,7 +11,7 @@
         <div v-if="game.roles">Role: {{ game.roles[uid] }}</div>
       </div>
       <div class="py-4 flex">
-        <div v-if="playerIds.length > 2">
+        <div>
           <button class="btn-secondary mr-2" @click="assignPlaces">
             Assign places
           </button>
@@ -25,13 +25,16 @@
           >
             Auto pilot
           </button>
-        </div>
-        <div v-else class="text-red-500">
-          We need minimum 3 players to start the game. There are only
-          {{ playerIds.length }}.
+          <button class="btn-secondary mr-2" @click="reset">
+            Reset
+          </button>
         </div>
       </div>
-      <div class="mt-4">
+      <div v-if="playerIds.length < 3" class="text-red-500">
+        We need minimum 3 players to start the game. There are only
+        {{ playerIds.length }}.
+      </div>
+      <div class="mt-4" v-if="players.length">
         <h2 class="text-xl font-bold">Players</h2>
         <div class="typo">
           <table>
@@ -66,7 +69,7 @@
           </table>
         </div>
       </div>
-      <div class="mt-4">
+      <div class="mt-4" v-if="game.set && game.set.roles">
         <h2 class="text-xl font-bold">Game Set</h2>
         <div class="typo">
           <table>
@@ -196,6 +199,15 @@ export default {
     getRandom(max) {
       return Math.floor(Math.random() * Math.floor(max))
     },
+    async reset() {
+      await this.update({
+        places: {},
+        roles: {},
+        set: {},
+        voice: {},
+        players: {}
+      })
+    },
     async assignPlaces() {
       const playerIds = Object.keys(this.game.players)
       const places = {}
@@ -218,6 +230,18 @@ export default {
       const roles = {}
 
       const combinations = {
+        1: {
+          citizen: 1,
+          mafia: 0,
+          don: 0,
+          sheriff: 0
+        },
+        2: {
+          citizen: 1,
+          mafia: 1,
+          don: 0,
+          sheriff: 0
+        },
         3: {
           citizen: 2,
           mafia: 1,

@@ -1,6 +1,6 @@
 <template>
   <main class="p-4">
-    <TLoader v-if="!profile" />
+    <TLoader v-if="!nickname" />
     <TCardList
       v-else
       :collection="collection"
@@ -20,26 +20,12 @@
         </button>
       </template>
       <template v-slot="{ item }">
-        <div class="px-6 py-4">
+        <div class="p-4 pb-6">
           <div class="font-bold text-xl mb-2">{{ item.title }}</div>
-          <p class="text-gray-700 text-base">
-            Created {{ getDate(item.createdAt) }} at
-            {{ getTime(item.createdAt) }} UTC
-          </p>
-          <TGuests v-if="openedListId === item.id" :id="item.id" class="p-4" />
+          <router-link class="btn mt-2" :to="`/mafia/game/${item.id}`"
+            >Open Game</router-link
+          >
         </div>
-        <TRsvp :id="item.id" :collection="collection" :extra="profile">
-          <template v-slot:header="{ count }">
-            {{ count }} participants. Do you want to join?
-          </template>
-          <template v-slot:default>
-            <div class="flex px-6 py-4 bg-gray-200 text-gray-700">
-              <router-link class="btn" :to="`/mafia/game/${item.id}`"
-                >Start Game</router-link
-              >
-            </div>
-          </template>
-        </TRsvp>
       </template>
     </TCardList>
   </main>
@@ -51,25 +37,23 @@ import useAuth from '~/use/auth'
 import useDoc from '~/use/doc'
 import { getDay, getTime, getDate } from '~/utils'
 import TCardList from '~/components/TCardList'
-import TRsvp from '~/components/TRsvp'
-import TGuests from '~/components/TGuests'
 import TLoader from '~/components/TLoader'
 
 export default {
   middleware: ['auth', 'mafia'],
   components: {
     TCardList,
-    TRsvp,
-    TGuests,
     TLoader
   },
   setup() {
     const { can, uid } = useAuth()
-    const { loadById, doc: profile } = useDoc('mafia_profiles')
+    const { loadById, doc } = useDoc('mafia_profiles')
 
     loadById(uid.value)
 
-    const title = computed(() => `Welcome, ${profile.value?.nickname}!`)
+    const nickname = computed(() => doc?.value?.nickname)
+
+    const title = computed(() => `Welcome, ${nickname.value}!`)
     const collection = 'mafia_games'
     const add = 'Create game'
 
@@ -93,7 +77,7 @@ export default {
       collection,
       add,
       openedListId,
-      profile
+      nickname
     }
   }
 }

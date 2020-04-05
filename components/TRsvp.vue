@@ -44,6 +44,10 @@ export default {
     collection: {
       type: String,
       default: ''
+    },
+    extra: {
+      type: Object,
+      default: () => ({})
     }
   },
   setup() {
@@ -60,7 +64,7 @@ export default {
   methods: {
     rsvp(id, answer) {
       if (this.confirmedAccount) {
-        this.updateRsvp(id, this.collection, answer)
+        this.updateRsvp(id, this.collection, answer, this.extra)
       } else {
         this.$router.push(
           `/rsvp/${this.id}/?rsvp=${answer}&back=${this.$route.fullPath}&collection=${this.collection}`
