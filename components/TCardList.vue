@@ -3,13 +3,17 @@
     <div class="md:flex items-baseline justify-between mb-4">
       <h1 class="text-3xl font-bold">{{ title }}</h1>
       <button
-        v-if="can('add', collection)"
+        v-if="add && can('add', collection)"
         class="btn"
         @click="currentId = 'add'"
       >
         {{ add }}
       </button>
+
+      <slot name="header" />
     </div>
+
+    <slot name="toolbar" />
 
     <div v-if="currentId === 'add'" class="card-item">
       <TForm
@@ -48,10 +52,10 @@
         />
         <div v-else>
           <div class="float-right mr-2 mt-2">
-            <slot name="toolbar" :item="item" />
+            <slot name="card-toolbar" :item="item" />
 
             <button
-              v-if="can('edit', collection, item)"
+              v-if="fields.length && can('edit', collection, item)"
               class="rounded border p-2 hover:bg-gray-200"
               @click="currentId = itemId"
             >
@@ -103,6 +107,11 @@ export default {
   data: () => ({
     currentId: false
   }),
+  watch: {
+    items(items) {
+      this.$emit('loadItems', items)
+    }
+  },
   setup(props) {
     const { docs } = useCollection(props.collection)
     const { update, remove } = useDoc(props.collection)

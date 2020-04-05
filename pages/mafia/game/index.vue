@@ -8,7 +8,7 @@
       :add="add"
       :fields="fields"
     >
-      <template v-slot:toolbar="{ item }">
+      <template v-slot:card-toolbar="{ item }">
         <button
           v-if="can('manage', collection, item)"
           class="underline mr-2"
