@@ -7,10 +7,18 @@
       </div>
       <div v-if="isCreator" class="py-4 flex">
         <div>
-          <button class="btn-secondary mr-2" @click="assignPlaces">
+          <button
+            v-if="playerIds.length"
+            class="btn-secondary mr-2"
+            @click="assignPlaces"
+          >
             Assign places
           </button>
-          <button class="btn-secondary mr-2" @click="assignRoles">
+          <button
+            v-if="playerIds.length"
+            class="btn-secondary mr-2"
+            @click="assignRoles"
+          >
             Assign roles
           </button>
           <button
@@ -130,8 +138,8 @@
                 <div v-if="player.order">
                   <div v-if="player.votes">{{ player.votes }}</div>
                   <button
-                    v-else
                     v-for="i in votesLeft"
+                    v-else
                     :key="i"
                     class="bg-gray-200 p-1 mr-1 border rounded"
                     @click="vote(player.id, i + 1)"
@@ -139,6 +147,9 @@
                     {{ i + 1 }}
                   </button>
                 </div>
+              </td>
+              <td v-if="game.winner">
+                {{ player.rating }}
               </td>
             </tr>
           </table>
@@ -254,6 +265,7 @@ export default {
               voice: (this.game.voice && this.game.voice[playerId]) ?? 0,
               active: !this.game.dead || !this.game.dead[playerId],
               votes: (this.game.votes && this.game.votes[playerId]) ?? 0,
+              rating: (this.game.rating && this.game.rating[playerId]) ?? 0,
               order:
                 this.game.nominated && this.game.nominated[playerId]
                   ? this.game.nominated[playerId].order
@@ -315,14 +327,36 @@ export default {
 
       if (mafiaCount === citizenCount) {
         await this.update({
-          winner: 'mafia'
+          winner: 'mafia',
+          rating: {}
         })
+
+        activePlayers
+          .filter((player) => player.role === 'mafia' || player.role === 'don')
+          .map((player) => player.id)
+          .forEach((id) => {
+            this.update({
+              [`rating.${id}`]: 2
+            })
+          })
       }
 
       if (mafiaCount === 0) {
         await this.update({
-          winner: 'city'
+          winner: 'city',
+          rating: {}
         })
+
+        activePlayers
+          .filter(
+            (player) => player.role === 'citizen' || player.role === 'sheriff'
+          )
+          .map((player) => player.id)
+          .forEach((id) => {
+            this.update({
+              [`rating.${id}`]: 2
+            })
+          })
       }
     },
     async vote(playerId, voteCount) {
@@ -404,6 +438,7 @@ export default {
         dead: {},
         votes: {},
         nominated: {},
+        rating: {},
         winner: ''
       })
     },
