@@ -68,6 +68,7 @@
           >
           <div v-if="showDetailsId === item.id && item.eventsCount">
             <TCardList
+              v-slot="{ item: event }"
               collection="meetups"
               :filters="[
                 {
@@ -76,7 +77,6 @@
                   filter: (event) => item.events.includes(event.id)
                 }
               ]"
-              v-slot="{ item: event }"
             >
               <div class="p-2 border">
                 {{ event.title }} on {{ getDate(event.date) }}
