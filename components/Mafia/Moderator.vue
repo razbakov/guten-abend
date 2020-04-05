@@ -26,11 +26,13 @@
         </div>
       </div>
       <div v-if="playing" class="p-2">
-        <div v-if="profile">Playing as: {{ profile.nickname }}</div>
+        <div v-if="profile">Name: {{ profile.nickname }}</div>
         <div v-if="game.places">Place: {{ game.places[uid] }}</div>
         <div v-if="game.roles">Role: {{ game.roles[uid] }}</div>
       </div>
-
+      <div v-if="game.winner" class="text-red-500 my-2 font-bold">
+        {{ game.winner }} won!
+      </div>
       <div v-if="playerIds.length < 3" class="text-red-500 my-2">
         We need minimum 3-10 players to start the game. There are only
         {{ playerIds.length }}.
@@ -38,34 +40,36 @@
       <div v-if="players.length" class="mt-4">
         <div class="flex">
           <h2 class="text-xl font-bold">Players</h2>
-          <button
-            class="p-1 text-gray-500"
-            :class="sortOrder === 'place' ? 'font-bold' : ''"
-            @click="sortOrder = 'place'"
-          >
-            By Place
-          </button>
-          <button
-            class="p-1 text-gray-500"
-            :class="sortOrder === 'order' ? 'font-bold' : ''"
-            @click="sortOrder = 'order'"
-          >
-            By Order
-          </button>
-          <button
-            v-if="isCreator"
-            class="p-1 text-gray-500"
-            @click="nominate(null)"
-          >
-            Clear nominations
-          </button>
-          <button
-            v-if="isCreator"
-            class="p-1 text-gray-500"
-            @click="vote(null)"
-          >
-            Clear votes
-          </button>
+          <template v-if="isCreator">
+            <button
+              class="p-1 text-gray-500"
+              :class="sortOrder === 'place' ? 'font-bold' : ''"
+              @click="sortOrder = 'place'"
+            >
+              By Place
+            </button>
+            <button
+              class="p-1 text-gray-500"
+              :class="sortOrder === 'order' ? 'font-bold' : ''"
+              @click="sortOrder = 'order'"
+            >
+              By Order
+            </button>
+            <button
+              v-if="isCreator"
+              class="p-1 text-gray-500"
+              @click="nominate(null)"
+            >
+              Clear nominations
+            </button>
+            <button
+              v-if="isCreator"
+              class="p-1 text-gray-500"
+              @click="vote(null)"
+            >
+              Clear votes
+            </button>
+          </template>
         </div>
 
         <div class="typo">
@@ -73,19 +77,22 @@
             <tr
               v-for="player in players"
               :key="player.id"
-              :class="activeVoice === player.id ? 'font-bold' : ''"
+              :class="{
+                'font-bold': activeVoice === player.id,
+                'text-red-200': !player.active
+              }"
             >
               <td class="text-center">
                 <div class="bg-gray-200 w-6 h-6">
                   {{ player.place }}
                 </div>
               </td>
+              <td v-if="isCreator">
+                {{ player.order }}
+              </td>
               <td>{{ player.nickname }}</td>
               <td v-if="!playing">
                 {{ player.role }}
-              </td>
-              <td>
-                {{ player.order }}
               </td>
               <td class="w-12">
                 {{ left(player.voice) }}
@@ -104,13 +111,19 @@
                   30s
                 </button>
               </td>
-              <td v-if="activeVoice && isCreator">
+              <td v-if="isCreator">
                 <button
-                  v-if="!game.nominated[player.id]"
-                  class="bg-gray-200 p-1 border rounded"
+                  v-if="activeVoice && !game.nominated[player.id]"
+                  class="bg-gray-200 p-1 border rounded m-1"
                   @click="nominate(player.id)"
                 >
                   Nom
+                </button>
+                <button
+                  class="bg-gray-200 p-1 border rounded m-1"
+                  @click="kill(player.id)"
+                >
+                  Kill
                 </button>
               </td>
               <td v-if="isCreator">
@@ -239,7 +252,7 @@ export default {
               place: this.game.places ? this.game.places[playerId] : '',
               role: this.game.roles ? this.game.roles[playerId] : '',
               voice: (this.game.voice && this.game.voice[playerId]) ?? 0,
-              active: true,
+              active: !this.game.dead || !this.game.dead[playerId],
               votes: (this.game.votes && this.game.votes[playerId]) ?? 0,
               order:
                 this.game.nominated && this.game.nominated[playerId]
@@ -286,6 +299,31 @@ export default {
       }
 
       return result
+    },
+    async kill(playerId) {
+      await this.update({
+        [`dead.${playerId}`]: !this.game.dead[playerId]
+      })
+
+      const activePlayers = this.players.filter((player) => player.active)
+      const citizenCount = activePlayers.filter(
+        (player) => player.role === 'citizen' || player.role === 'sheriff'
+      ).length
+      const mafiaCount = activePlayers.filter(
+        (player) => player.role === 'mafia' || player.role === 'don'
+      ).length
+
+      if (mafiaCount === citizenCount) {
+        await this.update({
+          winner: 'mafia'
+        })
+      }
+
+      if (mafiaCount === 0) {
+        await this.update({
+          winner: 'city'
+        })
+      }
     },
     async vote(playerId, voteCount) {
       if (!playerId) {
@@ -362,7 +400,11 @@ export default {
         roles: {},
         set: {},
         voice: {},
-        players: {}
+        players: {},
+        dead: {},
+        votes: {},
+        nominated: {},
+        winner: ''
       })
     },
     async assignPlaces() {
