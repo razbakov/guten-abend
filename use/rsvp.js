@@ -22,6 +22,29 @@ export default () => {
       .map((item) => item.participant)
   }
 
+  const getEvents = (userId, collection, rsvp = 'yes') => {
+    if (collection === 'meetups') {
+      return docs.value
+        .filter(
+          (item) =>
+            item.uid === userId &&
+            ((item.event && item.event.date) ||
+              item.collection === collection) &&
+            item.rsvp === rsvp
+        )
+        .map((item) => item.eventId)
+    }
+
+    return docs.value
+      .filter(
+        (item) =>
+          item.uid === userId &&
+          item.collection === collection &&
+          item.rsvp === rsvp
+      )
+      .map((item) => item.eventId)
+  }
+
   const getCount = (eventId) => getList(eventId).length
 
   async function updateRsvp(eventId, collection, rsvp) {
@@ -49,6 +72,7 @@ export default () => {
     getRsvpResponse,
     updateRsvp,
     getCount,
-    getList
+    getList,
+    getEvents
   }
 }

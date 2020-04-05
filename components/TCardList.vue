@@ -25,7 +25,7 @@
       />
     </div>
 
-    <div v-if="filters && filters.length > 1" class="flex">
+    <div v-if="filters && filters.length > 1" class="md:flex">
       <button
         v-for="filter in filters"
         :key="filter.name"
@@ -102,6 +102,10 @@ export default {
     filters: {
       type: Array,
       default: () => []
+    },
+    map: {
+      type: [Function, Boolean],
+      default: false
     }
   },
   data: () => ({
@@ -126,15 +130,19 @@ export default {
         return []
       }
 
+      let result = docs.value
+
+      if (props.map) {
+        result = result.map(props.map)
+      }
+
       if (!activeFilter.value) {
-        return docs.value
+        return result
       }
 
       const filterObject = props.filters.find(
         (filter) => filter.name === activeFilter.value
       )
-
-      let result = docs.value
 
       if (filterObject.map) {
         result = result.map(filterObject.map)
