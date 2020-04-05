@@ -1,16 +1,11 @@
 <template>
   <div class="card">
-    <TLoader v-if="loading" />
+    <TLoader v-if="loading || !exists" />
     <div v-else>
       <div class="border-b">
-        <h1 class="text-3xl font-bold">Moderator</h1>
+        <h1 class="text-3xl font-bold">{{ game.title }}</h1>
       </div>
-      <div v-if="playing">
-        <div v-if="profile">Playing as: {{ profile.nickname }}</div>
-        <div v-if="game.places">Place: {{ game.places[uid] }}</div>
-        <div v-if="game.roles">Role: {{ game.roles[uid] }}</div>
-      </div>
-      <div class="py-4 flex">
+      <div v-if="isCreator" class="py-4 flex">
         <div>
           <button class="btn-secondary mr-2" @click="assignPlaces">
             Assign places
@@ -30,15 +25,45 @@
           </button>
         </div>
       </div>
-      <div v-if="playerIds.length < 3" class="text-red-500">
-        We need minimum 3 players to start the game. There are only
+      <div v-if="playing" class="p-2">
+        <div v-if="profile">Playing as: {{ profile.nickname }}</div>
+        <div v-if="game.places">Place: {{ game.places[uid] }}</div>
+        <div v-if="game.roles">Role: {{ game.roles[uid] }}</div>
+      </div>
+
+      <div v-if="playerIds.length < 3" class="text-red-500 my-2">
+        We need minimum 3-10 players to start the game. There are only
         {{ playerIds.length }}.
       </div>
       <div v-if="players.length" class="mt-4">
-        <h2 class="text-xl font-bold">Players</h2>
+        <div class="flex">
+          <h2 class="text-xl font-bold">Players</h2>
+          <button
+            class="p-1 text-gray-500"
+            :class="sortOrder === 'place' ? 'font-bold' : ''"
+            @click="sortOrder = 'place'"
+          >
+            By Place
+          </button>
+          <button
+            class="p-1 text-gray-500"
+            :class="sortOrder === 'order' ? 'font-bold' : ''"
+            @click="sortOrder = 'order'"
+          >
+            By Order
+          </button>
+          <button class="p-1 text-gray-500" @click="nominate(null)">
+            Clear
+          </button>
+        </div>
+
         <div class="typo">
           <table>
-            <tr v-for="player in players" :key="player.id">
+            <tr
+              v-for="player in players"
+              :key="player.id"
+              :class="activeVoice === player.id ? 'font-bold' : ''"
+            >
               <td class="text-center">
                 <div class="bg-gray-200 w-6 h-6">
                   {{ player.place }}
@@ -48,10 +73,13 @@
               <td v-if="!playing">
                 {{ player.role }}
               </td>
+              <td>
+                {{ player.order }}
+              </td>
               <td class="w-12">
                 {{ left(player.voice) }}
               </td>
-              <td>
+              <td v-if="isCreator">
                 <button
                   class="bg-gray-200 p-1 border rounded"
                   @click="start(player.id, 60)"
@@ -63,6 +91,15 @@
                   @click="start(player.id, 30)"
                 >
                   30s
+                </button>
+              </td>
+              <td v-if="activeVoice">
+                <button
+                  v-if="!game.nominated[player.id]"
+                  class="bg-gray-200 p-1 border rounded"
+                  @click="nominate(player.id)"
+                >
+                  Nom
                 </button>
               </td>
             </tr>
@@ -101,7 +138,7 @@
 </template>
 
 <script>
-import { ref } from '@vue/composition-api'
+import { ref, computed } from '@vue/composition-api'
 import useAuth from '~/use/auth'
 import useDoc from '~/use/doc'
 import useLiveDoc from '~/use/liveDoc'
@@ -119,11 +156,17 @@ export default {
 
     const id = params.id
 
-    const { doc: game, update, loading } = useLiveDoc('mafia_games', id)
+    const { doc: game, update, loading, isCreator, exists } = useLiveDoc(
+      'mafia_games',
+      id
+    )
     const { loadById: loadProfile, doc: profile } = useDoc('mafia_profiles')
 
     const now = ref(0)
-    const playing = ref(false)
+    const sortOrder = ref('place')
+    const playing = computed(
+      () => (isCreator.value && game.value.auto) || !isCreator.value
+    )
 
     setInterval(() => {
       now.value = +new Date()
@@ -137,23 +180,60 @@ export default {
       loadProfile,
       profile,
       playing,
-      uid
+      uid,
+      isCreator,
+      exists,
+      sortOrder
     }
   },
   computed: {
+    activeVoice() {
+      return this.game.voice
+        ? Object.keys(this.game.voice).find((item) => item)
+        : false
+    },
     playerIds() {
-      return Object.keys(this.game.players)
+      return this.game.players ? Object.keys(this.game.players) : []
     },
     players() {
-      return Object.keys(this.game.players)
-        .map((playerId) => ({
-          id: playerId,
-          nickname: this.game.players[playerId].nickname,
-          place: this.game.places[playerId],
-          role: this.game.roles[playerId],
-          voice: (this.game.voice && this.game.voice[playerId]) ?? 0
-        }))
-        .sort(sortBy('place'))
+      return this.game.players
+        ? Object.keys(this.game.players)
+            .map((playerId) => ({
+              id: playerId,
+              nickname: this.game.players[playerId]?.nickname,
+              place: this.game.places ? this.game.places[playerId] : '',
+              role: this.game.roles ? this.game.roles[playerId] : '',
+              voice: (this.game.voice && this.game.voice[playerId]) ?? 0,
+              order:
+                this.game.nominated && this.game.nominated[playerId]
+                  ? this.game.nominated[playerId].order
+                  : ''
+            }))
+            .sort(sortBy(this.sortOrder))
+        : []
+    }
+  },
+  watch: {
+    exists(val) {
+      if (!val) {
+        this.$router.replace('/mafia/game')
+      }
+    }
+  },
+  async mounted() {
+    if (!this.loading && !this.exists) {
+      this.$router.replace('/mafia/game')
+    }
+
+    await this.loadProfile(this.uid)
+
+    if (this.playing) {
+      await this.update({
+        [`players.${this.uid}`]: {
+          active: true,
+          nickname: this.profile.nickname
+        }
+      })
     }
   },
   methods: {
@@ -170,6 +250,28 @@ export default {
 
       return result
     },
+    async nominate(to) {
+      if (!to) {
+        await this.update({
+          nominated: {}
+        })
+
+        return
+      }
+
+      const now = +new Date()
+      const order = this.game.nominated
+        ? Object.keys(this.game.nominated).length + 1
+        : 1
+
+      await this.update({
+        [`nominated.${to}`]: {
+          order,
+          time: now,
+          from: this.activeVoice
+        }
+      })
+    },
     async start(playerId, time) {
       await this.update({
         voice: {
@@ -179,18 +281,21 @@ export default {
     },
     async autoPilot() {
       if (this.playing) {
-        this.playing = false
+        await this.update({
+          auto: false
+        })
+
         return
       }
 
-      this.playing = true
-
       await this.loadProfile(this.uid)
+
       await this.update({
         [`players.${this.uid}`]: {
           active: true,
           nickname: this.profile.nickname
-        }
+        },
+        auto: true
       })
 
       await this.assignPlaces()
