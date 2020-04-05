@@ -56,7 +56,7 @@ import TGuests from '~/components/TGuests'
 import TLoader from '~/components/TLoader'
 
 export default {
-  middleware: ['auth'],
+  middleware: ['auth', 'mafia'],
   components: {
     TCardList,
     TRsvp,

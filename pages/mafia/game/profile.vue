@@ -6,7 +6,7 @@
       </h1>
     </div>
 
-    <TLoader v-if="!accountLoaded" />
+    <TLoader v-if="loading" />
     <div v-else>
       <TForm
         v-model="profile"
@@ -25,7 +25,7 @@ import TForm from '~/components/TForm'
 import TLoader from '~/components/TLoader'
 
 export default {
-  middleware: ['auth'],
+  middleware: ['auth', 'account'],
   components: {
     TForm,
     TLoader
@@ -40,13 +40,13 @@ export default {
     ]
   }),
   setup() {
-    const { uid, accountLoaded } = useAuth()
+    const { uid, loading } = useAuth()
     const { loadById, doc: profile, update, exists } = useDoc('mafia_profiles')
 
     loadById(uid.value)
 
     return {
-      accountLoaded,
+      loading,
       profile,
       update,
       exists

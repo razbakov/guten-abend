@@ -6,8 +6,11 @@
       Guten Abend is an online social hub to have fun via Zoom.
     </p>
     <div class="text-center mt-3 p-4 w-full md:flex">
-      <nuxt-link to="/signup" class="block w-full btn m-2">
-        {{ uid ? 'Go to my Account' : 'Join Now' }}
+      <nuxt-link v-if="!uid" to="/signup" class="block w-full btn m-2">
+        Join Now
+      </nuxt-link>
+      <nuxt-link v-else to="/account" class="block w-full btn m-2">
+        Go to my Account
       </nuxt-link>
       <nuxt-link to="/schedule" class="block w-full btn-secondary m-2"
         >See schedule</nuxt-link

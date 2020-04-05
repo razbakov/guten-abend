@@ -47,23 +47,23 @@ export default {
     }
   },
   setup() {
-    const { uid } = useAuth()
+    const { confirmedAccount } = useAuth()
     const { getRsvpResponse, getCount, updateRsvp } = useRSVP()
 
     return {
       getRsvpResponse,
       getCount,
       updateRsvp,
-      uid
+      confirmedAccount
     }
   },
   methods: {
     rsvp(id, answer) {
-      if (this.uid) {
+      if (this.confirmedAccount) {
         this.updateRsvp(id, this.collection, answer)
       } else {
         this.$router.push(
-          `/rsvp/${this.id}/?rsvp=no&back=${this.$route.fullPath}&collection=${this.collection}`
+          `/rsvp/${this.id}/?rsvp=${answer}&back=${this.$route.fullPath}&collection=${this.collection}`
         )
       }
     }

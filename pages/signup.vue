@@ -5,7 +5,7 @@
       <h2>Almost there</h2>
       <p>Check your email and click the invitation link.</p>
     </div>
-    <form v-else @submit.prevent="submit">
+    <div v-else>
       <div class="typo">
         <h2>Sign in with</h2>
       </div>
@@ -39,7 +39,7 @@
         </button>
       </div>
       <div class="divider">or</div>
-      <div>
+      <form @submit.prevent="submit">
         <label class="block text-gray-700 text-sm font-bold mb-2" for="email">
           Email
         </label>
@@ -55,8 +55,8 @@
             Sign In
           </button>
         </div>
-      </div>
-    </form>
+      </form>
+    </div>
   </main>
 </template>
 
@@ -65,7 +65,6 @@ import TLoader from '~/components/TLoader'
 import useAuth from '~/use/auth'
 
 export default {
-  middleware: ['auth'],
   components: {
     TLoader
   },
@@ -100,7 +99,7 @@ export default {
           window.localStorage.removeItem('target')
 
           if (!target) {
-            target = '/account'
+            target = '/schedule'
           }
 
           this.$router.push(target)

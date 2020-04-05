@@ -37,8 +37,8 @@ export default () => {
 
   const router = useRouter()
 
-  const accountLoaded = computed(
-    () => !state.loading && !!state.uid && !!state.account
+  const confirmedAccount = computed(
+    () => !!state.uid && !!state.account && !!state.account.newsletter
   )
 
   const firestore = firebase.firestore()
@@ -94,6 +94,14 @@ export default () => {
     }
 
     await loadProfile()
+  }
+
+  async function getAccount() {
+    if (!state.account) {
+      await loadAccount()
+    }
+
+    return state.account
   }
 
   async function loadAccount() {
@@ -184,7 +192,7 @@ export default () => {
       .doc(state.uid)
       .update(changes)
 
-    loadAccount()
+    await loadAccount()
   }
 
   async function signOut() {
@@ -262,8 +270,9 @@ export default () => {
     signInWithGoogle,
     sendSignInLinkToEmail,
     signOut,
-    accountLoaded,
+    confirmedAccount,
     isAdmin,
+    getAccount,
     can,
     signInAnonymously,
     signInWithEmailLink

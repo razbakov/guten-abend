@@ -6,7 +6,7 @@
 import useRSVP from '~/use/rsvp'
 
 export default {
-  middleware: ['auth'],
+  middleware: ['auth', 'account'],
   mounted() {
     const id = this.$route.params.id
     const rsvp = this.$route.query.rsvp

@@ -12,7 +12,7 @@ import GamePlayer from '~/components/Mafia/Player'
 import TLoader from '~/components/TLoader'
 
 export default {
-  middleware: ['auth'],
+  middleware: ['auth', 'mafia'],
   components: {
     GameModerator,
     GamePlayer,

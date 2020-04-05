@@ -1,15 +1,16 @@
 <template>
-  <main class="card">
+  <TLoader v-if="loading" />
+  <main v-else class="card">
     <div class="mb-4 bg-gray-200 -mt-2 -mx-8 p-4">
       <h1 class="text-3xl font-bold">
-        {{ account && account.newsletter ? 'My Account' : 'Create Account' }}
+        Your Account
       </h1>
     </div>
 
     <TForm
       v-model="account"
       :fields="fields"
-      :submit-label="`${account && account.newsletter ? 'Save' : 'Finish'}`"
+      :submit-label="`${confirmedAccount ? 'Save' : 'Confirm'}`"
       @save="save"
     />
 
@@ -24,20 +25,31 @@
 <script>
 import useAuth from '~/use/auth'
 import TForm from '~/components/TForm'
+import TLoader from '~/components/TLoader'
 
 export default {
   middleware: ['auth'],
   components: {
-    TForm
+    TForm,
+    TLoader
   },
   setup() {
-    const { uid, account, signOut, updateAccount } = useAuth()
-
-    return {
+    const {
       uid,
       account,
       signOut,
-      updateAccount
+      updateAccount,
+      confirmedAccount,
+      loading
+    } = useAuth()
+
+    return {
+      loading,
+      uid,
+      account,
+      signOut,
+      updateAccount,
+      confirmedAccount
     }
   },
   data: () => ({
@@ -69,6 +81,11 @@ export default {
       }
     ]
   }),
+  mounted() {
+    if (!this.confirmedAccount) {
+      this.$nuxt.setLayout('empty')
+    }
+  },
   methods: {
     async save(data) {
       await this.updateAccount(data)
