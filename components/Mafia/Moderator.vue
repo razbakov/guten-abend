@@ -52,8 +52,19 @@
           >
             By Order
           </button>
-          <button class="p-1 text-gray-500" @click="nominate(null)">
-            Clear
+          <button
+            v-if="isCreator"
+            class="p-1 text-gray-500"
+            @click="nominate(null)"
+          >
+            Clear nominations
+          </button>
+          <button
+            v-if="isCreator"
+            class="p-1 text-gray-500"
+            @click="vote(null)"
+          >
+            Clear votes
           </button>
         </div>
 
@@ -93,7 +104,7 @@
                   30s
                 </button>
               </td>
-              <td v-if="activeVoice">
+              <td v-if="activeVoice && isCreator">
                 <button
                   v-if="!game.nominated[player.id]"
                   class="bg-gray-200 p-1 border rounded"
@@ -101,6 +112,20 @@
                 >
                   Nom
                 </button>
+              </td>
+              <td v-if="isCreator">
+                <div v-if="player.order">
+                  <div v-if="player.votes">{{ player.votes }}</div>
+                  <button
+                    v-else
+                    v-for="i in votesLeft"
+                    :key="i"
+                    class="bg-gray-200 p-1 mr-1 border rounded"
+                    @click="vote(player.id, i + 1)"
+                  >
+                    {{ i + 1 }}
+                  </button>
+                </div>
               </td>
             </tr>
           </table>
@@ -187,6 +212,16 @@ export default {
     }
   },
   computed: {
+    votesLeft() {
+      const playerCount = this.players.filter((player) => player.active).length
+      const votesCount = this.players
+        .map((player) => player.votes)
+        .reduce((prev, current) => prev + current)
+
+      const count = playerCount - votesCount
+
+      return [...Array(count).keys()]
+    },
     activeVoice() {
       return this.game.voice
         ? Object.keys(this.game.voice).find((item) => item)
@@ -204,6 +239,8 @@ export default {
               place: this.game.places ? this.game.places[playerId] : '',
               role: this.game.roles ? this.game.roles[playerId] : '',
               voice: (this.game.voice && this.game.voice[playerId]) ?? 0,
+              active: true,
+              votes: (this.game.votes && this.game.votes[playerId]) ?? 0,
               order:
                 this.game.nominated && this.game.nominated[playerId]
                   ? this.game.nominated[playerId].order
@@ -250,8 +287,23 @@ export default {
 
       return result
     },
+    async vote(playerId, voteCount) {
+      if (!playerId) {
+        await this.update({
+          votes: {}
+        })
+
+        return
+      }
+
+      await this.update({
+        [`votes.${playerId}`]: voteCount
+      })
+    },
     async nominate(to) {
       if (!to) {
+        await this.vote(null)
+
         await this.update({
           nominated: {}
         })
