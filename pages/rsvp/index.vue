@@ -4,7 +4,7 @@
       :collection="collection"
       :title="title"
       :filters="filters"
-      :deleteItem="true"
+      :delete-item="true"
     >
       <template v-slot="{ item }">
         <div class="px-6 py-4">
@@ -26,8 +26,8 @@
                 </template>
               </div>
               <div
-                class="flex"
                 v-if="item.participant && item.participant.email"
+                class="flex"
               >
                 <dt class="w-1/3 text-right mr-2 text-gray-500">
                   email
@@ -35,15 +35,15 @@
                 <dd>{{ item.participant.email }}</dd>
               </div>
               <div
-                class="flex"
                 v-if="item.participant && item.participant.name"
+                class="flex"
               >
                 <dt class="w-1/3 text-right mr-2 text-gray-500">
                   name
                 </dt>
                 <dd>{{ item.participant.name }}</dd>
               </div>
-              <div class="flex" v-if="item.event && item.event.title">
+              <div v-if="item.event && item.event.title" class="flex">
                 <dt class="w-1/3 text-right mr-2 text-gray-500">
                   event
                 </dt>
