@@ -167,8 +167,8 @@ export default {
 
       return result
     },
-    start(playerId, time) {
-      this.update({
+    async start(playerId, time) {
+      await this.update({
         voice: {
           [playerId]: +new Date() + time * 1000
         }
