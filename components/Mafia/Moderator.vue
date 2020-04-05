@@ -34,7 +34,7 @@
         We need minimum 3 players to start the game. There are only
         {{ playerIds.length }}.
       </div>
-      <div class="mt-4" v-if="players.length">
+      <div v-if="players.length" class="mt-4">
         <h2 class="text-xl font-bold">Players</h2>
         <div class="typo">
           <table>
@@ -69,7 +69,7 @@
           </table>
         </div>
       </div>
-      <div class="mt-4" v-if="game.set && game.set.roles">
+      <div v-if="game.set && game.set.roles" class="mt-4">
         <h2 class="text-xl font-bold">Game Set</h2>
         <div class="typo">
           <table>
