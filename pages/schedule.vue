@@ -55,11 +55,26 @@
               v-if="!item.past"
               class="flex px-6 py-4 bg-gray-200 text-gray-700"
             >
-              <div v-if="item.link && (item.soon || item.now)">
-                <a class="btn" target="_blank" rel="noopener" :href="item.link"
-                  >Open in Zoom</a
-                >
-              </div>
+              <template v-if="item.soon || item.now">
+                <div v-if="item.link">
+                  <a
+                    class="btn"
+                    target="_blank"
+                    rel="noopener"
+                    :href="item.link"
+                    >Open in Zoom</a
+                  >
+                </div>
+                <div v-if="item.attachment">
+                  <a
+                    class="btn-secondary ml-2"
+                    target="_blank"
+                    rel="noopener"
+                    :href="item.attachment"
+                    >Open Attachment</a
+                  >
+                </div>
+              </template>
               <div v-else>
                 Zoom link will appear here before the event. Check later.
               </div>
@@ -126,7 +141,11 @@ export default {
       },
       {
         name: 'link',
-        label: 'Zoom Link'
+        label: 'Meeting Link'
+      },
+      {
+        name: 'attachment',
+        label: 'Attachment'
       }
     ]
 
