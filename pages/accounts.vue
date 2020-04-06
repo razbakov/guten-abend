@@ -21,6 +21,11 @@
           rows="10"
         ></textarea>
       </template>
+      <template v-slot:card-toolbar="{ item }">
+        <TButton type="link" @click="updateById(item.id, { hidden: true })"
+          >hide</TButton
+        >
+      </template>
       <template v-slot="{ item }">
         <div class="px-6 py-4">
           <div class="font-bold text-xl mb-2">
@@ -85,6 +90,7 @@
 
 <script>
 import useAuth from '~/use/auth'
+import useDoc from '~/use/doc'
 import TCardList from '~/components/TCardList'
 import TButton from '~/components/TButton'
 import { getDay, getTime, getDate } from '~/utils'
@@ -106,6 +112,7 @@ export default {
 
     const { can, isAdmin } = useAuth()
     const { getEvents } = useRSVP()
+    const { updateById } = useDoc('accounts')
 
     const fields = []
 
@@ -120,26 +127,33 @@ export default {
         name: 'new',
         label: 'New',
         default: true,
+        filter: (item) => !item.hidden,
         sort: '-createdAt'
       },
       {
         name: 'active',
         label: 'Active',
         default: true,
-        filter: (item) => item.eventsCount > 0,
+        filter: (item) => !item.hidden && item.eventsCount > 0,
         sort: '-eventsCount'
       },
       {
         name: 'newsletter',
         label: 'Newsletter',
-        filter: (item) => item.newsletter === 'yes',
+        filter: (item) => !item.hidden && item.newsletter === 'yes',
         sort: '-eventsCount'
       },
       {
         name: 'unfinished',
         label: 'Unfinished',
-        filter: (item) => !item.newsletter,
+        filter: (item) => !item.hidden && !item.newsletter,
         sort: '-eventsCount'
+      },
+      {
+        name: 'hidden',
+        label: 'Hidden',
+        filter: (item) => item.hidden,
+        sort: '-createdAt'
       }
     ]
 
@@ -153,7 +167,8 @@ export default {
       title,
       collection,
       isAdmin,
-      map
+      map,
+      updateById
     }
   },
   mounted() {
