@@ -11,7 +11,7 @@
             <span v-if="field.required">*</span>
           </label>
         </div>
-        <div class="md:w-2/3">
+        <div class="w-full">
           <p v-if="field.description" class="text-sm text-gray-700 mb-2">
             {{ field.description }}
           </p>
@@ -19,6 +19,7 @@
             :is="field.component"
             v-if="field.component"
             v-model="data"
+            v-bind="field"
           />
           <textarea
             v-else-if="field.type === 'textarea'"
@@ -31,6 +32,7 @@
                 : ''
             "
             class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+            rows="10"
             type="text"
           />
           <div
