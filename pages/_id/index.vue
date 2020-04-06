@@ -1,6 +1,6 @@
 <template>
   <main>
-    <div v-if="event" class="typo">
+    <div v-if="event" class="typo p-4 md:p-0">
       <h1>{{ event.title }}</h1>
       <TPreview :content="event.content" />
     </div>
