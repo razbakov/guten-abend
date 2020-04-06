@@ -16,6 +16,9 @@ export default () => {
   const getRsvpResponse = (eventId) =>
     (uid.value && getRsvp(eventId)?.rsvp) ?? null
 
+  const getFeedback = (eventId) =>
+    (uid.value && getRsvp(eventId)?.feedback) ?? null
+
   function getList(eventId, rsvp = 'yes') {
     return docs.value
       .filter((item) => item.eventId === eventId && item.rsvp === rsvp)
@@ -74,6 +77,7 @@ export default () => {
     updateRsvp,
     getCount,
     getList,
-    getEvents
+    getEvents,
+    getFeedback
   }
 }

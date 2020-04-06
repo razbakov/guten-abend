@@ -14,7 +14,13 @@
           <div class="md:flex justify-between">
             <dl class="w-full">
               <div
-                v-for="field in ['uid', 'collection', 'eventId', 'rsvp']"
+                v-for="field in [
+                  'feedback',
+                  'uid',
+                  'collection',
+                  'eventId',
+                  'rsvp'
+                ]"
                 :key="field"
                 class="flex"
               >
@@ -104,6 +110,12 @@ export default {
         label: 'No',
         filter: (item) => item.rsvp === 'no',
         sort: '-createdAt'
+      },
+      {
+        name: 'feedback',
+        label: 'Feedback',
+        filter: (item) => !!item.feedback,
+        sort: '-updatedAt'
       }
     ]
 

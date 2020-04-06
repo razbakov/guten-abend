@@ -4,6 +4,7 @@
       :collection="collection"
       :title="title"
       :add="add"
+      :map="map"
       :fields="fields"
       :filters="filters"
     >
@@ -43,9 +44,14 @@
             Starts soon
           </div>
           <TGuests v-if="openedListId === item.id" :id="item.id" class="p-4" />
-          <TPreview v-else class="mb-2" :content="item.description" />
+          <TPreview
+            v-else-if="!item.awaitsFeedback"
+            class="mb-2"
+            :content="item.description"
+          />
         </div>
-        <TRsvp :id="item.id" :collection="collection">
+        <TFeedback v-if="item.awaitsFeedback" :id="item.id" />
+        <TRsvp v-else :id="item.id" :collection="collection">
           <template v-slot:header="{ count }">
             <div v-if="item.past">{{ count }} participated</div>
             <div v-else>{{ count }} participants. Do you want to join?</div>
@@ -97,6 +103,7 @@ import useAuth from '~/use/auth'
 import useRSVP from '~/use/rsvp'
 import TCardList from '~/components/TCardList'
 import TPreview from '~/components/TPreview'
+import TFeedback from '~/components/TFeedback'
 import TRsvp from '~/components/TRsvp'
 import TGuests from '~/components/TGuests'
 import { getDay, getTime, getDate } from '~/utils'
@@ -106,7 +113,8 @@ export default {
     TCardList,
     TRsvp,
     TPreview,
-    TGuests
+    TGuests,
+    TFeedback
   },
   setup() {
     const title = 'Schedule'
@@ -114,7 +122,7 @@ export default {
     const add = 'Add event'
 
     const { can } = useAuth()
-    const { getRsvpResponse } = useRSVP()
+    const { getRsvpResponse, getFeedback } = useRSVP()
     const now = +new Date()
     const openedListId = ref(false)
 
@@ -146,38 +154,48 @@ export default {
       {
         name: 'attachment',
         label: 'Attachment'
+      },
+      {
+        name: 'enableFeedback',
+        type: 'select',
+        options: ['yes', 'no'],
+        default: 'no'
       }
     ]
+
+    const map = (item) => ({
+      ...item,
+      past: +new Date(item.date) < now,
+      awaitsFeedback:
+        +new Date(item.date) < now &&
+        getRsvpResponse(item.id) === 'yes' &&
+        item.enableFeedback === 'yes' &&
+        !getFeedback(item.id),
+      now:
+        +new Date(item.date) + 60000 * item.duration > now &&
+        +new Date(item.date) < now,
+      soon:
+        +new Date(item.date) > now && +new Date(item.date) - 60000 * 60 < now
+    })
 
     const filters = [
       {
         name: 'upcoming',
         label: 'Upcoming',
         default: true,
-        map: (item) => ({
-          ...item,
-          past: false,
-          now:
-            +new Date(item.date) + 60000 * item.duration > now &&
-            +new Date(item.date) < now,
-          soon:
-            +new Date(item.date) > now &&
-            +new Date(item.date) - 60000 * 60 < now
-        }),
         filter: (item) =>
-          +new Date(item.date) + 60000 * item.duration > now &&
+          (!item.past || item.now || item.awaitsFeedback) &&
           getRsvpResponse(item.id) !== 'no',
         sort: 'date'
       },
       {
         name: 'past',
         label: 'Past',
-        map: (item) => ({
-          ...item,
-          past: true
-        }),
         filter: (item) =>
-          +new Date(item.date) < now && getRsvpResponse(item.id) !== 'no',
+          item.past &&
+          !item.now &&
+          !item.awaitsFeedback &&
+          getRsvpResponse(item.id) !== 'no',
         sort: '-date'
       },
       {
@@ -199,6 +217,7 @@ export default {
       title,
       collection,
       add,
+      map,
       openedListId
     }
   }
