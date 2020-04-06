@@ -14,8 +14,13 @@
           <p v-if="field.description" class="text-sm text-gray-700 mb-2">
             {{ field.description }}
           </p>
+          <component
+            :is="field.component"
+            v-if="field.component"
+            v-model="data"
+          />
           <textarea
-            v-if="field.type === 'textarea'"
+            v-else-if="field.type === 'textarea'"
             :id="field.name"
             v-model="data[field.name]"
             :placeholder="field.placeholder"

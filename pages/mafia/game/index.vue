@@ -8,26 +8,43 @@
       :add="add"
       :fields="fields"
     >
-      <template v-slot:card-toolbar="{ item }">
-        <button
-          v-if="can('manage', collection, item)"
-          class="underline mr-2"
-          @click="
-            !openedListId ? (openedListId = item.id) : (openedListId = false)
-          "
-        >
-          Players
-        </button>
-      </template>
       <template v-slot="{ item }">
         <div class="p-4 pb-6">
           <div class="font-bold text-xl mb-2">{{ item.title }}</div>
+          <div class="bg-gray-200 p-2 mb-4 rounded border">
+            <dl>
+              <div class="flex">
+                <dt class="w-1/3 text-right font-bold mr-2">Players</dt>
+                <dd>
+                  {{ item.players ? Object.keys(item.players).length : 0 }} / 10
+                </dd>
+              </div>
+              <div v-if="item.winner" class="flex">
+                <dt class="w-1/3 text-right font-bold mr-2">Winner</dt>
+                <dd>{{ item.winner }}</dd>
+              </div>
+            </dl>
+          </div>
           <router-link class="btn mt-2" :to="`/mafia/game/${item.id}`"
             >Open Game</router-link
           >
         </div>
       </template>
     </TCardList>
+
+    <div v-if="can('import', 'mafia-game')" class="mt-8">
+      <TButton type="secondary" @click="importingGame = true"
+        >Import Game</TButton
+      >
+      <TForm
+        v-if="importingGame"
+        class="card-item p-4 mt-4"
+        :show-cancel="true"
+        :fields="importFields"
+        @save="create"
+        @cancel="importingGame = false"
+      />
+    </div>
   </main>
 </template>
 
@@ -38,16 +55,25 @@ import useDoc from '~/use/doc'
 import { getDay, getTime, getDate } from '~/utils'
 import TCardList from '~/components/TCardList'
 import TLoader from '~/components/TLoader'
+import TButton from '~/components/TButton'
+import TForm from '~/components/TForm'
+import TMafiaPlayers from '~/components/TMafiaPlayers'
 
 export default {
   middleware: ['auth', 'mafia'],
   components: {
     TCardList,
-    TLoader
+    TLoader,
+    TButton,
+    TForm
   },
+  data: () => ({
+    importingGame: false
+  }),
   setup() {
     const { can, uid } = useAuth()
     const { loadById, doc } = useDoc('mafia_profiles')
+    const { create } = useDoc('mafia_games')
 
     loadById(uid.value)
 
@@ -67,6 +93,24 @@ export default {
       }
     ]
 
+    const importFields = [
+      ...fields,
+      {
+        name: 'date',
+        label: 'Date',
+        type: 'datetime-local'
+      },
+      {
+        name: 'winner',
+        type: 'select',
+        options: ['city', 'mafia']
+      },
+      {
+        name: 'players',
+        component: TMafiaPlayers
+      }
+    ]
+
     return {
       can,
       getDay,
@@ -77,7 +121,9 @@ export default {
       collection,
       add,
       openedListId,
-      nickname
+      nickname,
+      importFields,
+      create
     }
   }
 }

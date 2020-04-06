@@ -105,7 +105,6 @@ export default (name) => {
       updatedAt: +new Date(),
       createdBy: uid.value,
       updatedBy: uid.value,
-      slug: state.slug,
       ...data
     })
 
