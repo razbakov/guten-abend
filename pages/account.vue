@@ -66,14 +66,6 @@ export default {
         name: 'city'
       },
       {
-        label: 'Join Slack',
-        description:
-          'We have Slack for our Guten Abend Club. Would you like to receive an invite?',
-        options: ['yes', 'no'],
-        type: 'select',
-        name: 'slack'
-      },
-      {
         description: 'Would you like to get emails about our next events?',
         options: ['yes', 'no'],
         type: 'select',

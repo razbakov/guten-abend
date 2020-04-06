@@ -29,13 +29,7 @@
           <div class="md:flex justify-between">
             <dl class="w-full">
               <div
-                v-for="field in [
-                  'email',
-                  'city',
-                  'timezone',
-                  'slack',
-                  'newsletter'
-                ]"
+                v-for="field in ['email', 'city', 'timezone', 'newsletter']"
                 :key="field"
                 class="flex"
               >
@@ -133,12 +127,6 @@ export default {
         label: 'Active',
         default: true,
         filter: (item) => item.eventsCount > 0,
-        sort: '-eventsCount'
-      },
-      {
-        name: 'slack',
-        label: 'Slack',
-        filter: (item) => item.slack === 'yes',
         sort: '-eventsCount'
       },
       {

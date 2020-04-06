@@ -25,7 +25,15 @@
           </div>
           <div class="text-gray-700 text-base">
             <strong class="font-bold">{{ getDay(item.date) }}</strong>
-            {{ getDate(item.date) }} at {{ getTime(item.date) }} UTC
+            {{ getDate(item.date) }} at {{ getTime(item.date) }}
+            <a
+              href="https://time.is/CEST"
+              title="Central European Summer Time"
+              target="_blank"
+              rel="noopened"
+              class="underline"
+              >CEST</a
+            >
             <span v-if="item.duration">({{ item.duration }} min)</span>
           </div>
           <div v-if="item.now" class="text-green-500 font-bold">
