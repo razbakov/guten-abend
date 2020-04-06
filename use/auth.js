@@ -38,7 +38,7 @@ export default () => {
   const router = useRouter()
 
   const confirmedAccount = computed(
-    () => !!state.uid && !!state.account && !!state.account.newsletter
+    () => !!state.uid && !!state.account && !!state.account.confirmed
   )
 
   const firestore = firebase.firestore()

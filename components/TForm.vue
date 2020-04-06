@@ -8,6 +8,7 @@
             class="block text-gray-700 font-bold md:text-right mb-1 md:mb-0 pr-4"
           >
             {{ getLabel(field) }}
+            <span v-if="field.required">*</span>
           </label>
         </div>
         <div class="md:w-2/3">
@@ -24,11 +25,21 @@
             :id="field.name"
             v-model="data[field.name]"
             :placeholder="field.placeholder"
+            :class="
+              error && error.fields && error.fields[field.name]
+                ? 'border-red-500'
+                : ''
+            "
             class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
             type="text"
           />
           <div
             v-else-if="field.type === 'select'"
+            :class="
+              error && error.fields && error.fields[field.name]
+                ? 'border-red-500'
+                : ''
+            "
             class="inline-block relative"
           >
             <select
@@ -63,10 +74,18 @@
             :disabled="field.disabled"
             :placeholder="field.placeholder"
             :type="field.type || 'text'"
+            :class="
+              error && error.fields && error.fields[field.name]
+                ? 'border-red-500'
+                : ''
+            "
             class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
           />
         </div>
       </div>
+    </div>
+    <div v-if="error" class="text-red-500 py-4 text-right">
+      {{ error.message }}
     </div>
     <div class="flex justify-end">
       <button
@@ -115,12 +134,11 @@ export default {
     }
   },
   data: () => ({
-    data: {}
+    data: {},
+    error: false
   }),
   watch: {
-    value(val) {
-      this.data = { ...val }
-    }
+    value: 'load'
   },
   mounted() {
     this.load()
@@ -128,6 +146,14 @@ export default {
   methods: {
     load() {
       this.data = { ...this.value }
+
+      this.fields
+        .filter((field) => field.default)
+        .forEach((field) => {
+          if (!this.data[field.name]) {
+            this.data[field.name] = field.default
+          }
+        })
     },
     getLabel(field) {
       if (typeof field === 'string') {
@@ -147,6 +173,26 @@ export default {
       this.$emit('cancel')
     },
     save() {
+      this.error = false
+
+      this.fields
+        .filter((field) => field.required)
+        .forEach((field) => {
+          if (!this.data[field.name]) {
+            this.error = {
+              ...this.error,
+              message: 'Fill required fields',
+              fields: {
+                [field.name]: true
+              }
+            }
+          }
+        })
+
+      if (this.error) {
+        return
+      }
+
       this.$emit('save', this.data)
     }
   }

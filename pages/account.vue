@@ -60,14 +60,18 @@ export default {
       },
       {
         name: 'name',
-        label: 'Full Name'
+        label: 'Full Name',
+        required: true,
+        placeholder: '(Required)'
       },
       {
-        name: 'city'
+        name: 'city',
+        placeholder: '(Optional)'
       },
       {
         description: 'Would you like to get emails about our next events?',
         options: ['yes', 'no'],
+        default: 'yes',
         type: 'select',
         name: 'newsletter'
       }
@@ -80,7 +84,12 @@ export default {
   },
   methods: {
     async save(data) {
-      await this.updateAccount(data)
+      const changes = {
+        ...data,
+        confirmed: true
+      }
+
+      await this.updateAccount(changes)
 
       let target = window.localStorage.getItem('target')
       window.localStorage.removeItem('target')
