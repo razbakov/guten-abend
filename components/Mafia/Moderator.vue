@@ -316,7 +316,7 @@ export default {
     },
     async kill(playerId) {
       await this.update({
-        [`dead.${playerId}`]: !this.game.dead[playerId]
+        [`dead.${playerId}`]: this.game.dead ? !this.game.dead[playerId] : true
       })
 
       const activePlayers = this.players.filter((player) => player.active)
