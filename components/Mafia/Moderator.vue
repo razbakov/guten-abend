@@ -246,7 +246,11 @@ export default {
 
       const count = playerCount - votesCount
 
-      return [...Array(count).keys()]
+      if (count > 0) {
+        return [...Array(count).keys()]
+      } else {
+        return []
+      }
     },
     activeVoice() {
       return this.game.voice
