@@ -121,7 +121,9 @@
               </td>
               <td v-if="isCreator">
                 <button
-                  v-if="activeVoice && !game.nominated[player.id]"
+                  v-if="
+                    activeVoice && game.nominated && !game.nominated[player.id]
+                  "
                   class="bg-gray-200 p-1 border rounded m-1"
                   @click="nominate(player.id)"
                 >
