@@ -1,6 +1,8 @@
 <template>
   <div>
-    <TButton type="secondary" @click="showPopup = true">Select players</TButton>
+    <TButton type="secondary" @click="showPopup = true"
+      >Select players ({{ count }})</TButton
+    >
     <template v-if="showPopup">
       <div
         class="fixed w-full top-0 left-0 bottom-0 h-screen bg-black opacity-50 border-l p-4"
@@ -8,8 +10,10 @@
       <div
         class="fixed md:w-1/3 w-full top-0 right-0 bottom-0 h-screen bg-light border-l px-4 overflow-scroll z-50"
       >
-        <div class="sticky top-0 py-4 bg-light flex justify-between">
-          <div class="text-3xl font-bold">Select players ({{ count }})</div>
+        <div
+          class="sticky top-0 py-4 bg-light flex justify-between items-center"
+        >
+          <div class="font-bold">Select players ({{ count }})</div>
           <TButton @click="save">Finish</TButton>
         </div>
 
@@ -22,13 +26,13 @@
           <div
             :class="item.selected ? 'border-green-500' : ''"
             class="p-4 mb-4 card-item border-2 border-white"
-            @click="selectItem(item.id)"
+            @click="select(item)"
           >
             <div
               class="float-right border w-4 h-4 rounded-full border-gray-500"
               :class="item.selected ? 'bg-green-500 border-green-500' : ''"
             ></div>
-            <div class="font-bold text-xl mb-2">
+            <div v-if="item.nickname" class="font-bold text-xl mb-2">
               {{ item.nickname }}
             </div>
             <div class="font-bold">
@@ -37,6 +41,14 @@
             <div>
               {{ item.email }}
             </div>
+            <input
+              v-if="!item.nickname"
+              v-model="nicknames[item.id]"
+              type="text"
+              placeholder="Nickname"
+              class="mt-4 bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+              @click.stop
+            />
           </div>
         </TCardList>
       </div>
@@ -62,20 +74,21 @@ export default {
   props: {
     value: {
       type: Array,
-      default: () => []
+      default: () => {}
     }
   },
   data: () => ({
     showPopup: false
   }),
-  setup() {
+  setup(props) {
     const title = 'Select players'
     const collection = 'accounts'
 
     const { can, isAdmin } = useAuth()
     const { updateById } = useDoc('accounts')
     const { docs: profiles } = useCollection('mafia_profiles')
-    const selected = ref({})
+    const selected = ref(props.value || {})
+    const nicknames = ref({})
 
     const fields = []
 
@@ -111,7 +124,8 @@ export default {
       isAdmin,
       updateById,
       map,
-      selected
+      selected,
+      nicknames
     }
   },
   computed: {
@@ -125,18 +139,19 @@ export default {
     }
   },
   methods: {
-    loadItems(items) {
-      this.emails = items.map((item) => item.email)
-    },
-    selectItem(itemId) {
-      if (this.selected[itemId]) {
-        Vue.delete(this.selected, itemId)
+    select(item) {
+      if (this.selected[item.id]) {
+        Vue.delete(this.selected, item.id)
       } else {
-        Vue.set(this.selected, itemId, true)
+        Vue.set(this.selected, item.id, {
+          active: true,
+          nickname: item.nickname || this.nicknames[item.id]
+        })
       }
     },
     save() {
       this.showPopup = false
+      this.$emit('input', this.selected)
     }
   }
 }

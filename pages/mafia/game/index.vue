@@ -58,6 +58,7 @@ import TLoader from '~/components/TLoader'
 import TButton from '~/components/TButton'
 import TForm from '~/components/TForm'
 import TMafiaPlayers from '~/components/TMafiaPlayers'
+import TMafiaRoles from '~/components/TMafiaRoles'
 
 export default {
   middleware: ['auth', 'mafia'],
@@ -108,6 +109,10 @@ export default {
       {
         name: 'players',
         component: TMafiaPlayers
+      },
+      {
+        name: 'roles',
+        component: TMafiaRoles
       }
     ]
 

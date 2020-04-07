@@ -19,6 +19,7 @@
             :is="field.component"
             v-if="field.component"
             v-model="data[field.name]"
+            :data.sync="data"
             v-bind="field"
           />
           <textarea
