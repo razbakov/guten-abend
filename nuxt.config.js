@@ -30,7 +30,8 @@ export default {
     '@/assets/css/typography.css',
     '@/assets/css/aspect-ratio.css',
     '@/assets/css/signup.css',
-    '@/assets/css/nav.css'
+    '@/assets/css/nav.css',
+    '@/assets/css/vendors.css'
   ],
   /*
    ** Plugins to load before mounting the App

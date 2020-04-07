@@ -35,7 +35,8 @@
     "markdown-it-container": "^2.0.0",
     "nuxt": "^2.0.0",
     "slugify": "^1.4.0",
-    "v-runtime-template": "^1.10.0"
+    "v-runtime-template": "^1.10.0",
+    "vue-codemirror": "^4.0.6"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^2.0.0",

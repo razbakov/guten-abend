@@ -15,17 +15,32 @@
         </div>
       </template>
     </TCardList>
+    <!-- <codemirror v-model="data" :options="cmOptions" /> -->
   </main>
 </template>
 
 <script>
+import { codemirror } from 'vue-codemirror'
+import 'codemirror/mode/markdown/markdown.js'
+import 'codemirror/theme/base16-light.css'
 import TCardList from '~/components/TCardList'
 import { getDate } from '~/utils'
 
 export default {
   components: {
     TCardList
+    // codemirror
   },
+  data: () => ({
+    data: '',
+    cmOptions: {
+      mode: 'markdown',
+      theme: 'base16-dark',
+      tabSize: 2,
+      styleActiveLine: true,
+      lineNumbers: true
+    }
+  }),
   setup() {
     const title = 'Email Campaigns'
     const collection = 'campaigns'
@@ -44,7 +59,15 @@ export default {
       },
       {
         name: 'content',
-        type: 'textarea'
+        hideLabel: true,
+        component: codemirror,
+        options: {
+          mode: 'markdown',
+          theme: 'base16-light',
+          tabSize: 2,
+          styleActiveLine: true,
+          lineWrapping: true
+        }
       }
     ]
 

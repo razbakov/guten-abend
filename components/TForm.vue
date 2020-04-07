@@ -2,7 +2,7 @@
   <div>
     <div v-for="field in fields" :key="field.name">
       <div class="md:flex md:items-top mb-6">
-        <div class="md:w-1/3">
+        <div v-if="!field.hideLabel" class="md:w-1/3">
           <label
             :for="field.name"
             class="block text-gray-700 font-bold md:text-right mb-1 md:mb-0 pr-4"
@@ -18,7 +18,7 @@
           <component
             :is="field.component"
             v-if="field.component"
-            v-model="data"
+            v-model="data[field.name]"
             v-bind="field"
           />
           <textarea
