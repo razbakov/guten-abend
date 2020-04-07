@@ -1,33 +1,32 @@
 <template>
   <main class="p-4">
     <TCardList
+      v-slot="{ item }"
       :collection="collection"
       :title="title"
       :add="add"
       :fields="fields"
       :filters="filters"
     >
-      <template v-slot="{ item }">
-        <div class="px-6 py-4">
-          <div class="font-bold text-xl mb-2">{{ item.title }}</div>
-          <TPreview class="mb-2" :content="item.description" />
-          <button
-            v-if="can('manage', collection, item)"
-            class="underline mt-2"
-            @click="
-              openedListId !== item.id
-                ? (openedListId = item.id)
-                : (openedListId = false)
-            "
-          >
-            Followers
-          </button>
-          <TGuests v-if="openedListId === item.id" :id="item.id" class="p-4" />
-        </div>
-        <TRsvp :id="item.id" :collection="collection" v-slot="{ count }">
-          {{ count }} interested. Are you interested?
-        </TRsvp>
-      </template>
+      <div class="px-6 py-4">
+        <div class="font-bold text-xl mb-2">{{ item.title }}</div>
+        <TPreview class="mb-2" :content="item.description" />
+        <button
+          v-if="can('manage', collection, item)"
+          class="underline mt-2"
+          @click="
+            openedListId !== item.id
+              ? (openedListId = item.id)
+              : (openedListId = false)
+          "
+        >
+          Followers
+        </button>
+        <TGuests v-if="openedListId === item.id" :id="item.id" class="p-4" />
+      </div>
+      <TRsvp :id="item.id" v-slot="{ count }" :collection="collection">
+        {{ count }} interested. Are you interested?
+      </TRsvp>
     </TCardList>
   </main>
 </template>
