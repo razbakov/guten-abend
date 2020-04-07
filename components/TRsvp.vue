@@ -1,32 +1,30 @@
 <template>
-  <div>
-    <div class="md:flex px-6 pb-4 justify-start items-center text-center">
-      <div class="mr-4">
-        <slot :count="getCount(id)" />
-      </div>
-      <div
-        v-if="canAnswer"
-        class="flex mt-4 md:mt-0 content-center justify-center"
+  <div class="md:flex justify-start items-center text-center">
+    <div class="mr-4">
+      <slot :count="getCount(id)" />
+    </div>
+    <div
+      v-if="canAnswer"
+      class="flex mt-4 md:mt-0 content-center justify-center"
+    >
+      <button
+        class="hover:bg-green-400 text-green-800 font-bold py-2 px-4 rounded-l"
+        :class="{
+          'bg-green-300': getRsvpResponse(id) === 'yes'
+        }"
+        @click="rsvp(id, 'yes')"
       >
-        <button
-          class="hover:bg-green-400 text-green-800 font-bold py-2 px-4 rounded-l"
-          :class="{
-            'bg-green-300': getRsvpResponse(id) === 'yes'
-          }"
-          @click="rsvp(id, 'yes')"
-        >
-          Yes
-        </button>
-        <button
-          class="hover:bg-red-400 text-red-800 font-bold py-2 px-4 rounded-r"
-          :class="{
-            'bg-red-300': getRsvpResponse(id) === 'no'
-          }"
-          @click="rsvp(id, 'no')"
-        >
-          No
-        </button>
-      </div>
+        Yes
+      </button>
+      <button
+        class="hover:bg-red-400 text-red-800 font-bold py-2 px-4 rounded-r"
+        :class="{
+          'bg-red-300': getRsvpResponse(id) === 'no'
+        }"
+        @click="rsvp(id, 'no')"
+      >
+        No
+      </button>
     </div>
   </div>
 </template>

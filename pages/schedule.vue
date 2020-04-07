@@ -9,7 +9,7 @@
       :fields="fields"
       :filters="filters"
     >
-      <div class="px-6 py-4">
+      <div class="p-4 card-item">
         <div class="font-bold text-xl mb-2">
           {{ item.title }}
         </div>
@@ -49,42 +49,44 @@
           Guests
         </button>
         <TGuests v-if="openedListId === item.id" :id="item.id" class="p-4" />
-      </div>
-      <TFeedback v-if="item.finished && item.awaitsFeedback" :id="item.id" />
-      <TRsvp
-        v-if="!item.finished || !item.awaitsFeedback"
-        :id="item.id"
-        v-slot="{ count }"
-        :collection="collection"
-        :can-answer="!item.finished"
-      >
-        <div v-if="item.finished">{{ count }} participated</div>
-        <div v-else>{{ count }} participants. Do you want to join?</div>
-      </TRsvp>
-      <div
-        v-if="item.going && !item.finished"
-        class="md:flex px-6 py-4 bg-gray-200 text-gray-700 text-center"
-      >
-        <template v-if="item.opened">
-          <a
-            v-if="item.link"
-            class="btn block w-full"
-            target="_blank"
-            rel="noopener"
-            :href="item.link"
-            >Open in Zoom</a
-          >
-          <a
-            v-if="item.attachment"
-            class="btn-secondary block w-full md:ml-2 mt-2 md:mt-0"
-            target="_blank"
-            rel="noopener"
-            :href="item.attachment"
-            >Open Attachment</a
-          >
-        </template>
-        <div v-else>
-          Zoom link will appear here before the event. Check later.
+
+        <TFeedback v-if="item.finished && item.awaitsFeedback" :id="item.id" />
+        <TRsvp
+          v-if="!item.finished || !item.awaitsFeedback"
+          :id="item.id"
+          v-slot="{ count }"
+          :collection="collection"
+          :can-answer="!item.finished"
+          class="my-4"
+        >
+          <div v-if="item.finished">{{ count }} participated</div>
+          <div v-else>{{ count }} participants. Do you want to join?</div>
+        </TRsvp>
+        <div
+          v-if="item.going && !item.finished && item.link"
+          class="md:flex p-4 -m-4 mt-4 bg-gray-200 text-gray-700 text-center"
+        >
+          <template v-if="item.opened">
+            <a
+              v-if="item.link"
+              class="btn block w-full"
+              target="_blank"
+              rel="noopener"
+              :href="item.link"
+              >Open in Zoom</a
+            >
+            <a
+              v-if="item.attachment"
+              class="btn-secondary block w-full md:ml-2 mt-2 md:mt-0"
+              target="_blank"
+              rel="noopener"
+              :href="item.attachment"
+              >Open Attachment</a
+            >
+          </template>
+          <div v-else>
+            Zoom link will appear here before the event. Check later.
+          </div>
         </div>
       </div>
     </TCardList>

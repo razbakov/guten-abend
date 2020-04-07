@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="md:flex items-baseline justify-between mb-4">
-      <h1 class="text-3xl font-bold">{{ title }}</h1>
+      <h1 v-if="title" class="text-3xl font-bold">{{ title }}</h1>
       <button
         v-if="add && can('add', collection)"
         class="btn"
@@ -38,40 +38,38 @@
     </div>
 
     <div v-for="(item, itemId) in items" :key="item.id" :item="item">
-      <div class="card-item">
-        <TForm
-          v-if="currentId === itemId"
-          v-model="items[itemId]"
-          class="px-6 py-4"
-          :fields="fields"
-          show-cancel
-          :show-remove="can('remove', collection, item)"
-          @save="saveItem"
-          @cancel="cancelItem"
-          @remove="removeItem"
-        />
-        <div v-else>
-          <div class="float-right mr-2 mt-2">
-            <slot name="card-toolbar" :item="item" />
+      <TForm
+        v-if="currentId === itemId"
+        v-model="items[itemId]"
+        :fields="fields"
+        show-cancel
+        :show-remove="can('remove', collection, item)"
+        class="card-item p-4"
+        @save="saveItem"
+        @cancel="cancelItem"
+        @remove="removeItem"
+      />
+      <template v-else>
+        <div class="flex justify-end">
+          <slot name="card-toolbar" :item="item" />
 
-            <button
-              v-if="fields.length && can('edit', collection, item)"
-              class="rounded border p-2 hover:bg-gray-200"
-              @click="currentId = itemId"
-            >
-              <TIconEdit />
-            </button>
-            <button
-              v-if="deleteItem"
-              class="rounded border p-2 hover:bg-gray-200"
-              @click="removeItem(item.id)"
-            >
-              x
-            </button>
-          </div>
-          <slot :item="item" />
+          <button
+            v-if="fields.length && can('edit', collection, item)"
+            class="rounded p-2 hover:text-primary"
+            @click="currentId = itemId"
+          >
+            <TIconEdit />
+          </button>
+          <button
+            v-if="deleteItem"
+            class="rounded p-2 hover:text-primary"
+            @click="removeItem(item.id)"
+          >
+            Delete
+          </button>
         </div>
-      </div>
+        <slot :item="item" />
+      </template>
     </div>
   </div>
 </template>
@@ -117,6 +115,10 @@ export default {
     deleteItem: {
       type: Boolean,
       default: false
+    },
+    itemClass: {
+      type: String,
+      default: 'px-6 py-4 card-item'
     }
   },
   data: () => ({

@@ -7,7 +7,7 @@
       :delete-item="true"
     >
       <template v-slot="{ item }">
-        <div class="px-6 py-4">
+        <div class="p-4 card-item">
           <div class="font-bold text-xl mb-2">
             {{ item.name }}
           </div>

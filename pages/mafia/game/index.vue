@@ -9,7 +9,7 @@
       :fields="fields"
     >
       <template v-slot="{ item }">
-        <div class="p-4 pb-6">
+        <div class="p-4 card-item">
           <div class="font-bold text-xl mb-2">{{ item.title }}</div>
           <div class="bg-gray-200 p-2 mb-4 rounded border">
             <dl>

@@ -8,7 +8,7 @@
       :fields="fields"
       :filters="filters"
     >
-      <div class="px-6 py-4">
+      <div class="p-4 card-item">
         <div class="font-bold text-xl mb-2">{{ item.title }}</div>
         <TPreview class="mb-2" :content="item.description" />
         <button
@@ -23,10 +23,15 @@
           Followers
         </button>
         <TGuests v-if="openedListId === item.id" :id="item.id" class="p-4" />
+        <TRsvp
+          :id="item.id"
+          v-slot="{ count }"
+          :collection="collection"
+          class="mt-4"
+        >
+          {{ count }} interested. Are you interested?
+        </TRsvp>
       </div>
-      <TRsvp :id="item.id" v-slot="{ count }" :collection="collection">
-        {{ count }} interested. Are you interested?
-      </TRsvp>
     </TCardList>
   </main>
 </template>
