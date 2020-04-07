@@ -19,6 +19,9 @@
 </template>
 
 <script>
+import { codemirror } from 'vue-codemirror'
+import 'codemirror/mode/markdown/markdown.js'
+import 'codemirror/theme/base16-light.css'
 import TCardList from '~/components/TCardList'
 
 export default {
@@ -39,7 +42,15 @@ export default {
       },
       {
         name: 'content',
-        type: 'textarea'
+        hideLabel: true,
+        component: codemirror,
+        options: {
+          mode: 'markdown',
+          theme: 'base16-light',
+          tabSize: 2,
+          styleActiveLine: true,
+          lineWrapping: true
+        }
       }
     ]
 
