@@ -59,27 +59,25 @@
           <template v-slot:default>
             <div
               v-if="!item.past"
-              class="flex px-6 py-4 bg-gray-200 text-gray-700"
+              class="md:flex px-6 py-4 bg-gray-200 text-gray-700 text-center"
             >
               <template v-if="item.soon || item.now">
-                <div v-if="item.link">
-                  <a
-                    class="btn"
-                    target="_blank"
-                    rel="noopener"
-                    :href="item.link"
-                    >Open in Zoom</a
-                  >
-                </div>
-                <div v-if="item.attachment">
-                  <a
-                    class="btn-secondary ml-2"
-                    target="_blank"
-                    rel="noopener"
-                    :href="item.attachment"
-                    >Open Attachment</a
-                  >
-                </div>
+                <a
+                  v-if="item.link"
+                  class="btn block w-full"
+                  target="_blank"
+                  rel="noopener"
+                  :href="item.link"
+                  >Open in Zoom</a
+                >
+                <a
+                  v-if="item.attachment"
+                  class="btn-secondary block w-full md:ml-2 mt-2 md:mt-0"
+                  target="_blank"
+                  rel="noopener"
+                  :href="item.attachment"
+                  >Open Attachment</a
+                >
               </template>
               <div v-else>
                 Zoom link will appear here before the event. Check later.
