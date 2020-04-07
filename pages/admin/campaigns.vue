@@ -29,17 +29,9 @@ import { getDate } from '~/utils'
 export default {
   components: {
     TCardList
-    // codemirror
   },
   data: () => ({
-    data: '',
-    cmOptions: {
-      mode: 'markdown',
-      theme: 'base16-dark',
-      tabSize: 2,
-      styleActiveLine: true,
-      lineNumbers: true
-    }
+    data: ''
   }),
   setup() {
     const title = 'Email Campaigns'
