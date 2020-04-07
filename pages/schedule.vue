@@ -44,21 +44,15 @@
             Starts soon
           </div>
           <TGuests v-if="openedListId === item.id" :id="item.id" class="p-4" />
-          <TPreview
-            v-else-if="!item.awaitsFeedback"
-            class="mb-2"
-            :content="item.description"
-          />
+          <TPreview v-else class="mb-2" :content="item.description" />
         </div>
-        <TFeedback v-if="item.awaitsFeedback" :id="item.id" />
-        <TRsvp v-else :id="item.id" :collection="collection">
+        <TRsvp :id="item.id" :collection="collection">
           <template v-slot:header="{ count }">
             <div v-if="item.past">{{ count }} participated</div>
             <div v-else>{{ count }} participants. Do you want to join?</div>
           </template>
           <template v-slot:default>
             <div
-              v-if="!item.past"
               class="md:flex px-6 py-4 bg-gray-200 text-gray-700 text-center"
             >
               <template v-if="item.soon || item.now">
@@ -101,7 +95,6 @@ import useAuth from '~/use/auth'
 import useRSVP from '~/use/rsvp'
 import TCardList from '~/components/TCardList'
 import TPreview from '~/components/TPreview'
-import TFeedback from '~/components/TFeedback'
 import TRsvp from '~/components/TRsvp'
 import TGuests from '~/components/TGuests'
 import { getDay, getTime, getDate } from '~/utils'
@@ -111,8 +104,7 @@ export default {
     TCardList,
     TRsvp,
     TPreview,
-    TGuests,
-    TFeedback
+    TGuests
   },
   setup() {
     const title = 'Schedule'
@@ -165,7 +157,6 @@ export default {
       ...item,
       past: +new Date(item.date) < now,
       awaitsFeedback:
-        +new Date(item.date) < now &&
         getRsvpResponse(item.id) === 'yes' &&
         item.enableFeedback === 'yes' &&
         !getFeedback(item.id),
