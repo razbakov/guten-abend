@@ -1,12 +1,12 @@
 <template>
-  <div class="font-mono">
+  <div>
     <div
       v-for="participant in participants"
       :key="participant.email"
       class="border-b mb-2 p-2"
     >
-      <p><span class="font-bold">Name:</span> {{ participant.name }}</p>
-      <p><span class="font-bold">Email:</span> {{ participant.email }}</p>
+      <div class="font-bold">{{ participant.name }}</div>
+      <div>{{ participant.email }}</div>
     </div>
   </div>
 </template>

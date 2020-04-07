@@ -7,27 +7,25 @@
       :fields="fields"
       :filters="filters"
     >
-      <template v-slot:card-toolbar="{ item }">
-        <button
-          v-if="can('manage', collection, item)"
-          class="underline mr-2"
-          @click="
-            !openedListId ? (openedListId = item.id) : (openedListId = false)
-          "
-        >
-          Followers
-        </button>
-      </template>
       <template v-slot="{ item }">
         <div class="px-6 py-4">
           <div class="font-bold text-xl mb-2">{{ item.title }}</div>
-          <TGuests v-if="openedListId === item.id" :id="item.id" class="p-4" />
           <TPreview class="mb-2" :content="item.description" />
+          <button
+            v-if="can('manage', collection, item)"
+            class="underline mt-2"
+            @click="
+              openedListId !== item.id
+                ? (openedListId = item.id)
+                : (openedListId = false)
+            "
+          >
+            Followers
+          </button>
+          <TGuests v-if="openedListId === item.id" :id="item.id" class="p-4" />
         </div>
-        <TRsvp :id="item.id" :collection="collection">
-          <template v-slot:header="{ count }">
-            {{ count }} interested. Are you interested?
-          </template>
+        <TRsvp :id="item.id" :collection="collection" v-slot="{ count }">
+          {{ count }} interested. Are you interested?
         </TRsvp>
       </template>
     </TCardList>
@@ -55,7 +53,7 @@ export default {
     const collection = 'ideas'
     const add = 'Add your idea'
 
-    const { getCount, getRsvpResponse } = useRSVP()
+    const { getCount } = useRSVP()
     const openedListId = ref(false)
 
     const fields = [
@@ -81,19 +79,6 @@ export default {
           ...item,
           votes: getCount(item.id)
         }),
-        filter: (item) => getRsvpResponse(item.id) !== 'no',
-        sort: '-votes'
-      },
-
-      {
-        name: 'archive',
-        label: 'Archive',
-        default: true,
-        map: (item) => ({
-          ...item,
-          votes: getCount(item.id)
-        }),
-        filter: (item) => getRsvpResponse(item.id) === 'no',
         sort: '-votes'
       }
     ]

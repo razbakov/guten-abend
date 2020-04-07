@@ -8,17 +8,6 @@
       :fields="fields"
       :filters="filters"
     >
-      <template v-slot:card-toolbar="{ item }">
-        <button
-          v-if="can('manage', collection, item)"
-          class="underline mr-2"
-          @click="
-            !openedListId ? (openedListId = item.id) : (openedListId = false)
-          "
-        >
-          Guests
-        </button>
-      </template>
       <template v-slot="{ item }">
         <div class="px-6 py-4">
           <div class="font-bold text-xl mb-2">
@@ -37,48 +26,67 @@
             >
             <span v-if="item.duration">({{ item.duration }} min)</span>
           </div>
-          <div v-if="item.now" class="text-green-500 font-bold">
+          <div v-if="item.happening" class="text-green-500 font-bold">
             Happening now
           </div>
           <div v-if="item.soon" class="text-orange-500 font-bold">
             Starts soon
           </div>
+          <TPreview
+            v-if="!item.finished || !item.awaitsFeedback"
+            class="mb-2"
+            :content="item.description"
+          />
+          <button
+            v-if="can('manage', collection, item)"
+            class="underline mt-2"
+            @click="
+              openedListId !== item.id
+                ? (openedListId = item.id)
+                : (openedListId = false)
+            "
+          >
+            Guests
+          </button>
           <TGuests v-if="openedListId === item.id" :id="item.id" class="p-4" />
-          <TPreview v-else class="mb-2" :content="item.description" />
         </div>
-        <TRsvp :id="item.id" :collection="collection">
-          <template v-slot:header="{ count }">
-            <div v-if="item.past">{{ count }} participated</div>
-            <div v-else>{{ count }} participants. Do you want to join?</div>
-          </template>
-          <template v-slot:default>
-            <div
-              class="md:flex px-6 py-4 bg-gray-200 text-gray-700 text-center"
-            >
-              <template v-if="item.soon || item.now">
-                <a
-                  v-if="item.link"
-                  class="btn block w-full"
-                  target="_blank"
-                  rel="noopener"
-                  :href="item.link"
-                  >Open in Zoom</a
-                >
-                <a
-                  v-if="item.attachment"
-                  class="btn-secondary block w-full md:ml-2 mt-2 md:mt-0"
-                  target="_blank"
-                  rel="noopener"
-                  :href="item.attachment"
-                  >Open Attachment</a
-                >
-              </template>
-              <div v-else>
-                Zoom link will appear here before the event. Check later.
-              </div>
-            </div>
-          </template>
+        <TFeedback v-if="item.finished && item.awaitsFeedback" :id="item.id" />
+        <TRsvp
+          v-if="!item.finished || !item.awaitsFeedback"
+          :id="item.id"
+          :collection="collection"
+          :can-answer="!item.finished"
+          v-slot="{ count }"
+        >
+          <div v-if="item.finished">{{ count }} participated</div>
+          <div v-else>{{ count }} participants. Do you want to join?</div>
         </TRsvp>
+        <div
+          v-if="item.going && !item.finished"
+          class="md:flex px-6 py-4 bg-gray-200 text-gray-700 text-center"
+        >
+          <template v-if="item.opened">
+            <a
+              v-if="item.link"
+              class="btn block w-full"
+              target="_blank"
+              rel="noopener"
+              :href="item.link"
+              >Open in Zoom</a
+            >
+            <a
+              v-if="item.attachment"
+              class="btn-secondary block w-full md:ml-2 mt-2 md:mt-0"
+              target="_blank"
+              rel="noopener"
+              :href="item.attachment"
+              >Open Attachment</a
+            >
+          </template>
+          <div v-else>
+            Zoom link will appear here before the event. Check later.
+          </div>
+        </div>
       </template>
     </TCardList>
 
@@ -95,6 +103,7 @@ import useAuth from '~/use/auth'
 import useRSVP from '~/use/rsvp'
 import TCardList from '~/components/TCardList'
 import TPreview from '~/components/TPreview'
+import TFeedback from '~/components/TFeedback'
 import TRsvp from '~/components/TRsvp'
 import TGuests from '~/components/TGuests'
 import { getDay, getTime, getDate } from '~/utils'
@@ -104,7 +113,8 @@ export default {
     TCardList,
     TRsvp,
     TPreview,
-    TGuests
+    TGuests,
+    TFeedback
   },
   setup() {
     const title = 'Schedule'
@@ -153,44 +163,66 @@ export default {
       }
     ]
 
-    const map = (item) => ({
-      ...item,
-      past: +new Date(item.date) < now,
-      awaitsFeedback:
-        getRsvpResponse(item.id) === 'yes' &&
-        item.enableFeedback === 'yes' &&
-        !getFeedback(item.id),
-      now:
-        +new Date(item.date) + 60000 * item.duration > now &&
-        +new Date(item.date) < now,
-      soon:
-        +new Date(item.date) > now && +new Date(item.date) - 60000 * 60 < now
-    })
+    const map = (item) => {
+      const minute = 60000
+      const duration = item.duration ? parseInt(item.duration, 10) : 120
+
+      const startTime = +new Date(item.date)
+      const endTime = startTime + minute * duration
+      const openTime = startTime - minute * 60
+
+      const going = getRsvpResponse(item.id) === 'yes'
+      const skip = getRsvpResponse(item.id) === 'no'
+      const inbox = !getRsvpResponse(item.id)
+
+      const finished = now > endTime
+      const started = now > startTime
+      const opened = now > openTime && !finished
+
+      const happening = started && !finished
+      const soon = !started && opened
+
+      const awaitsFeedback =
+        going && item.enableFeedback === 'yes' && !getFeedback(item.id)
+
+      const upcoming = !skip && (!finished || awaitsFeedback)
+
+      return {
+        ...item,
+        happening,
+        finished,
+        started,
+        soon,
+        opened,
+        awaitsFeedback,
+        going,
+        skip,
+        inbox,
+        upcoming,
+        startTime,
+        endTime,
+        openTime
+      }
+    }
 
     const filters = [
       {
         name: 'upcoming',
         label: 'Upcoming',
         default: true,
-        filter: (item) =>
-          (!item.past || item.now || item.awaitsFeedback) &&
-          getRsvpResponse(item.id) !== 'no',
+        filter: (item) => item.upcoming,
         sort: 'date'
       },
       {
         name: 'past',
         label: 'Past',
-        filter: (item) =>
-          item.past &&
-          !item.now &&
-          !item.awaitsFeedback &&
-          getRsvpResponse(item.id) !== 'no',
+        filter: (item) => !item.upcoming,
         sort: '-date'
       },
       {
         name: 'archive',
         label: 'Archive',
-        filter: (item) => getRsvpResponse(item.id) === 'no',
+        filter: (item) => item.skip,
         sort: 'date'
       }
     ]
@@ -207,7 +239,8 @@ export default {
       collection,
       add,
       map,
-      openedListId
+      openedListId,
+      now
     }
   }
 }

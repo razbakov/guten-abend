@@ -1,10 +1,13 @@
 <template>
   <div>
-    <div class="md:flex px-6 pb-4 justify-end items-center text-center">
+    <div class="md:flex px-6 pb-4 justify-start items-center text-center">
       <div class="mr-4">
-        <slot name="header" :count="getCount(id)" />
+        <slot :count="getCount(id)" />
       </div>
-      <div class="flex mt-4 md:mt-0 content-center justify-center">
+      <div
+        v-if="canAnswer"
+        class="flex mt-4 md:mt-0 content-center justify-center"
+      >
         <button
           class="hover:bg-green-400 text-green-800 font-bold py-2 px-4 rounded-l"
           :class="{
@@ -24,9 +27,6 @@
           No
         </button>
       </div>
-    </div>
-    <div v-if="getRsvpResponse(id) === 'yes'">
-      <slot />
     </div>
   </div>
 </template>
@@ -48,6 +48,10 @@ export default {
     extra: {
       type: Object,
       default: () => ({})
+    },
+    canAnswer: {
+      type: Boolean,
+      default: true
     }
   },
   setup() {
