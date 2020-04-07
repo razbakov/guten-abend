@@ -4,6 +4,7 @@
   >
     <div v-if="isAdmin" class="bg-black text-white p-2">
       <router-link class="p-2" to="/admin/pages">Pages</router-link>
+      <router-link class="p-2" to="/admin/campaigns">Campaigns</router-link>
       <router-link class="p-2" to="/accounts">Accounts</router-link>
       <router-link class="p-2" to="/rsvp">RSVP</router-link>
       <router-link class="p-2" to="/mafia/game">Mafia Game</router-link>
