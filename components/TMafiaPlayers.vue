@@ -41,14 +41,6 @@
             <div>
               {{ item.email }}
             </div>
-            <input
-              v-if="!item.nickname"
-              v-model="nicknames[item.id]"
-              type="text"
-              placeholder="Nickname"
-              class="mt-4 bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-              @click.stop
-            />
           </div>
         </TCardList>
       </div>
@@ -88,7 +80,6 @@ export default {
     const { updateById } = useDoc('accounts')
     const { docs: profiles } = useCollection('mafia_profiles')
     const selected = ref(props.value || {})
-    const nicknames = ref({})
 
     const fields = []
 
@@ -124,8 +115,7 @@ export default {
       isAdmin,
       updateById,
       map,
-      selected,
-      nicknames
+      selected
     }
   },
   computed: {
@@ -145,7 +135,7 @@ export default {
       } else {
         Vue.set(this.selected, item.id, {
           active: true,
-          nickname: item.nickname || this.nicknames[item.id]
+          nickname: item.nickname || item.name
         })
       }
     },
