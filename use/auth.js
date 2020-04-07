@@ -5,26 +5,33 @@ import 'firebase/auth'
 import 'firebase/firestore'
 import { useRouter } from '~/plugins/router'
 
-let uid = null
-let isAdmin = false
-let account = null
-
-if (window) {
-  isAdmin = !!window.localStorage.getItem('is_admin')
-  uid = window.localStorage.getItem('uid')
-  account = JSON.parse(window.localStorage.getItem('account'))
-}
-
 const state = Vue.observable({
   loading: true,
   signingIn: false,
-  uid,
+  uid: null,
   profile: null,
-  account,
+  account: null,
   initialized: false
 })
 
 export default () => {
+  let isAdmin = false
+
+  if (window) {
+    isAdmin = !!window.localStorage.getItem('is_admin')
+
+    const storedUid = window.localStorage.getItem('uid')
+
+    if (storedUid) {
+      state.uid = storedUid
+    }
+
+    const storeAccount = window.localStorage.getItem('account')
+    if (storeAccount) {
+      state.account = JSON.parse(storeAccount)
+    }
+  }
+
   if (!state.initialized) {
     firebase.auth().onAuthStateChanged(setUser)
 

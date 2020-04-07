@@ -8,6 +8,7 @@
       <router-link class="p-2" to="/accounts">Accounts</router-link>
       <router-link class="p-2" to="/rsvp">RSVP</router-link>
       <router-link class="p-2" to="/mafia/game">Mafia Game</router-link>
+      <router-link class="p-2" to="/superadmin/logout">Logout</router-link>
     </div>
     <THeader />
     <div class="container w-full mx-auto md:max-w-xl">
