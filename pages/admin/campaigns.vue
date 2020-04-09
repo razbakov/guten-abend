@@ -17,7 +17,9 @@
             Scheduled for {{ getDate(item.scheduledAt) }} at
             {{ getTime(item.scheduledAt) }}
           </div>
-          <pre>{{ item.recipients }}</pre>
+          <div class="mb-2 text-gray-500">
+            {{ Object.keys(item.recipients).length }} recipients
+          </div>
         </div>
       </template>
     </TCardList>
