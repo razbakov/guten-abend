@@ -27,3 +27,7 @@ export const getTime = (val) => {
   if (!val) return ''
   return format(new Date(val), 'H:mm')
 }
+
+export const openURL = (url) => {
+  window.open(url, '_blank')
+}

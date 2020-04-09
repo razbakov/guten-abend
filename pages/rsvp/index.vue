@@ -65,7 +65,25 @@
                 <dt class="w-1/3 text-right mr-2 text-gray-500">
                   responded
                 </dt>
-                <dd>{{ getDate(item.createdAt) }}</dd>
+                <dd>
+                  {{ getDate(item.createdAt) }} at {{ getTime(item.createdAt) }}
+                </dd>
+              </div>
+              <div v-if="item.updatedAt" class="flex">
+                <dt class="w-1/3 text-right mr-2 text-gray-500">
+                  updated
+                </dt>
+                <dd>
+                  {{ getDate(item.updatedAt) }} at {{ getTime(item.updatedAt) }}
+                </dd>
+              </div>
+              <div v-if="item.joinedAt" class="flex">
+                <dt class="w-1/3 text-right mr-2 text-gray-500">
+                  joined
+                </dt>
+                <dd>
+                  {{ getDate(item.joinedAt) }} at {{ getTime(item.joinedAt) }}
+                </dd>
               </div>
             </dl>
           </div>
@@ -98,6 +116,12 @@ export default {
         label: 'New',
         default: true,
         sort: '-createdAt'
+      },
+      {
+        name: 'joined',
+        label: 'Joined',
+        filter: (item) => !!item.confirmed,
+        sort: '-joinedAt'
       },
       {
         name: 'yes',

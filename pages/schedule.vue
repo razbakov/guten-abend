@@ -107,9 +107,7 @@
               <a
                 v-if="item.link"
                 class="btn block w-full"
-                target="_blank"
-                rel="noopener"
-                :href="item.link"
+                @click="openLink(item.id, item.link)"
                 >Open in Zoom</a
               >
               <a
@@ -146,7 +144,7 @@ import TFeedback from '~/components/TFeedback'
 import TRsvp from '~/components/TRsvp'
 import TGuests from '~/components/TGuests'
 import Notification from '~/components/icons/Notification'
-import { getDay, getTime, getDate } from '~/utils'
+import { getDay, getTime, getDate, openURL } from '~/utils'
 
 export default {
   components: {
@@ -166,7 +164,7 @@ export default {
     const add = 'Add event'
 
     const { can } = useAuth()
-    const { getRsvpResponse, getFeedback } = useRSVP()
+    const { getRsvpResponse, getFeedback, updateRsvp } = useRSVP()
     const now = +new Date()
     const openedListId = ref(false)
 
@@ -245,7 +243,8 @@ export default {
         upcoming,
         startTime,
         endTime,
-        openTime
+        openTime,
+        updateRsvp
       }
     }
 
@@ -340,7 +339,19 @@ export default {
       map,
       openedListId,
       now,
-      getNotificationFields
+      getNotificationFields,
+      openURL,
+      updateRsvp
+    }
+  },
+  methods: {
+    async openLink(eventId, link) {
+      await this.updateRsvp(eventId, 'meetups', 'yes', {
+        joinedAt: +new Date(),
+        confirmed: true
+      })
+
+      this.openURL(link)
     }
   }
 }
