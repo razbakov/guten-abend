@@ -20,7 +20,7 @@
         class="px-6 py-4"
         :fields="fields"
         show-cancel
-        @save="saveItem"
+        @save="createItem"
         @cancel="cancelItem"
       />
     </div>
@@ -131,7 +131,7 @@ export default {
   },
   setup(props) {
     const { docs } = useCollection(props.collection)
-    const { update, remove } = useDoc(props.collection)
+    const { update, remove, create } = useDoc(props.collection)
     const { can } = useAuth()
 
     const activeFilter = ref(
@@ -175,6 +175,7 @@ export default {
     return {
       can,
       update,
+      create,
       remove,
       items,
       activeFilter
@@ -183,6 +184,10 @@ export default {
   methods: {
     cancelItem() {
       this.currentId = false
+    },
+    async createItem(data) {
+      this.cancelItem()
+      await this.create(data)
     },
     async saveItem(data) {
       this.cancelItem()

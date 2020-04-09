@@ -7,6 +7,7 @@
       :title="title"
       :add="add"
       :fields="fields"
+      :filters="filters"
     >
       <template v-slot="{ item }">
         <div class="p-4 card-item">
@@ -91,6 +92,20 @@ export default {
         name: 'title',
         label: 'Title',
         placeholder: 'Give it a funny name'
+      },
+      {
+        name: 'archived',
+        type: 'select',
+        options: ['yes', 'no'],
+        default: 'no'
+      }
+    ]
+
+    const filters = [
+      {
+        name: 'active',
+        default: true,
+        filter: (item) => item.archived !== 'yes'
       }
     ]
 
@@ -128,7 +143,8 @@ export default {
       openedListId,
       nickname,
       importFields,
-      create
+      create,
+      filters
     }
   }
 }
