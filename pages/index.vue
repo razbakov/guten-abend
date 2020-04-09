@@ -1,7 +1,7 @@
 <template>
   <main class="mt-6 p-8">
     <p class="font-bold">Everything closed?</p>
-    <h1 class="font-bold text-4xl">We are open 24/7</h1>
+    <h1 class="font-bold text-4xl">We are open</h1>
     <p class="text-lg">
       Guten Abend is an online social hub to have fun via Zoom.
     </p>

@@ -11,9 +11,36 @@
       <router-link class="p-2" to="/superadmin/logout">Logout</router-link>
     </div>
     <THeader />
-    <div class="container w-full mx-auto md:max-w-xl">
+    <div class="container w-full mx-auto md:max-w-xl min-h-screen">
       <nuxt />
     </div>
+    <footer
+      class="md:flex text-center p-4 text-white bg-dark justify-end items-center"
+    >
+      <div class="m-3 text-md font-bold">
+        Follow us
+      </div>
+      <div class="m-3">
+        <a
+          class="underline hover:no-underline hover:text-blue-500"
+          :href="social.twitter"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Twitter
+        </a>
+      </div>
+      <div class="m-3">
+        <a
+          class="underline hover:no-underline hover:text-pink-500"
+          :href="social.instagram"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Instagram
+        </a>
+      </div>
+    </footer>
   </div>
 </template>
 
@@ -25,6 +52,12 @@ export default {
   components: {
     THeader
   },
+  data: () => ({
+    social: {
+      twitter: 'https://twitter.com/AbendKantine',
+      instagram: 'https://www.instagram.com/AbendKantine'
+    }
+  }),
   setup() {
     const { isAdmin } = useAuth()
 
