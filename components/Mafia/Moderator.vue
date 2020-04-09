@@ -12,6 +12,14 @@
           >Change my nickname</router-link
         >
       </div>
+      <div class="my-2">
+        There are
+        {{ playerIds.length }} players now. We need 3 to 10 players to start the
+        game.
+      </div>
+      <div v-if="!game.places" class="my-2">
+        Player numbers will be assigned shortly.
+      </div>
       <div v-if="isCreator" class="py-4 flex">
         <div>
           <button
@@ -54,10 +62,6 @@
       </div>
       <div v-if="game.winner" class="text-red-500 my-2 font-bold">
         {{ game.winner }} won!
-      </div>
-      <div v-if="playerIds.length < 3" class="text-red-500 my-2">
-        We need minimum 3-10 players to start the game. There are only
-        {{ playerIds.length }}.
       </div>
       <div v-if="players.length" class="mt-4">
         <div class="flex">
@@ -104,7 +108,7 @@
                 'text-red-200': !player.active
               }"
             >
-              <td v-if="isCreator" class="text-center">
+              <td v-if="isCreator && game.places" class="text-center">
                 <input
                   v-model="game.places[player.id]"
                   class="w-6 h-6"
