@@ -24,34 +24,40 @@
         <div>
           <button
             v-if="playerIds.length"
-            class="btn-secondary mr-2"
+            class="btn-secondary m-1"
             @click="assignPlaces"
           >
             Assign places
           </button>
           <button
             v-if="playerIds.length"
-            class="btn-secondary mr-2"
+            class="btn-secondary m-1"
             @click="savePlaces"
           >
             Set places
           </button>
           <button
             v-if="playerIds.length"
-            class="btn-secondary mr-2"
+            class="btn-secondary m-1"
             @click="assignRoles"
           >
             Assign roles
           </button>
           <button
-            class="mr-2"
+            class="m-1"
             :class="playing ? 'btn' : 'btn-secondary'"
             @click="autoPilot"
           >
             Auto pilot
           </button>
-          <button class="btn-secondary mr-2" @click="reset">
+          <button class="btn-secondary m-1" @click="reset">
             Reset
+          </button>
+          <button class="btn-secondary m-1" @click="timestamp('startedAt')">
+            Start {{ getTime(game.startedAt) }}
+          </button>
+          <button class="btn-secondary m-1" @click="timestamp('endedAt')">
+            End {{ getTime(game.endedAt) }}
           </button>
         </div>
       </div>
@@ -218,7 +224,7 @@ import useDoc from '~/use/doc'
 import useLiveDoc from '~/use/liveDoc'
 import useRouter from '~/use/router'
 import TLoader from '~/components/TLoader'
-import { sortBy } from '~/utils'
+import { sortBy, getTime } from '~/utils'
 
 export default {
   components: {
@@ -257,7 +263,8 @@ export default {
       uid,
       isCreator,
       exists,
-      sortOrder
+      sortOrder,
+      getTime
     }
   },
   computed: {
@@ -328,6 +335,11 @@ export default {
     }
   },
   methods: {
+    async timestamp(field) {
+      await this.update({
+        [field]: +new Date()
+      })
+    },
     left(end) {
       if (!end) {
         return 0
@@ -368,6 +380,8 @@ export default {
               [`rating.${id}`]: 2
             })
           })
+
+        await this.timestamp('endedAt')
       }
 
       if (mafiaCount === 0) {
@@ -386,6 +400,8 @@ export default {
               [`rating.${id}`]: 2
             })
           })
+
+        await this.timestamp('endedAt')
       }
     },
     async vote(playerId, voteCount) {
@@ -583,6 +599,8 @@ export default {
           roles: set
         }
       })
+
+      await this.timestamp('startedAt')
     }
   }
 }
