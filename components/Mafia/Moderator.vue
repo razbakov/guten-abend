@@ -6,8 +6,11 @@
         <h1 class="text-3xl font-bold">{{ game.title }}</h1>
       </div>
       <div class="py-4 flex">
+        <router-link class="underline hover:text-blue-500 mr-2" to="/mafia/game"
+          >Go to lobby</router-link
+        >
         <router-link
-          class="underline hover:text-blue-500"
+          class="underline hover:text-blue-500 mr-2"
           to="/mafia/game/profile"
           >Change my nickname</router-link
         >
