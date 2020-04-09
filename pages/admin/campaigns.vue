@@ -23,7 +23,6 @@
         </div>
       </template>
     </TCardList>
-    <!-- <codemirror v-model="data" :options="cmOptions" /> -->
   </main>
 </template>
 
