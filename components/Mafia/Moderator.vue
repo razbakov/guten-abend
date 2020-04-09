@@ -24,6 +24,13 @@
           <button
             v-if="playerIds.length"
             class="btn-secondary mr-2"
+            @click="savePlaces"
+          >
+            Set places
+          </button>
+          <button
+            v-if="playerIds.length"
+            class="btn-secondary mr-2"
             @click="assignRoles"
           >
             Assign roles
@@ -97,10 +104,15 @@
                 'text-red-200': !player.active
               }"
             >
-              <td class="text-center">
-                <div class="bg-gray-200 w-6 h-6">
-                  {{ player.place }}
-                </div>
+              <td v-if="isCreator" class="text-center">
+                <input
+                  v-model="game.places[player.id]"
+                  class="w-6 h-6"
+                  type="text"
+                />
+              </td>
+              <td v-else class="text-center w-6 h-6">
+                {{ player.place }}
               </td>
               <td v-if="isCreator">
                 {{ player.order }}
@@ -453,6 +465,11 @@ export default {
         nominated: {},
         rating: {},
         winner: ''
+      })
+    },
+    async savePlaces() {
+      await this.update({
+        places: this.game.places
       })
     },
     async assignPlaces() {
