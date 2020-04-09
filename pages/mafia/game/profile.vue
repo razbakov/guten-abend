@@ -41,20 +41,22 @@ export default {
   }),
   setup() {
     const { uid, loading } = useAuth()
-    const { loadById, doc: profile, update, exists } = useDoc('mafia_profiles')
+    const { loadById, doc: profile, updateById, exists } = useDoc(
+      'mafia_profiles'
+    )
 
     loadById(uid.value)
 
     return {
       loading,
       profile,
-      update,
+      updateById,
       exists
     }
   },
   methods: {
     async save(data) {
-      await this.update(data)
+      await this.updateById(this.uid, data)
 
       let target = window.localStorage.getItem('target')
       window.localStorage.removeItem('target')
