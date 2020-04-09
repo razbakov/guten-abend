@@ -125,9 +125,7 @@ export default {
     currentId: false
   }),
   watch: {
-    items(items) {
-      this.$emit('loadItems', items)
-    }
+    items: 'loadItems'
   },
   setup(props) {
     const { docs } = useCollection(props.collection)
@@ -182,6 +180,9 @@ export default {
     }
   },
   methods: {
+    loadItems() {
+      this.$emit('loadItems', this.items)
+    },
     cancelItem() {
       this.currentId = false
     },
@@ -191,6 +192,7 @@ export default {
     },
     async saveItem(data) {
       this.cancelItem()
+      console.log('saveItem', data)
       await this.update(data)
     },
     async removeItem(id) {

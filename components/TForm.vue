@@ -33,6 +33,7 @@
               styleActiveLine: true,
               lineWrapping: true
             }"
+            class="z-0"
           />
           <textarea
             v-else-if="field.type === 'textarea'"

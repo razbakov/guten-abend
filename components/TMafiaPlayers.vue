@@ -65,8 +65,8 @@ export default {
   },
   props: {
     value: {
-      type: Array,
-      default: () => {}
+      type: [Object, Boolean],
+      default: false
     }
   },
   data: () => ({

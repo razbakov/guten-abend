@@ -17,6 +17,7 @@
             Scheduled for {{ getDate(item.scheduledAt) }} at
             {{ getTime(item.scheduledAt) }}
           </div>
+          <pre>{{ item.recipients }}</pre>
         </div>
       </template>
     </TCardList>
@@ -25,10 +26,8 @@
 </template>
 
 <script>
-import { codemirror } from 'vue-codemirror'
-import 'codemirror/mode/markdown/markdown.js'
-import 'codemirror/theme/base16-light.css'
 import TCardList from '~/components/TCardList'
+import TAccountSelector from '~/components/TAccountSelector'
 import { getDate, getTime } from '~/utils'
 
 export default {
@@ -64,16 +63,13 @@ export default {
         type: 'datetime-local'
       },
       {
+        name: 'recipients',
+        component: TAccountSelector
+      },
+      {
         name: 'content',
         hideLabel: true,
-        component: codemirror,
-        options: {
-          mode: 'markdown',
-          theme: 'base16-light',
-          tabSize: 2,
-          styleActiveLine: true,
-          lineWrapping: true
-        }
+        type: 'markdown'
       }
     ]
 

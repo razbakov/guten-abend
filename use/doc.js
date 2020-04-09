@@ -80,7 +80,7 @@ export default (name) => {
       ...data
     }
 
-    const result = await collection.doc(state.id).set(changes)
+    const result = await collection.doc(data.id).update(changes)
     return result
   }
 
