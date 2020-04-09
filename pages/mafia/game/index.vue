@@ -81,7 +81,7 @@ export default {
 
     const nickname = computed(() => doc?.value?.nickname)
 
-    const title = computed(() => `Welcome, ${nickname.value}!`)
+    const title = 'Mafia Game Lobby'
     const collection = 'mafia_games'
     const add = 'Create game'
 
