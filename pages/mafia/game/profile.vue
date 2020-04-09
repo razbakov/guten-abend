@@ -51,7 +51,8 @@ export default {
       loading,
       profile,
       updateById,
-      exists
+      exists,
+      uid
     }
   },
   methods: {

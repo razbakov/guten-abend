@@ -5,6 +5,13 @@
       <div class="border-b">
         <h1 class="text-3xl font-bold">{{ game.title }}</h1>
       </div>
+      <div class="py-4 flex">
+        <router-link
+          class="underline hover:text-blue-500"
+          to="/mafia/game/profile"
+          >Change my nickname</router-link
+        >
+      </div>
       <div v-if="isCreator" class="py-4 flex">
         <div>
           <button
