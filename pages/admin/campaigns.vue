@@ -11,7 +11,12 @@
           <div class="font-bold text-xl">
             {{ item.title }}
           </div>
-          <div class="mb-2 text-gray-500">{{ getDate(item.createdAt) }}</div>
+          <div class="mb-2 text-gray-500 font-bold">{{ item.status }}</div>
+          <div class="mb-2 text-gray-500">Subject: {{ item.subject }}</div>
+          <div class="mb-2 text-gray-500">
+            Scheduled for {{ getDate(item.scheduledAt) }} at
+            {{ getTime(item.scheduledAt) }}
+          </div>
         </div>
       </template>
     </TCardList>
@@ -24,7 +29,7 @@ import { codemirror } from 'vue-codemirror'
 import 'codemirror/mode/markdown/markdown.js'
 import 'codemirror/theme/base16-light.css'
 import TCardList from '~/components/TCardList'
-import { getDate } from '~/utils'
+import { getDate, getTime } from '~/utils'
 
 export default {
   components: {
@@ -50,6 +55,15 @@ export default {
         default: 'Aleksey from Guten Abend <gutenabend@razbakov.com>'
       },
       {
+        name: 'status',
+        type: 'select',
+        options: ['draft', 'scheduled', 'sent', 'canceled']
+      },
+      {
+        name: 'scheduledAt',
+        type: 'datetime-local'
+      },
+      {
         name: 'content',
         hideLabel: true,
         component: codemirror,
@@ -68,7 +82,8 @@ export default {
       title,
       collection,
       add,
-      getDate
+      getDate,
+      getTime
     }
   }
 }

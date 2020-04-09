@@ -1,10 +1,10 @@
 /* purgecss start ignore */
 @import 'codemirror/lib/codemirror.css';
+@import 'codemirror/theme/base16-light.css';
 
 .CodeMirror {
   border: 1px solid #eee;
   height: auto;
   padding: 1em;
 }
-
 /* purgecss end ignore */

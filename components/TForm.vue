@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-for="field in fields" :key="field.name">
+    <div v-for="field in visibleFields" :key="field.name">
       <div class="md:flex md:items-top mb-6">
         <div v-if="!field.hideLabel" class="md:w-1/3">
           <label
@@ -21,6 +21,18 @@
             v-model="data[field.name]"
             :data.sync="data"
             v-bind="field"
+          />
+          <codemirror
+            v-else-if="field.type === 'markdown'"
+            v-model="data[field.name]"
+            v-bind="field"
+            :options="{
+              mode: 'markdown',
+              theme: 'base16-light',
+              tabSize: 2,
+              styleActiveLine: true,
+              lineWrapping: true
+            }"
           />
           <textarea
             v-else-if="field.type === 'textarea'"
@@ -71,7 +83,7 @@
             </div>
           </div>
           <input
-            v-else
+            v-else-if="field.type !== 'hidden'"
             :id="field.name"
             v-model="data[field.name]"
             :disabled="field.disabled"
@@ -107,6 +119,9 @@
 </template>
 
 <script>
+import { codemirror } from 'vue-codemirror'
+import 'codemirror/mode/markdown/markdown.js'
+
 const camelcase = (text) => {
   const result = text.replace(/([A-Z])/g, ' $1')
   const finalResult = result.charAt(0).toUpperCase() + result.slice(1)
@@ -114,6 +129,9 @@ const camelcase = (text) => {
 }
 
 export default {
+  components: {
+    codemirror
+  },
   props: {
     fields: {
       type: Array,
@@ -140,6 +158,11 @@ export default {
     data: {},
     error: false
   }),
+  computed: {
+    visibleFields() {
+      return this.fields.filter((field) => field.type !== 'hidden')
+    }
+  },
   watch: {
     value: 'load'
   },
