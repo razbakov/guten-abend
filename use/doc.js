@@ -69,30 +69,19 @@ export default (name) => {
       state.exists = true
     }
 
-    if (!state.id) {
+    if (!data.id) {
       const result = await create(data)
       return result
     }
 
-    let changes = {
+    const changes = {
       updatedAt: +new Date(),
       updatedBy: uid.value,
       ...data
     }
 
-    if (state.exists) {
-      const result = await collection.doc(state.id).update(changes)
-      return result
-    } else {
-      changes = {
-        createdAt: +new Date(),
-        createdBy: uid.value,
-        ...changes
-      }
-
-      const result = await collection.doc(state.id).set(changes)
-      return result
-    }
+    const result = await collection.doc(state.id).set(changes)
+    return result
   }
 
   async function updateById(id, data) {
