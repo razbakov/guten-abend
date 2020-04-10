@@ -177,8 +177,8 @@ export default {
       this.fields
         .filter((field) => field.default)
         .forEach((field) => {
-          if (!this.data[field.name]) {
-            this.data[field.name] = field.default
+          if (!data[field.name]) {
+            data[field.name] = field.default
           }
         })
 

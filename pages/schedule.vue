@@ -187,7 +187,8 @@ export default {
       },
       {
         name: 'duration',
-        label: 'Duration (min)'
+        label: 'Duration (min)',
+        default: '30'
       },
       {
         name: 'link',
@@ -201,7 +202,7 @@ export default {
         name: 'enableFeedback',
         type: 'select',
         options: ['yes', 'no'],
-        default: 'no'
+        default: 'yes'
       }
     ]
 
@@ -243,8 +244,7 @@ export default {
         upcoming,
         startTime,
         endTime,
-        openTime,
-        updateRsvp
+        openTime
       }
     }
 
