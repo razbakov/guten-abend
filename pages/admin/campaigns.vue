@@ -29,7 +29,7 @@
 <script>
 import TCardList from '~/components/TCardList'
 import TAccountSelector from '~/components/TAccountSelector'
-import { getDate, getTime } from '~/utils'
+import { getDate, getTime, getDateObect, toDatetimeLocal } from '~/utils'
 
 export default {
   components: {
@@ -61,7 +61,15 @@ export default {
       },
       {
         name: 'scheduledAt',
-        type: 'datetime-local'
+        type: 'datetime-local',
+        set: (val) => {
+          if (!val) return ''
+          return new Date(val)
+        },
+        get: (val) => {
+          if (!val) return ''
+          return toDatetimeLocal(getDateObect(val))
+        }
       },
       {
         name: 'recipients',

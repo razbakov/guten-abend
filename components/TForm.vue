@@ -172,7 +172,7 @@ export default {
   },
   methods: {
     load() {
-      this.data = { ...this.value }
+      const data = { ...this.value }
 
       this.fields
         .filter((field) => field.default)
@@ -181,6 +181,14 @@ export default {
             this.data[field.name] = field.default
           }
         })
+
+      this.fields
+        .filter((field) => field.get)
+        .forEach((field) => {
+          data[field.name] = field.get(data[field.name])
+        })
+
+      this.data = data
     },
     getLabel(field) {
       if (typeof field === 'string') {
@@ -216,11 +224,19 @@ export default {
           }
         })
 
+      const data = { ...this.data }
+
+      this.fields
+        .filter((field) => field.set)
+        .forEach((field) => {
+          data[field.name] = field.set(data[field.name])
+        })
+
       if (this.error) {
         return
       }
 
-      this.$emit('save', this.data)
+      this.$emit('save', data)
     }
   }
 }

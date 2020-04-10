@@ -24,3 +24,11 @@ yarn install
 # serve with hot reload at localhost:3000
 yarn dev
 ```
+
+## Configuration
+
+Mailgun
+
+```bash
+firebase functions:config:set mailgun.key="" mailgun.domain="" mailgun.host=""
+```

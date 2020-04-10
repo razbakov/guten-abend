@@ -13,19 +13,35 @@ export const sortBy = (_key) => {
     a[key] > b[key] ? 1 * multi : b[key] > a[key] ? -1 * multi : 0
 }
 
+export const toDatetimeLocal = (date) => {
+  return format(date, "yyyy-MM-dd'T'HH:mm", { awareOfUnicodeTokens: true })
+}
+
+export const getDateObect = (val) => {
+  let date
+
+  if (typeof val.toDate === 'function') {
+    date = val.toDate()
+  } else {
+    date = new Date(val)
+  }
+
+  return date
+}
+
 export const getDate = (val) => {
   if (!val) return ''
-  return format(new Date(val), 'd MMM')
+  return format(getDateObect(val), 'd MMM')
 }
 
 export const getDay = (val) => {
   if (!val) return ''
-  return format(new Date(val), 'iiii')
+  return format(getDateObect(val), 'iiii')
 }
 
 export const getTime = (val) => {
   if (!val) return ''
-  return format(new Date(val), 'H:mm')
+  return format(getDateObect(val), 'H:mm')
 }
 
 export const openURL = (url) => {
