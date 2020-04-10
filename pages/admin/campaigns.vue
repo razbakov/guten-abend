@@ -17,7 +17,7 @@
             Scheduled for {{ getDate(item.scheduledAt) }} at
             {{ getTime(item.scheduledAt) }}
           </div>
-          <div class="mb-2 text-gray-500">
+          <div v-if="item.recipients" class="mb-2 text-gray-500">
             {{ Object.keys(item.recipients).length }} recipients
           </div>
         </div>
