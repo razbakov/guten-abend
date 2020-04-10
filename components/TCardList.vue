@@ -192,7 +192,6 @@ export default {
     },
     async saveItem(data) {
       this.cancelItem()
-      console.log('saveItem', data)
       await this.update(data)
     },
     async removeItem(id) {
