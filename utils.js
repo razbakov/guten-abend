@@ -29,6 +29,11 @@ export const getDateObect = (val) => {
   return date
 }
 
+export const getDateTime = (val) => {
+  if (!val) return ''
+  return format(getDateObect(val), "d MMM' at 'H:mm")
+}
+
 export const getDate = (val) => {
   if (!val) return ''
   return format(getDateObect(val), 'd MMM')
