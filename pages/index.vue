@@ -1,9 +1,10 @@
 <template>
   <main class="mt-6 p-8">
     <p class="font-bold">Everything closed?</p>
-    <h1 class="font-bold text-4xl">We are open</h1>
+    <h1 class="font-bold text-4xl">Meet New Friends Online</h1>
     <p class="text-lg">
-      Guten Abend is an online social hub to have fun via Zoom.
+      Mafia Game, Resistance, Pandemics, Geo Guess, CashFlow, Conversations,
+      Fitness Online. Get Social. Meet Friends. Be Happy.
     </p>
     <div class="text-center mt-3 p-4 w-full md:flex">
       <nuxt-link v-if="!uid" to="/signup" class="block w-full btn m-2">
