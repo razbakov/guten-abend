@@ -25,7 +25,10 @@
       />
     </div>
 
-    <div v-if="filters && filters.length > 1" class="md:flex">
+    <div
+      v-if="filters && filters.length > 1"
+      class="md:flex bg-orange-100 rounded shadow mb-4"
+    >
       <button
         v-for="filter in filters"
         :key="filter.name"
