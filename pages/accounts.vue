@@ -49,23 +49,37 @@
                 <dt class="w-1/3 text-right mr-2 text-gray-500">
                   registered
                 </dt>
-                <dd>{{ getDate(item.createdAt) }}</dd>
+                <dd>
+                  {{ getDate(item.createdAt) }} at {{ getTime(item.createdAt) }}
+                </dd>
               </div>
             </dl>
             <div class="md:w-1/3 mt-2 mb-2 md:mt-0">
               <img v-if="item.photo" :src="item.photo" alt="photo" />
             </div>
           </div>
-          <TButton
-            type="link"
-            @click="
-              showDetailsId === item.id
-                ? (showDetailsId = false)
-                : (showDetailsId = item.id)
-            "
-            >Participated in {{ item.eventsCount }} events</TButton
-          >
-          <div v-if="showDetailsId === item.id && item.eventsCount">
+          <div class="flex">
+            <TButton
+              type="link"
+              class="mr-2"
+              @click="
+                expandEventsForId === item.id
+                  ? (expandEventsForId = false)
+                  : (expandEventsForId = item.id)
+              "
+              >{{ item.eventsCount }} events</TButton
+            >
+            <TButton
+              type="link"
+              @click="
+                expandIdeasForId === item.id
+                  ? (expandIdeasForId = false)
+                  : (expandIdeasForId = item.id)
+              "
+              >{{ item.ideasCount }} ideas</TButton
+            >
+          </div>
+          <div v-if="expandEventsForId === item.id && item.eventsCount">
             <TCardList
               v-slot="{ item: event }"
               collection="meetups"
@@ -79,6 +93,28 @@
             >
               <div class="p-2 border">
                 {{ event.title }} on {{ getDate(event.date) }}
+              </div>
+            </TCardList>
+          </div>
+
+          <div v-if="expandIdeasForId === item.id">
+            <TCardList
+              v-slot="{ item: event }"
+              collection="ideas"
+              :filters="[
+                {
+                  name: 'users',
+                  default: true,
+                  filter: (e) =>
+                    e.createdBy === item.id || item.ideas.includes(e.id)
+                }
+              ]"
+            >
+              <div
+                class="p-2 border"
+                :class="{ 'font-bold': event.createdBy === item.id }"
+              >
+                {{ event.title }}
               </div>
             </TCardList>
           </div>
@@ -104,7 +140,8 @@ export default {
   data: () => ({
     emails: [],
     showEmails: false,
-    showDetailsId: false
+    expandEventsForId: false,
+    expandIdeasForId: false
   }),
   setup() {
     const title = 'Accounts'
@@ -119,7 +156,9 @@ export default {
     const map = (item) => ({
       ...item,
       events: getEvents(item.id, 'meetups'),
-      eventsCount: getEvents(item.id, 'meetups').length || 0
+      eventsCount: getEvents(item.id, 'meetups').length || 0,
+      ideas: getEvents(item.id, 'ideas'),
+      ideasCount: getEvents(item.id, 'ideas').length || 0
     })
 
     const filters = [
