@@ -29,7 +29,7 @@
       <template v-slot="{ item }">
         <div class="p-4 card-item">
           <div class="font-bold text-xl mb-2">
-            {{ item.name }}
+            {{ item.name }} - {{ item.id }}
           </div>
           <div class="md:flex justify-between">
             <dl class="w-full">

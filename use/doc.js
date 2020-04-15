@@ -89,6 +89,11 @@ export default (name) => {
     return result
   }
 
+  async function setById(id, data) {
+    const result = await collection.doc(id).set(data)
+    return result
+  }
+
   async function remove(id) {
     await collection.doc(id).delete()
   }
@@ -119,6 +124,7 @@ export default (name) => {
     loadById,
     remove,
     updateById,
-    isCreator
+    isCreator,
+    setById
   }
 }
