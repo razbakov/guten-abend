@@ -1,4 +1,6 @@
 import Vue from 'vue'
+import * as system from 'platform'
+import * as features from 'platform-detect'
 import { toRefs, computed } from '@vue/composition-api'
 import firebase from 'firebase/app'
 import 'firebase/auth'
@@ -11,7 +13,8 @@ const state = Vue.observable({
   uid: null,
   profile: null,
   account: null,
-  initialized: false
+  initialized: false,
+  referrer: ''
 })
 
 export default () => {
@@ -29,6 +32,10 @@ export default () => {
     const storeAccount = window.localStorage.getItem('account')
     if (storeAccount) {
       state.account = JSON.parse(storeAccount)
+    }
+
+    if (document.referrer || !state.referrer) {
+      setReferrer(document.referrer)
     }
   }
 
@@ -49,6 +56,26 @@ export default () => {
   )
 
   const firestore = firebase.firestore()
+
+  function setReferrer(payload) {
+    if (!payload) {
+      return
+    }
+    if (payload.includes('firebaseapp.com')) {
+      return
+    }
+    if (payload.includes('localhost')) {
+      return
+    }
+    if (payload.includes('gutenabend.netlify.app')) {
+      return
+    }
+    if (payload.includes('gutenabend.netlify.com')) {
+      return
+    }
+
+    state.referrer = payload
+  }
 
   function can(action, collection, object) {
     if (isAdmin) {
@@ -89,7 +116,17 @@ export default () => {
         name: user.displayName ?? '',
         email: user.email ?? '',
         photo: user.photoURL ?? '',
-        timezone: new Date().toString().match(/([A-Z]+[+-][0-9]+)/)[1]
+        timezone: new Date().toString().match(/([A-Z]+[+-][0-9]+)/)[1],
+        marketing: {
+          referrer: state.referrer,
+          userLanguage: window?.navigator?.userLanguage || '',
+          systemLanguage: window?.navigator?.systemLanguage || '',
+          browserLanguage: window?.navigator?.browserLanguage || '',
+          language: window?.navigator?.language || '',
+          languages: window?.navigator?.languages || '',
+          system,
+          features
+        }
       }
 
       await firestore
