@@ -1,6 +1,5 @@
 import Vue from 'vue'
-import * as system from 'platform'
-import * as features from 'platform-detect'
+import features from 'platform-detect'
 import { toRefs, computed } from '@vue/composition-api'
 import firebase from 'firebase/app'
 import 'firebase/auth'
@@ -90,8 +89,7 @@ export default () => {
       browserLanguage: window?.navigator?.browserLanguage || '',
       language: window?.navigator?.language || '',
       languages: window?.navigator?.languages || '',
-      system,
-      features
+      mode: features
     }
   }
 
