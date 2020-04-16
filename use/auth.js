@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import features from 'platform-detect'
+import ls from 'local-storage'
+import { utm } from 'url-utm-params'
 import { toRefs, computed } from '@vue/composition-api'
 import firebase from 'firebase/app'
 import 'firebase/auth'
@@ -34,10 +36,6 @@ export default () => {
       state.account = JSON.parse(storeAccount)
     }
 
-    if (document.referrer || !state.referrer) {
-      setReferrer(document.referrer)
-    }
-
     if (!state.marketing) {
       setMarketing()
     }
@@ -61,36 +59,57 @@ export default () => {
 
   const firestore = firebase.firestore()
 
-  function setReferrer(payload) {
+  function getReferrer() {
+    const payload = document.referrer
+
     if (!payload) {
-      return
+      return ''
     }
     if (payload.includes('firebaseapp.com')) {
-      return
+      return ''
     }
     if (payload.includes('localhost')) {
-      return
+      return ''
     }
     if (payload.includes('gutenabend.netlify.app')) {
-      return
+      return ''
     }
     if (payload.includes('gutenabend.netlify.com')) {
-      return
+      return ''
     }
 
-    state.referrer = payload
+    return payload
   }
 
   function setMarketing() {
+    state.marketing = ls('marketing')
+
+    if (state.marketing) {
+      return
+    }
+
+    const languages = window?.navigator?.languages || []
+    const languageString = languages.length
+      ? languages[0]
+      : window?.navigator?.userLanguage || window?.navigator?.language || ''
+
+    const [language, locale] = languageString
+      .replace('-', '_')
+      .toLowerCase()
+      .split('_')
+
     state.marketing = {
-      referrer: state.referrer,
-      userLanguage: window?.navigator?.userLanguage || '',
-      systemLanguage: window?.navigator?.systemLanguage || '',
-      browserLanguage: window?.navigator?.browserLanguage || '',
-      language: window?.navigator?.language || '',
-      languages: window?.navigator?.languages || '',
+      updatedAt: new Date(),
+      timezone: new Date().toString().match(/([A-Z]+[+-][0-9]+)/)[1],
+      referrer: getReferrer(),
+      utms: utm(document.location.href),
+      language,
+      locale,
+      languages,
       mode: features
     }
+
+    ls('marketing', state.marketing)
   }
 
   function can(action, collection, object) {
