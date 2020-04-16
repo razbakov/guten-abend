@@ -58,7 +58,8 @@ export default {
   modules: [
     '@nuxtjs/pwa',
     // Doc: https://github.com/nuxt-community/dotenv-module
-    '@nuxtjs/dotenv'
+    '@nuxtjs/dotenv',
+    '@nuxtjs/sentry'
   ],
   pwa: {
     meta: {
@@ -98,5 +99,9 @@ export default {
         analytics: true
       }
     }
+  },
+  sentry: {
+    dsn:
+      'https://b982bf8f05eb4746b678e38036add63e@o340470.ingest.sentry.io/5202226'
   }
 }
