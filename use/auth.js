@@ -14,7 +14,8 @@ const state = Vue.observable({
   profile: null,
   account: null,
   initialized: false,
-  referrer: ''
+  referrer: '',
+  marketing: null
 })
 
 export default () => {
@@ -36,6 +37,10 @@ export default () => {
 
     if (document.referrer || !state.referrer) {
       setReferrer(document.referrer)
+    }
+
+    if (!state.marketing) {
+      setMarketing()
     }
   }
 
@@ -75,6 +80,19 @@ export default () => {
     }
 
     state.referrer = payload
+  }
+
+  function setMarketing() {
+    state.marketing = {
+      referrer: state.referrer,
+      userLanguage: window?.navigator?.userLanguage || '',
+      systemLanguage: window?.navigator?.systemLanguage || '',
+      browserLanguage: window?.navigator?.browserLanguage || '',
+      language: window?.navigator?.language || '',
+      languages: window?.navigator?.languages || '',
+      system,
+      features
+    }
   }
 
   function can(action, collection, object) {
@@ -117,16 +135,7 @@ export default () => {
         email: user.email ?? '',
         photo: user.photoURL ?? '',
         timezone: new Date().toString().match(/([A-Z]+[+-][0-9]+)/)[1],
-        marketing: {
-          referrer: state.referrer,
-          userLanguage: window?.navigator?.userLanguage || '',
-          systemLanguage: window?.navigator?.systemLanguage || '',
-          browserLanguage: window?.navigator?.browserLanguage || '',
-          language: window?.navigator?.language || '',
-          languages: window?.navigator?.languages || '',
-          system,
-          features
-        }
+        marketing: state.marketing
       }
 
       await firestore

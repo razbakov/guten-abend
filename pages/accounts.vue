@@ -29,12 +29,18 @@
       <template v-slot="{ item }">
         <div class="p-4 card-item">
           <div class="font-bold text-xl mb-2">
-            {{ item.name }} - {{ item.id }}
+            {{ item.name }}
           </div>
           <div class="md:flex justify-between">
             <dl class="w-full">
               <div
-                v-for="field in ['email', 'city', 'timezone', 'newsletter']"
+                v-for="field in [
+                  'id',
+                  'email',
+                  'city',
+                  'timezone',
+                  'newsletter'
+                ]"
                 :key="field"
                 class="flex"
               >
@@ -52,6 +58,9 @@
                 <dd>
                   {{ getDate(item.createdAt) }} at {{ getTime(item.createdAt) }}
                 </dd>
+              </div>
+              <div v-if="item.marketing">
+                <pre>{{ item.marketing }}</pre>
               </div>
             </dl>
             <div class="md:w-1/3 mt-2 mb-2 md:mt-0">

@@ -17,6 +17,7 @@
         >See schedule</nuxt-link
       >
     </div>
+    <pre v-if="isAdmin" class="mt-4">{{ marketing }}</pre>
   </main>
 </template>
 
@@ -25,10 +26,12 @@ import useAuth from '~/use/auth'
 
 export default {
   setup() {
-    const { uid } = useAuth()
+    const { uid, marketing, isAdmin } = useAuth()
 
     return {
-      uid
+      uid,
+      marketing,
+      isAdmin
     }
   }
 }
