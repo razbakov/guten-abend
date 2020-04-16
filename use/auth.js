@@ -98,6 +98,16 @@ export default () => {
       .toLowerCase()
       .split('_')
 
+    const width =
+      window.innerWidth ||
+      document.documentElement.clientWidth ||
+      document.body.clientWidth
+
+    const height =
+      window.innerHeight ||
+      document.documentElement.clientHeight ||
+      document.body.clientHeight
+
     state.marketing = {
       updatedAt: new Date(),
       timezone: new Date().toString().match(/([A-Z]+[+-][0-9]+)/)[1],
@@ -106,7 +116,11 @@ export default () => {
       language,
       locale,
       languages,
-      mode: features
+      mode: features,
+      screen: {
+        width,
+        height
+      }
     }
 
     ls('marketing', state.marketing)
