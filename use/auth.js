@@ -81,6 +81,10 @@ export default () => {
     return payload
   }
 
+  function getRef() {
+    return router?.currentRoute?.query?.ref || ''
+  }
+
   function setMarketing() {
     state.marketing = ls('marketing')
 
@@ -112,6 +116,7 @@ export default () => {
       updatedAt: new Date(),
       timezone: new Date().toString().match(/([A-Z]+[+-][0-9]+)/)[1],
       referrer: getReferrer(),
+      ref: getRef(),
       utms: utm(document.location.href),
       language,
       locale,
