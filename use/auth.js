@@ -20,6 +20,8 @@ const state = Vue.observable({
 })
 
 export default () => {
+  const router = useRouter()
+
   let isAdmin = false
 
   if (window) {
@@ -36,9 +38,7 @@ export default () => {
       state.account = JSON.parse(storeAccount)
     }
 
-    if (!state.marketing) {
-      setMarketing()
-    }
+    setMarketing()
   }
 
   if (!state.initialized) {
@@ -50,8 +50,6 @@ export default () => {
 
     state.initialized = true
   }
-
-  const router = useRouter()
 
   const confirmedAccount = computed(
     () => !!state.uid && !!state.account && !!state.account.confirmed
@@ -81,16 +79,8 @@ export default () => {
     return payload
   }
 
-  function getRef() {
-    return router?.currentRoute?.query?.ref || ''
-  }
-
   function setMarketing() {
     state.marketing = ls('marketing')
-
-    if (state.marketing) {
-      return
-    }
 
     const languages = window?.navigator?.languages || []
     const languageString = languages.length
@@ -112,23 +102,30 @@ export default () => {
       document.documentElement.clientHeight ||
       document.body.clientHeight
 
-    state.marketing = {
+    const marketing = {
       updatedAt: new Date(),
       timezone: new Date().toString().match(/([A-Z]+[+-][0-9]+)/)[1],
       referrer: getReferrer(),
-      ref: getRef(),
+      ref: router?.currentRoute?.query?.ref || '',
+      fbclid: router?.currentRoute?.query?.fbclid || '',
+      gclid: router?.currentRoute?.query?.gclid || '',
       utms: utm(document.location.href),
       language,
       locale,
       languages,
-      mode: features,
+      mode: features || '',
       screen: {
         width,
         height
       }
     }
 
-    ls('marketing', state.marketing)
+    if (!state.marketing) {
+      state.marketing = marketing
+      ls('marketing', marketing)
+    }
+
+    ls('session', marketing)
   }
 
   function can(action, collection, object) {
