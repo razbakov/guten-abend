@@ -18,6 +18,19 @@
       class="md:flex text-center p-4 text-white bg-dark justify-end items-center"
     >
       <div class="m-3 text-md font-bold">
+        Join Chat
+      </div>
+      <div class="m-3">
+        <a
+          class="underline hover:no-underline hover:text-red-500"
+          :href="social.slack"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Slack
+        </a>
+      </div>
+      <div class="m-3 text-md font-bold">
         Follow us
       </div>
       <div class="m-3">
@@ -55,7 +68,9 @@ export default {
   data: () => ({
     social: {
       twitter: 'https://twitter.com/AbendKantine',
-      instagram: 'https://www.instagram.com/AbendKantine'
+      instagram: 'https://www.instagram.com/AbendKantine',
+      slack:
+        'https://join.slack.com/t/guten-abend/shared_invite/zt-dkaf1w0m-GJFmiVjeUJ4NW4t~RC7eTQ'
     }
   }),
   setup() {
