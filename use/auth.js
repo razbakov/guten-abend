@@ -131,7 +131,10 @@ export default () => {
 
   function can(action, collection, object) {
     if (isAdmin) {
-      return true
+      return !!state.uid
+    }
+    if (action === 'add' && collection === 'ideas') {
+      return !!state.uid
     }
     if (action === 'edit') {
       return !object || object.createdBy === state.uid
