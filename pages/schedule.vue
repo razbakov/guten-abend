@@ -66,6 +66,9 @@
           <div v-if="item.soon" class="text-orange-500 font-bold">
             Starts soon
           </div>
+          <div v-if="!item.link && isAdmin" class="text-red-500 font-bold">
+            No link
+          </div>
           <TPreview
             v-if="!item.finished || !item.awaitsFeedback"
             class="mb-2"
@@ -100,27 +103,32 @@
             <div v-else>{{ count }} participants. Do you want to join?</div>
           </TRsvp>
           <div
-            v-if="item.going && !item.finished && item.link"
+            v-if="item.going && !item.finished"
             class="md:flex p-4 -m-4 mt-4 bg-gray-200 text-gray-700 text-center"
           >
             <template v-if="item.opened">
               <a
                 v-if="item.link"
-                class="btn block w-full"
-                @click="openLink(item.id, item.link)"
+                class="btn block w-full cursor-pointer"
+                @click="openLink(item.id, 'zoom', item.link)"
                 >Open in Zoom</a
               >
               <a
                 v-if="item.attachment"
-                class="btn-secondary block w-full md:ml-2 mt-2 md:mt-0"
-                target="_blank"
-                rel="noopener"
-                :href="item.attachment"
+                class="btn-secondary block w-full md:ml-2 mt-2 md:mt-0 cursor-pointer"
+                @click="openLink(item.id, 'attachment', item.attachment)"
                 >Open Attachment</a
               >
             </template>
-            <div v-else>
-              Zoom link will appear here before the event. Check later.
+            <div v-else class="md:flex w-full items-center">
+              <div class="flex-grow text-left">
+                Zoom link will appear here before the event.
+              </div>
+              <TButton
+                type="secondary"
+                @click="openLink(item.id, 'calendar', item.calendarLink)"
+                >Add to calendar</TButton
+              >
             </div>
           </div>
         </div>
@@ -136,8 +144,10 @@
 
 <script>
 import { ref } from '@vue/composition-api'
+import googleCalendarEventUrl from 'generate-google-calendar-url'
 import useAuth from '~/use/auth'
 import useRSVP from '~/use/rsvp'
+import TButton from '~/components/TButton'
 import TCardList from '~/components/TCardList'
 import TPreview from '~/components/TPreview'
 import TFeedback from '~/components/TFeedback'
@@ -148,6 +158,7 @@ import { getDay, getTime, getDate, openURL } from '~/utils'
 
 export default {
   components: {
+    TButton,
     TCardList,
     TRsvp,
     TPreview,
@@ -163,7 +174,7 @@ export default {
     const collection = 'meetups'
     const add = 'Add event'
 
-    const { can } = useAuth()
+    const { can, isAdmin } = useAuth()
     const { getRsvpResponse, getFeedback, updateRsvp } = useRSVP()
     const now = +new Date()
     const openedListId = ref(false)
@@ -230,6 +241,14 @@ export default {
 
       const upcoming = !skip && (!finished || awaitsFeedback)
 
+      const calendarLink = googleCalendarEventUrl({
+        start: new Date(startTime),
+        end: new Date(endTime),
+        title: item.title,
+        details: 'https://gutenabend.netlify.app/schedule/',
+        location: 'Zoom'
+      })
+
       return {
         ...item,
         happening,
@@ -244,7 +263,8 @@ export default {
         upcoming,
         startTime,
         endTime,
-        openTime
+        openTime,
+        calendarLink
       }
     }
 
@@ -341,14 +361,15 @@ export default {
       now,
       getNotificationFields,
       openURL,
-      updateRsvp
+      updateRsvp,
+      isAdmin
     }
   },
   methods: {
-    async openLink(eventId, link) {
+    async openLink(eventId, type, link) {
       await this.updateRsvp(eventId, 'meetups', 'yes', {
-        joinedAt: +new Date(),
-        confirmed: true
+        [`${type}At`]: +new Date(),
+        [type]: true
       })
 
       this.openURL(link)
