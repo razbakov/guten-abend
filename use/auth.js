@@ -7,7 +7,7 @@ import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
 import clean from 'lodash-clean'
-import { useRouter } from '~/plugins/router'
+import useRouter from '~/use/router'
 
 const state = Vue.observable({
   loading: true,

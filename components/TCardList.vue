@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="md:flex items-baseline justify-between mb-4">
+    <div class="md:flex items-baseline justify-between">
       <h1 v-if="title" class="text-3xl font-bold">{{ title }}</h1>
       <button
         v-if="add && can('add', collection)"
@@ -9,13 +9,11 @@
       >
         {{ add }}
       </button>
-
-      <slot name="header" />
     </div>
 
-    <slot name="toolbar" />
+    <slot name="header" />
 
-    <div v-if="currentId === 'add'" class="card-item">
+    <div v-if="currentId === 'add'" class="mt-4 card-item">
       <TForm
         class="px-6 py-4"
         :fields="fields"
@@ -27,7 +25,7 @@
 
     <div
       v-if="filters && filters.length > 1"
-      class="md:flex bg-orange-100 rounded shadow mb-4"
+      class="mt-4 md:flex bg-orange-100 rounded shadow"
     >
       <button
         v-for="filter in filters"
@@ -39,6 +37,8 @@
         {{ filter.label }}
       </button>
     </div>
+
+    <div class="mt-4" />
 
     <div v-for="(item, itemId) in items" :key="item.id" :item="item">
       <TForm

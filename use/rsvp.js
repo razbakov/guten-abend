@@ -1,9 +1,11 @@
 import useAuth from '~/use/auth'
 import useDoc from '~/use/doc'
+import useRouter from '~/use/router'
 import useCollection from '~/use/collection'
 
 export default () => {
-  const { uid, account } = useAuth()
+  const { uid, account, confirmedAccount } = useAuth()
+  const { router, route } = useRouter()
 
   const { docs } = useCollection('participants')
   const { update } = useDoc('participants')
@@ -48,9 +50,17 @@ export default () => {
       .map((item) => item.eventId)
   }
 
-  const getCount = (eventId) => getList(eventId).length
+  const getCount = (eventId, rsvp = 'yes') => getList(eventId, rsvp).length
 
   async function updateRsvp(eventId, collection, rsvp, extra) {
+    if (!confirmedAccount.value) {
+      router.push(
+        `/rsvp/${eventId}/?rsvp=${rsvp}&back=${route.fullPath}&collection=${collection}`
+      )
+
+      return
+    }
+
     let rsvpObject = getRsvp(eventId)
 
     if (!rsvpObject) {
