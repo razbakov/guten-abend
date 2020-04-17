@@ -7775,6 +7775,13 @@ locate-path@^5.0.0:
   dependencies:
     p-locate "^4.1.0"
 
+lodash-clean@^2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/lodash-clean/-/lodash-clean-2.2.1.tgz#54338432b808237085466534b409b063c364a360"
+  integrity sha512-GiQWe78XLfkNDvddLB5Y6gWQzNOW7il2AX5tNz0MOGJ8wh11i6U3H1WFvNBjCW+OLn7+/Gb/29i6Skkujz2ypg==
+  dependencies:
+    lodash "^4.17.15"
+
 lodash._reinterpolate@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/lodash._reinterpolate/-/lodash._reinterpolate-3.0.0.tgz#0ccf2d89166af03b3663c796538b75ac6e114d9d"

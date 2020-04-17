@@ -6,6 +6,7 @@ import { toRefs, computed } from '@vue/composition-api'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
+import clean from 'lodash-clean'
 import { useRouter } from '~/plugins/router'
 
 const state = Vue.observable({
@@ -113,7 +114,7 @@ export default () => {
       language,
       locale,
       languages,
-      mode: features || '',
+      mode: clean(features),
       screen: {
         width,
         height
