@@ -59,8 +59,55 @@
                   {{ getDate(item.createdAt) }} at {{ getTime(item.createdAt) }}
                 </dd>
               </div>
-              <div v-if="item.marketing">
-                <pre>{{ item.marketing }}</pre>
+              <div
+                v-if="item.marketing && item.marketing.existing"
+                class="flex"
+              >
+                <dt class="w-1/3 text-right mr-2 text-gray-500 font-bold">
+                  existing
+                </dt>
+              </div>
+              <div v-if="item.marketing && item.marketing.ref" class="flex">
+                <dt class="w-1/3 text-right mr-2 text-gray-500">
+                  ref
+                </dt>
+                <dd>
+                  {{ item.marketing.ref }}
+                </dd>
+              </div>
+              <div
+                v-if="item.marketing && item.marketing.referrer"
+                class="flex"
+              >
+                <dt class="w-1/3 text-right mr-2 text-gray-500">
+                  referrer
+                </dt>
+                <dd>
+                  {{ item.marketing.referrer }}
+                </dd>
+              </div>
+              <div
+                v-if="item.marketing && item.marketing.language"
+                class="flex"
+              >
+                <dt class="w-1/3 text-right mr-2 text-gray-500">
+                  language
+                </dt>
+                <dd>
+                  {{ item.marketing.language }}
+                </dd>
+              </div>
+
+              <div
+                v-if="item.marketing && item.marketing.languages"
+                class="flex"
+              >
+                <dt class="w-1/3 text-right mr-2 text-gray-500">
+                  languages
+                </dt>
+                <dd>
+                  {{ item.marketing.languages.join(', ') }}
+                </dd>
               </div>
             </dl>
             <div class="md:w-1/3 mt-2 mb-2 md:mt-0">

@@ -16,7 +16,6 @@ const state = Vue.observable({
   profile: null,
   account: null,
   initialized: false,
-  referrer: '',
   marketing: null
 })
 
@@ -181,6 +180,16 @@ export default () => {
         .set(newAccount)
 
       await loadAccount()
+    } else if (!state.account.marketing) {
+      await firestore
+        .collection('accounts')
+        .doc(state.uid)
+        .update({
+          marketing: {
+            ...state.marketing,
+            existing: true
+          }
+        })
     }
 
     await loadProfile()
