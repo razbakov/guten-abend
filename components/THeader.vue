@@ -90,6 +90,31 @@
                 />
               </svg>
             </a>
+            <a
+              class="ml-2 mt-1 w-4 h-4"
+              :href="social.facebook"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                class="fill-current hover:text-blue-500 pb-1"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <g clip-path="url(#clip0)">
+                  <path
+                    d="M22.6738 0.00119019H1.3246C0.593539 0.00119019 0 0.593544 0 1.32579V22.675C0 23.4073 0.593539 24.0004 1.3246 24.0004H12.8184V14.7065H9.69105V11.084H12.8184V8.41269C12.8184 5.3134 14.7108 3.62486 17.4762 3.62486C18.802 3.62486 19.9389 3.72405 20.2704 3.76712V7.00669L18.3523 7.00748C16.8487 7.00748 16.5586 7.72233 16.5586 8.77071V11.0828H20.1459L19.6769 14.7049H16.5582V23.9992H22.6734C23.4053 23.9992 23.9992 23.4053 23.9992 22.675V1.325C23.9988 0.593544 23.4057 0.00119019 22.6738 0.00119019Z"
+                  />
+                </g>
+                <defs>
+                  <clipPath id="clip0">
+                    <rect y="0.000183105" width="24" height="23.9996" />
+                  </clipPath>
+                </defs>
+              </svg>
+            </a>
           </div>
         </div>
       </div>
@@ -154,6 +179,7 @@ export default {
     social: {
       twitter: 'https://twitter.com/AbendKantine',
       instagram: 'https://www.instagram.com/AbendKantine',
+      facebook: 'https://www.facebook.com/abendkantine',
       slack:
         'https://join.slack.com/t/guten-abend/shared_invite/zt-dkaf1w0m-GJFmiVjeUJ4NW4t~RC7eTQ'
     },
