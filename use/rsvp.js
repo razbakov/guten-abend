@@ -27,6 +27,12 @@ export default () => {
       .map((item) => item.participant)
   }
 
+  function getListRsvps(eventId, rsvp = 'yes') {
+    return docs.value.filter(
+      (item) => item.eventId === eventId && item.rsvp === rsvp
+    )
+  }
+
   const getEvents = (userId, collection, rsvp = 'yes') => {
     if (collection === 'meetups') {
       return docs.value
@@ -88,6 +94,7 @@ export default () => {
     getCount,
     getList,
     getEvents,
-    getFeedback
+    getFeedback,
+    getListRsvps
   }
 }

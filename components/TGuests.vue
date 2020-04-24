@@ -1,12 +1,16 @@
 <template>
   <div>
     <div
-      v-for="participant in participants"
-      :key="participant.email"
+      v-for="rsvp in rsvps"
+      :key="rsvp.participant.email"
       class="border-b mb-2 p-2"
     >
-      <div class="font-bold">{{ participant.name }}</div>
-      <div>{{ participant.email }}</div>
+      <div class="font-bold">{{ rsvp.participant.name }}</div>
+      <div class="flex">
+        <div v-if="rsvp.calendar" class="mr-2">calendar</div>
+        <div v-if="rsvp.zoom" class="mr-2">zoom</div>
+        <div v-if="rsvp.attachment" class="mr-2">attachment</div>
+      </div>
     </div>
   </div>
 </template>
@@ -22,12 +26,12 @@ export default {
     }
   },
   setup(params) {
-    const { getList } = useRSVP()
+    const { getListRsvps } = useRSVP()
 
-    const participants = getList(params.id)
+    const rsvps = getListRsvps(params.id)
 
     return {
-      participants
+      rsvps
     }
   }
 }
