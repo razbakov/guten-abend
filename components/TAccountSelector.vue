@@ -1,8 +1,15 @@
 <template>
   <div>
-    <TButton type="secondary" @click="showPopup = true"
-      >Select accounts ({{ count }})</TButton
-    >
+    <div class="flex">
+      <TButton type="secondary" class="mr-2" @click="showPopup = true"
+        >Select accounts ({{ count }})</TButton
+      >
+      <TButton type="secondary" @click="showImport = true">Import</TButton>
+    </div>
+    <template v-if="showImport">
+      <TField v-model="csv" type="textarea" class="mb-2" />
+      <TButton @click="startImport">Import</TButton>
+    </template>
     <template v-if="showPopup">
       <div
         class="fixed z-10 w-full top-0 left-0 bottom-0 h-screen bg-black opacity-50 border-l p-4"
@@ -95,11 +102,13 @@ import { computed, ref } from '@vue/composition-api'
 import useAuth from '~/use/auth'
 import useCollection from '~/use/collection'
 import TButton from '~/components/TButton'
+import TField from '~/components/TField'
 import { sortBy, getTime, getDate } from '~/utils'
 
 export default {
   components: {
-    TButton
+    TButton,
+    TField
   },
   props: {
     value: {
@@ -109,7 +118,9 @@ export default {
   },
   data: () => ({
     showPopup: false,
-    selected: {}
+    showImport: false,
+    selected: {},
+    csv: ''
   }),
   setup() {
     const { isAdmin } = useAuth()
@@ -188,6 +199,28 @@ export default {
     save() {
       this.showPopup = false
       this.$emit('input', this.selected)
+    },
+    sanitize(value) {
+      return value.replace(/[^a-z0-9]/gim, '')
+    },
+    startImport() {
+      this.showImport = false
+
+      const lines = this.csv.split('\n').map((l) => {
+        const [name, email] = l.split('\t')
+        return {
+          name,
+          email
+        }
+      })
+
+      const result = {}
+
+      lines.forEach((line) => {
+        result[this.sanitize(line.email)] = line
+      })
+
+      this.$emit('input', result)
     }
   }
 }
