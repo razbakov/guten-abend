@@ -10,6 +10,7 @@
         <div v-if="rsvp.calendar" class="mr-2">calendar</div>
         <div v-if="rsvp.zoom" class="mr-2">zoom</div>
         <div v-if="rsvp.attachment" class="mr-2">attachment</div>
+        <div v-if="rsvp.feedback" class="mr-2">rated {{ rsvp.feedback }}</div>
       </div>
     </div>
   </div>
