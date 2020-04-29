@@ -132,6 +132,9 @@ export default () => {
     if (isAdmin) {
       return !!state.uid
     }
+    if (action === 'add' && collection === 'mafia_games') {
+      return !!state.uid
+    }
     if (action === 'add' && collection === 'ideas') {
       return !!state.uid
     }
