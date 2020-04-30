@@ -328,7 +328,7 @@ export default {
 
     await this.loadProfile(this.uid)
 
-    if (this.playing) {
+    if (this.playing && !this.game.startedAt) {
       await this.update({
         [`players.${this.uid}`]: {
           active: true,
@@ -487,7 +487,9 @@ export default {
         votes: {},
         nominated: {},
         rating: {},
-        winner: ''
+        winner: '',
+        startedAt: null,
+        endedAt: null
       })
     },
     async savePlaces() {

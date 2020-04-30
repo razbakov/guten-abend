@@ -12,6 +12,9 @@
       <template v-slot="{ item }">
         <div class="p-4 card-item">
           <div class="font-bold text-xl mb-2">{{ item.title }}</div>
+          <div class="text-xs mb-2">
+            Started {{ getDateTime(item.startedAt) }}
+          </div>
           <div class="bg-gray-200 p-2 mb-4 rounded border">
             <dl>
               <div class="flex">
@@ -53,7 +56,7 @@
 import { ref, computed } from '@vue/composition-api'
 import useAuth from '~/use/auth'
 import useDoc from '~/use/doc'
-import { getDay, getTime, getDate } from '~/utils'
+import { getDay, getTime, getDate, getDateTime } from '~/utils'
 import TCardList from '~/components/TCardList'
 import TLoader from '~/components/TLoader'
 import TButton from '~/components/TButton'
@@ -92,20 +95,22 @@ export default {
         name: 'title',
         label: 'Title',
         placeholder: 'Give it a funny name'
-      },
-      {
-        name: 'archived',
-        type: 'select',
-        options: ['yes', 'no'],
-        default: 'no'
       }
     ]
 
     const filters = [
       {
         name: 'active',
+        label: 'Active',
         default: true,
-        filter: (item) => item.archived !== 'yes'
+        filter: (item) => !item.endedAt,
+        sort: '-createdAt'
+      },
+      {
+        name: 'archived',
+        label: 'Archived',
+        filter: (item) => item.endedAt,
+        sort: '-createdAt'
       }
     ]
 
@@ -136,6 +141,7 @@ export default {
       getDay,
       getTime,
       getDate,
+      getDateTime,
       fields,
       title,
       collection,
