@@ -76,6 +76,22 @@ export default {
      */
     extend(config, ctx) {
       config.resolve.alias.vue = 'vue/dist/vue.common'
+
+      const svgRule = config.module.rules.find((rule) => rule.test.test('.svg'))
+
+      svgRule.test = /\.(png|jpe?g|gif|webp)$/
+
+      config.module.rules.push({
+        test: /\.svg$/,
+        use: [
+          {
+            loader: 'html-loader',
+            options: {
+              minimize: true
+            }
+          }
+        ]
+      })
     }
   },
   generate: {

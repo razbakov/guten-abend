@@ -5,7 +5,10 @@
       <button
         v-if="add && can('add', collection)"
         class="btn"
-        @click="currentId = 'add'"
+        @click="
+          newItem = {}
+          currentId = 'add'
+        "
       >
         {{ add }}
       </button>
@@ -18,6 +21,7 @@
         class="px-6 py-4"
         :fields="fields"
         show-cancel
+        :value="newItem"
         @save="createItem"
         @cancel="cancelItem"
       />
@@ -57,6 +61,14 @@
           <slot name="card-toolbar" :item="item" />
 
           <button
+            v-if="can('add', collection)"
+            class="p-2 hover:text-primary"
+            @click="copy(item)"
+          >
+            <TIcon name="copy" />
+          </button>
+
+          <button
             v-if="fields.length && can('edit', collection, item)"
             class="rounded p-2 hover:text-primary"
             @click="currentId = itemId"
@@ -85,10 +97,13 @@ import useDoc from '~/use/doc'
 import useCollection from '~/use/collection'
 import TIconEdit from '~/components/TIconEdit'
 import TForm from '~/components/TForm'
+import TIcon from '~/components/TIcon'
+
 export default {
   components: {
     TIconEdit,
-    TForm
+    TForm,
+    TIcon
   },
   props: {
     title: {
@@ -125,7 +140,8 @@ export default {
     }
   },
   data: () => ({
-    currentId: false
+    currentId: false,
+    newItem: {}
   }),
   watch: {
     items: 'loadItems'
@@ -183,6 +199,15 @@ export default {
     }
   },
   methods: {
+    copy(item) {
+      this.newItem = {
+        ...item
+      }
+
+      delete this.newItem.id
+
+      this.currentId = 'add'
+    },
     loadItems() {
       this.$emit('loadItems', this.items)
     },
